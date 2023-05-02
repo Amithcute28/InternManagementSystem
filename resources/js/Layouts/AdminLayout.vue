@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -9,12 +9,42 @@ import { Link } from '@inertiajs/vue3';
 import SidebarLink from '@/Components/SidebarLink.vue';
 
 const showingNavigationDropdown = ref(false);
+let currentRoute = ref('')
+
+const routeTitle = (route) => {
+    if (route === 'admindash') {
+    return 'Dashboard'
+  } else if (route === 'students/create') {
+    return 'Student Create'
+  }else if (route === 'newstudents') {
+    return 'New Students'
+  } else if (route === 'schools/create') {
+    return 'Schools Create'
+  }else if (route === 'coordinators/create') {
+    return 'Coordinators Create'
+  }else if (route.match(/^students\/\d+\/edit$/)) {
+    const userId = route.match(/^students\/(\d+)\/edit$/)[1]
+    return `Edit Profile`
+  }else if (route.match(/^coordinators\/\d+\/edit$/)) {
+    const userId = route.match(/^coordinators\/(\d+)\/edit$/)[1]
+    return `Edit Profile`
+  }else if (route.match(/^newstudents\/\d+\/edit$/)) {
+    const userId = route.match(/^newstudents\/(\d+)\/edit$/)[1]
+    return `Approval`
+  }else {
+    const routeLabel = route?.toString().charAt(0).toUpperCase() + route.substring(1)
+    return routeLabel 
+  }
+}
+
+onMounted(() => {
+    currentRoute.value = routeTitle((window.location.pathname).substring(1))
+})
 </script>
 
 <template>
-    <div class="w-full h-full
-    ">
-      <aside class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+    <div class="w-full h-full bg-white ">
+      <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
     <div>
         <div class="-mx-6 px-6 py-4">
             <a href="#" title="home">
@@ -22,9 +52,9 @@ const showingNavigationDropdown = ref(false);
             </a>
         </div>
 
-        <div class="mt-8 text-center">
-            <img src="@/Assets/profile.jpg" alt="" class="w-10 h-10 m-auto rounded-full object-cover lg:w-20 lg:h-20">
-            <h5 class="hidden mt-4 text-xl font-semibold text-gray-600 lg:block"> {{ $page.props.auth.user.name }}</h5>
+        <div class="mt-4 text-center">
+            <img src="@/Assets/profile.jpg" alt="" class="w-10 h-10 m-auto rounded-full object-cover lg:w-16 lg:h-16">
+            <h5 class="hidden mt-4 text-md font-semibold text-gray-600 lg:block"> {{ $page.props.auth.user.full_name }}</h5>
             <span class="hidden text-gray-400 lg:block">Admin</span>
         </div>
 
@@ -71,11 +101,24 @@ const showingNavigationDropdown = ref(false);
                  :href="route('students.index')" 
                 :active="route().current('students.index')">
                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path class="group-hover:text-blue-600" stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    <path class="group-hover:text-blue-400" stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                     </svg>
 
 
                     <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">Students</span>
+                </SidebarLink>
+            </li>
+
+            <li>
+                 <SidebarLink 
+                 :href="route('newstudents.index')" 
+                :active="route().current('newstudents.index')">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path class="group-hover:text-blue-600" stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+
+
+                    <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">New Students</span>
                 </SidebarLink>
             </li>
 
@@ -105,6 +148,7 @@ const showingNavigationDropdown = ref(false);
                     <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">Reports</span>
                 </SidebarLink>
             </li>
+
         </ul>
     </div>
 
@@ -118,9 +162,9 @@ const showingNavigationDropdown = ref(false);
     </div>
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="sticky z-10 top-1 h-16 border-b bg-white lg:py-2.5">
+    <div class="fixed z-10 w-full bg-white lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
-            <h5 hidden class="text-2xl text-gray-600 font-medium lg:block">Dashboard</h5>
+            <h5 hidden class="text-2xl text-black font-medium lg:block">{{ currentRoute }}</h5>
             <button class="w-12 h-16 -mr-2 border-r lg:hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

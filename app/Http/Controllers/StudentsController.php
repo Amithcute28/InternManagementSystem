@@ -2,9 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PermissionResource;
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\StudentsResource;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Models\Student;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 use Inertia\Inertia;
+use Inertia\Response;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Http\Requests\ProfileUpdateRequest;
 
 class StudentsController extends Controller
 {
@@ -13,54 +26,139 @@ class StudentsController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Pages/Students');
+        return Inertia::render('Admin/Pages/Students',[
+            'students' => UserResource::collection(User::where('approved', '=', 1)->where('is_admin', '=', 0)->get()),
+            
+            
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Admin/Pages/StudentCreate');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $request->validate([
+            'student_id' => 'required|string|max:255',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'program' => 'required|string|max:255',
+            'year_level' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'birthday' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'relationship' => 'required|string|max:255',
+            'nationality' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:255',
+            'home_address' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:255',
+            'guardian_name' => 'required|string|max:255',
+            'guardian_contact' => 'required|string|max:255',
+            
+        ]);
+
+        $user = User::create([
+            'student_id' => $request->student_id,
+            'password' => Hash::make($request->password),
+            'program' => $request->program,
+            'year_level' => $request->year_level,
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'birthday' => $request->birthday,
+            'gender' => $request->gender,
+            'relationship' => $request->relationship,
+            'nationality' => $request->nationality,
+            'contact_number' => $request->contact_number,
+            'home_address' => $request->home_address,
+            'zip_code' => $request->zip_code,
+            'guardian_name' => $request->guardian_name,
+            'guardian_contact' => $request->guardian_contact,
+        ])->assignRole('user');
+
+        
+
+        return to_route('students.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
+    
+   
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $student): Response
     {
-        //
+        return Inertia::render('Admin/Pages/StudentEdit', [
+            'student' => new UserResource($student)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $student): RedirectResponse
     {
-        //
+        $request->validate([
+            'student_id' => 'required|string|max:255|'.Rule::unique('users', 'student_id')->ignore($student),
+            'program' => 'required|string|max:255',
+            'year_level' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|'.Rule::unique('users', 'email')->ignore($student),
+            'birthday' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'relationship' => 'required|string|max:255',
+            'nationality' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:255',
+            'home_address' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:255',
+            'guardian_name' => 'required|string|max:255',
+            'guardian_contact' => 'required|string|max:255',
+            'approved' => 'required|string|max:255',
+            
+            
+        ]);
+
+        $student->update([
+            'student_id' => $request->student_id,
+            'program' => $request->program,
+            'year_level' => $request->year_level,
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'birthday' => $request->birthday,
+            'gender' => $request->gender,
+            'relationship' => $request->relationship,
+            'nationality' => $request->nationality,
+            'contact_number' => $request->contact_number,
+            'home_address' => $request->home_address,
+            'zip_code' => $request->zip_code,
+            'guardian_name' => $request->guardian_name,
+            'guardian_contact' => $request->guardian_contact,
+            'approved' => $request->approved,
+        ]);
+
+       
+
+        
+
+
+       
+
+        return to_route('students.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $student): RedirectResponse
     {
-        //
+        $student->delete();
+        return to_route('students.index');
     }
 }

@@ -1,0 +1,212 @@
+<script setup>
+    import GuestLayout from '@/Layouts/GuestLayout.vue';
+    import InputError from '@/Components/InputError.vue';
+    import InputLabel from '@/Components/InputLabel.vue';
+    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import TextInput from '@/Components/TextInput.vue';
+    import { Head, Link, useForm } from '@inertiajs/vue3';
+
+    import { ref } from 'vue'
+
+
+    
+    const form = useForm({
+        student_id: '',
+        full_name: '',
+        email: '',
+        gender: '',
+        contact: '',
+        current_address: '',
+        permanent_address: '',
+        birthday: '',
+        password: '',
+        password_confirmation: '',
+        terms: false,
+    });
+    
+    const submit = () => {
+        form.post(route('register'), {
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        });
+    };
+
+    step: ref(1)
+    </script>
+    
+    <template>
+            <Head title="Register" />
+    <section class="flex flex-col md:flex-row h-screen items-center">
+    
+      <div class="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+        <img src="@/Assets/logBack.png" alt="" class="w-full h-full object-cover">
+      </div>
+    
+      <div class="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+            flex items-center justify-center">
+    
+        <div class="w-80 h-100">
+    
+    
+          <h1 class="flex justify-center text-xl md:text-2xl font-bold leading-tight mt-12">Create your account</h1>
+    
+    <ol class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
+    <li class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+        <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <svg aria-hidden="true" class="w-4 h-4 mr-2 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Personal <span class="hidden sm:inline-flex sm:ml-2">Info</span>
+        </span>
+    </li>
+
+    <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+        <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span class="mr-2">2</span>
+            Account <span class="hidden sm:inline-flex sm:ml-2">Info</span>
+        </span>
+    </li>
+    <li class="flex items-center">
+        <span class="mr-2">3</span>
+        Confirmation
+    </li>
+</ol>
+          <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
+           
+    
+         <div>
+                <InputLabel for="gender" value="Gender" />
+    
+                <TextInput
+                    id="full_name"
+                    type="text"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="gender"
+                    v-model="form.gender"
+                    required
+                    autofocus
+                    autocomplete="gender"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.gender" />
+            </div>
+    
+            <div>
+                <InputLabel for="contact" value="Contact No" />
+    
+                <TextInput
+                    id="contact"
+                    type="text"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="number"
+                    v-model="form.contact"
+                    required
+                    autofocus
+                    autocomplete="contact"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.contact" />
+            </div>
+    
+           
+    
+            <div>
+                <InputLabel for="current_address" value="Currenr Address" />
+    
+                <TextInput
+                    id="current_address"
+                    type="text"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="current_address"
+                    v-model="form.current_address"
+                    required
+                    autofocus
+                    autocomplete="current_address"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.current_address" />
+            </div>
+    
+            <div>
+                <InputLabel for="permanent_address" value="Permanent Address" />
+    
+                <TextInput
+                    id="permanent_address"
+                    type="text"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="permanent_address"
+                    v-model="form.permanent_address"
+                    required
+                    autofocus
+                    autocomplete="permanent_address"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.permanent_address" />
+            </div>
+    
+            <div>
+                <InputLabel for="birthday" value="Birthday" />
+    
+                <TextInput
+                    id="birthday"
+                    type="text"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="birthday"
+                    v-model="form.birthday"
+                    required
+                    autofocus
+                    autocomplete="birthday"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.birthday" />
+            </div>
+    
+            <div class="mt-4">
+                <InputLabel for="password" value="Password" />
+    
+                <TextInput
+                    id="password"
+                    type="password"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="password"
+                    v-model="form.password"
+                    required
+                    autocomplete="new-password"
+                />
+    
+                <InputError class="mt-2" :message="form.errors.password" />
+            </div>
+    
+            <div class="mt-4">
+                <InputLabel for="password_confirmation" value="Confirm Password" />
+    
+                <TextInput
+                    id="password_confirmation"
+                    type="password"
+                    class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    placeholder="Confirm password"
+                    v-model="form.password_confirmation"
+                    required
+                    autocomplete="new-password"
+                    
+                />
+    
+                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+            </div>
+    
+            
+                <button type="submit" class="w-80 py-2.5 block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                  px-4 py-3 mt-6">Register</button>
+    
+        </form>
+    
+    
+          <p class="mt-8 flex justify-center text-gray-700">Already registered?&nbsp;<a :href="route('login')" class="text-blue-500 hover:text-blue-700 font-semibold" :class=" {'opacity-25': form.processing }" :disabled="form.processing">
+                  Login</a></p>
+    
+    
+        </div>
+      </div>
+    
+    </section>
+            
+        
+    </template>
+    

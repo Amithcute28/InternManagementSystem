@@ -33,7 +33,7 @@ const submit = () => {
 <section class="flex flex-col md:flex-row h-screen items-center">
 
   <div class="bg-white-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-    <img src="@/Assets/logBack.png" alt="" class="w-full h-full object-cover">
+    <img src="@/Assets/login.png" alt="" class="w-full h-full object-cover">
   </div>
 
   <div class="bg-white w-20 md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
@@ -50,35 +50,41 @@ const submit = () => {
       </div>
 
       <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
-        <div>
-          <label class="block text-gray-700">Email Address</label>
-          <input 
+        
+        <div class="relative">
+    <input 
           type="email" 
           name="" 
           id="email" 
           v-model="form.email"
-          placeholder="Enter Email Address" 
-          class="text-xm w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" 
+          class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+          placeholder=" "
           autofocus 
           required 
           autocomplete="username">
           <InputError class="mt-2" :message="form.errors.email" />
-        </div>
+    <label for="floating_outlined" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Email address</label>
+</div>
 
-        <div class="mt-4">
-          <label class="block text-gray-700">Password</label>
-          <input 
+<div class="relative mt-4">
+    <input 
           type="password" 
           name="" 
           id="password" 
           v-model="form.password"
-          placeholder="Enter Password" 
-          minlength="6" class="w-80 px-4 py-2.5 rounded-lg mt-2 border focus:border-blue-500
-                focus:bg-white focus:outline-none" 
-          required
+          minlength="6" 
+          class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+          placeholder=" " 
+          autofocus 
+          required 
           autocomplete="current-password">
           <InputError class="mt-2" :message="form.errors.password" />
-        </div>
+    <label for="floating_outlined" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Password</label>
+</div>
+      
+
+          
+
 
         <div class="block mt-4 flex flex-wrap justify-between">
           <label>

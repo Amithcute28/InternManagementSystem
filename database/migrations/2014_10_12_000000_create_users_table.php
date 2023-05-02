@@ -13,16 +13,30 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('student_id')->unique();
+            $table->string('password');
+            $table->string('program');
+            $table->string('year_level');
+            $table->string('full_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('birthday');
+            $table->string('gender');
+            $table->string('relationship');
+            $table->string('nationality');
+            $table->string('contact_number');
+            $table->string('home_address');
+            $table->string('zip_code');
+            $table->string('guardian_name');
+            $table->string('guardian_contact');
             $table->boolean('is_admin')->default(0);
+            $table->boolean('approved')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
     }
 
+    
     /**
      * Reverse the migrations.
      */

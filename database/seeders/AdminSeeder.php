@@ -16,11 +16,25 @@ class AdminSeeder extends Seeder
     {
         //
         User::create([
-            'name' => 'John Rey Amith',
-            'email' => 'admin@gmail.com',
+            'student_id'=> '1',
+            'password'=> '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'program'=> 'BSIT',
+            'year_level'=> 'Fourth year',
+            'full_name'=> 'John Rey A. Amith',
+            'email'=> 'admin@gmail.com',
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'birthday'=> 'October 28, 2000',
+            'gender'=> 'Male',
+            'relationship'=> 'Single',
+            'nationality'=> 'Filipino',
+            'contact_number'=> '09691277480',
+            'home_address'=> 'Tacloban City',
+            'zip_code'=> '6810',
+            'guardian_name'=> 'Ian Ben',
+            'guardian_contact'=> '123456789',
             'remember_token' => Str::random(10),
         ])->assignRole('admin');
+
+        
     }
 }

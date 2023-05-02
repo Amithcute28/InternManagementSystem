@@ -14,8 +14,8 @@ const props = defineProps({
 
 const classes = computed(() =>
     props.active
-        ? 'relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white bg-gradient-to-r from-blue-900 to-blue-500 group-hover:bg-white-100 '
-        : 'px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:bg-gray-100 transition duration-300 ease-in '
+        ? 'relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition duration-200 ease-in-out'
+        : 'px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:bg-yellow-300 transition duration-300 ease-in '
 );
 </script>
 

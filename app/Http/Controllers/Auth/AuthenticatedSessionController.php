@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Session;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -34,13 +35,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if(Auth::user()->is_admin){
+        $user = Auth::user();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if ($user->is_admin && $user->approved) {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        } elseif ($user->approved) {
+            return redirect('/user');
+        } else {
+            Auth::logout();
+            Session::flash('error', 'Your account is waiting for approval');
+            return redirect()->back()->withInput()->withErrors(['email' => trans('auth.failed')]);
         }
-        return redirect('/user');
-        
     }
+
 
     /**
      * Destroy an authenticated session.

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
-
+use App\Models\User;
+use App\Http\Resources\UserResource;
+use App\Models\School;
+use App\Http\Resources\SchoolResource;
 class AdminDashboardController extends Controller
 {
     /**
@@ -13,7 +16,18 @@ class AdminDashboardController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Pages/AdminDashboard');
+        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+        $totalStudents = $students->count();
+    
+        $schools = School::all();
+        $totalSchools = $schools->count();
+    
+        return Inertia::render('Admin/Pages/AdminDashboard',[
+            'students' => UserResource::collection($students),
+            'totalStudents' => $totalStudents,
+            'schools' => SchoolResource::collection($schools),
+            'totalSchools' => $totalSchools,
+        ]);
     }
 
     /**
