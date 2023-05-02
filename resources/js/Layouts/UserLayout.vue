@@ -30,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full">
+    <div class="w-full h-full mt-16">
       <aside class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white rounded-xl  transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
     <div>
         <div class="-mx-6 px-6 py-4">
@@ -101,7 +101,7 @@ onMounted(() => {
     </div>
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="sticky z-10 top-0 h-16 bg-white shadow-md lg:py-2.5">
+    <div class="fixed pt top-0 w-full bg-white lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
             <h5 hidden class="text-2xl text-gray-600 font-medium lg:block">{{ currentRoute }}</h5>
             <button class="w-12 h-16 -mr-2 border-r lg:hidden">

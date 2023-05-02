@@ -42,7 +42,7 @@ defineProps(["users"]);
                 <!-- Profile tab -->
                 <!-- About Section -->
                 <div class="bg-white p-3 rounded-xl shadow-md">
-                    <div class="flex items-center  space-x-2 ml-3 font-semibold text-gray-900 leading-8 pt-5">
+                    <div class="flex items-center  space-x-2 ml-3 font-semibold text-gray-900 leading-8">
                         <span clas="text-green-500">
                             <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">

@@ -47,11 +47,11 @@ const submit = () => {
     <AdminLayout>
 
       
-  <div class="h-full mt-16">
+<div class="h-full mt-16">
     <div class="flex justify-end">
             
             <!-- <Link :href="route('schools.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded" @click="toggleModal" @close-modal="toggleModal">Add New School</Link> -->
-             <button class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded" @click="toggleModal" >Add New School</button>
+             <PrimaryButton class="px-3 py-2 mx-6 text-white font-semibold rounded" @click="toggleModal" >Add New School</PrimaryButton>
            </div>
         <div class="grid grid-cols-2 gap-0">
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8 px-6 py-6">

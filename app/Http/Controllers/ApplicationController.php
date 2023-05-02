@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
+use App\Models\ApplicationForm;
+use App\Http\Requests\ApplicationRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\ApplicationResource;
 
 class ApplicationController extends Controller
 {
@@ -13,7 +18,9 @@ class ApplicationController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Student/ApplicationIndex');
+        return Inertia::render('Student/ApplicationIndex', [
+            'application_forms' => ApplicationResource::collection(ApplicationForm::all())
+        ]);
     }
 
     /**
@@ -27,9 +34,56 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ApplicationRequest $request)
+
     {
-        //
+        $eslip = '';
+        $psa = '';
+        $pros = '';
+        $applicationF = '';
+        $medical = '';
+        $parent = '';
+        $twobytwo = '';
+
+        // Check if eslip file exists and store it
+        if ($request->hasFile('eslip')) {
+            $eslip = $request->file('eslip')->store('student', 'public');
+        }
+
+        // Check if other files exist and store them
+        if ($request->hasFile('psa')) {
+            $psa = $request->file('psa')->store('student', 'public');
+        }
+        if ($request->hasFile('pros')) {
+            $pros = $request->file('pros')->store('student', 'public');
+        }
+        if ($request->hasFile('applicationF')) {
+            $applicationF = $request->file('applicationF')->store('student', 'public');
+        }
+        if ($request->hasFile('medical')) {
+            $medical = $request->file('medical')->store('student', 'public');
+        }
+        if ($request->hasFile('parent')) {
+            $parent = $request->file('parent')->store('student', 'public');
+        }
+        if ($request->hasFile('twobytwo')) {
+            $twobytwo = $request->file('twobytwo')->store('student', 'public');
+        }
+
+        // Create new application form record in the database
+        ApplicationForm::create([
+            'fname' => $request->firstName,
+            'lname' => $request->lastName,
+            'eslip' => $eslip,
+            'psa' => $psa,
+            'pros' => $pros,
+            'applicationF' => $applicationF,
+            'medical' => $medical,
+            'parent' => $parent,
+            'twobytwo' => $twobytwo,
+        ]);
+
+        return Redirect::route('application.index');
     }
 
     /**

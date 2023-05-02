@@ -55,6 +55,7 @@ Route::resource('/reports', ReportsController::class);
 Route::resource('/role', RoleController::class);
 
 
+
 Route::get('/dashboard', function () {
     
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,6 +75,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
+    Route::resource('/application', ApplicationController::class);
+   
+
 });
 
 

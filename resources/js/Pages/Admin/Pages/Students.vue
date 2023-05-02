@@ -1,15 +1,35 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { Link } from '@inertiajs/vue3';
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { Head } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 
-import Table from '@/Components/Table.vue';
-import TableRow from '@/Components/TableRow.vue';
-import TableHeaderCell from '@/Components/TableHeaderCell.vue';
-import TableDataCell from '@/Components/TableDataCell.vue';
+import Table from "@/Components/Table.vue";
+import TableRow from "@/Components/TableRow.vue";
+import TableHeaderCell from "@/Components/TableHeaderCell.vue";
+import TableDataCell from "@/Components/TableDataCell.vue";
 
-defineProps(["students"]);
+const isImage = (url) => {
+  return /\.(jpeg|jpg|png|gif)$/i.test(url);
+};
 
+const isPdf = (url) => {
+  return /\.(pdf)$/i.test(url);
+};
+
+const props = defineProps({
+  files: {
+    type: Array,
+    required: true,
+  },
+  application_forms: {
+    type: Array,
+    required: true,
+  },
+  students: {
+    type: Array,
+    required: true,
+  },
+});
 
 </script>
 
@@ -20,7 +40,7 @@ defineProps(["students"]);
         <div class="max-w-7xl mx-aut mt-16">
            <div class="flex justify-between">
             <h1></h1>
-            <Link :href="route('students.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Students</Link>
+            <Link :href="route('students.create')" class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">New Students</Link>
            </div>
             <div class="mt-6">
                 <Table>
@@ -73,6 +93,217 @@ defineProps(["students"]);
                 </Table>
                
             </div>
+<div class="mt-6">
+<Table>
+          <template #header>
+            <TableRow>
+              <TableHeaderCell>ID</TableHeaderCell>
+              <TableHeaderCell>Name</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">Entrance Slip</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">PSA LiveBirth</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">Prospectus</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">Application Form</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">Medical Certificate</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">Parent's Permit</TableHeaderCell>
+              <TableHeaderCell class="whitespace-nowrap">2x2 ID</TableHeaderCell>
+              <TableHeaderCell>Action</TableHeaderCell>
+            </TableRow>
+          </template>
+          <template #default>
+            <TableRow v-for="form in application_forms" :key="form.id">
+              <TableDataCell>{{ form.id }}</TableDataCell>
+              <TableDataCell class="flex items-center gap-3">
+                <div class="relative h-10 w-10">
+                 <img
+                    class="h-full w-full rounded-full object-cover object-center"
+                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                  />
+                  <span
+                    class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"
+                  ></span>
+                </div>
+                {{ `${form.fname} ${form.lname}` }}</TableDataCell
+              >
+              <TableDataCell
+                ><a v-if="isImage(form.eslip)" :href="form.psa" target="_blank">
+                  <img
+                    :src="form.eslip"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.eslip)"
+                  :href="form.eslip"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.eslip"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+              <TableDataCell>
+                <a v-if="isImage(form.psa)" :href="form.psa" target="_blank">
+                  <img
+                    :src="form.psa"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.psa)"
+                  :href="form.psa"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.psa"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                >
+              </TableDataCell>
+
+              <TableDataCell>
+                <a v-if="isImage(form.pros)" :href="form.pros" target="_blank">
+                  <img
+                    :src="form.pros"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.pros)"
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+              <TableDataCell>
+                <a
+                  v-if="isImage(form.applicationF)"
+                  :href="form.applicationF"
+                  target="_blank"
+                >
+                  <img
+                    :src="form.applicationF"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.applicationF)"
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.applicationF"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+              <TableDataCell>
+                <a
+                  v-if="isImage(form.medical)"
+                  :href="form.medical"
+                  target="_blank"
+                >
+                  <img
+                    :src="form.medical"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.medical)"
+                  :href="form.medical"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.medical"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+              <TableDataCell>
+                <a
+                  v-if="isImage(form.parent)"
+                  :href="form.parent"
+                  target="_blank"
+                >
+                  <img
+                    :src="form.parent"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.parent)"
+                  :href="form.parent"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.parent"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+
+              <TableDataCell>
+                <a
+                  v-if="isImage(form.twobytwo)"
+                  :href="form.twobytwo"
+                  target="_blank"
+                >
+                  <img
+                    :src="form.twobytwo"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.twobytwo)"
+                  :href="form.twobytwo"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else
+                  :href="form.twobytwo"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                ></TableDataCell
+              >
+
+              <TableDataCell>Edit/Delete</TableDataCell>
+            </TableRow>
+          </template>
+        </Table>
+</div>
+            
         </div>
     </AdminLayout>
 
