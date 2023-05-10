@@ -26,11 +26,19 @@ class NewStudentsController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Pages/NewStudents', [
-            'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
+        // return Inertia::render('Admin/Pages/NewStudents',[
+        //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
+            
+            $newstudents = User::where('approved', '=', 0)->get();
+            $totalNewStudents = $newstudents->count();
 
+            return Inertia::render('Admin/Pages/NewStudents',[
+                'newstudents' => UserResource::collection($newstudents),
+                'totalNewStudents' => $totalNewStudents,
+            ]);
 
-        ]);
+          
+        
     }
 
     /**

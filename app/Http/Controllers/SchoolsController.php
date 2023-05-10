@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SchoolResource;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
@@ -9,16 +10,19 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\School;
 
 
+
 class SchoolsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index(): Response
     {
         return Inertia::render('Admin/Pages/Schools', [
             'schools' => School::all()->map(function($school) {
                 return [
+                    'id' => $school->id,
                     'school_name' => $school->school_name,
                     'school_address' => $school->school_address,
                     'school_logo' => asset('storage/'. $school->school_logo)
@@ -27,14 +31,21 @@ class SchoolsController extends Controller
             })
            
         ]);
+
+        
     }
 
+    public function showSchoolsInfo(): Response
+    {
+        return Inertia::render('Admin/Pages/SchoolsInfo');
+
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return Inertia::render('Admin/Pages/SchoolCreate');
+        return Inertia::render('Admin/Pages/SchoolsInfo');
     }
 
     /**
@@ -66,19 +77,25 @@ class SchoolsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(School $school)
     {
-        //
+        return Inertia::render('Admin/Pages/SchoolsInfo', [
+            'school' => new SchoolResource($school),
+            'image' => asset('storage/'. $school->school_logo)
+        ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(School $school)
     {
-        //
+        return Inertia::render('Admin/Pages/SchoolsInfo', [
+            'school' => new SchoolResource($school),
+            'image' => asset('storage/'. $school->school_logo)
+        ]);
     }
 
+    
     /**
      * Update the specified resource in storage.
      */

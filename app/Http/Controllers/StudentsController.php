@@ -34,6 +34,7 @@ use Inertia\Response;
 
 class StudentsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */

@@ -18,6 +18,9 @@ class AdminDashboardController extends Controller
     {
         $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->get();
         $totalStudents = $students->count();
+
+        $newstudents = User::where('approved', '=', 0)->get();
+        $totalNewStudents = $newstudents->count();
     
         $schools = School::all();
         $totalSchools = $schools->count();
@@ -25,6 +28,8 @@ class AdminDashboardController extends Controller
         return Inertia::render('Admin/Pages/AdminDashboard',[
             'students' => UserResource::collection($students),
             'totalStudents' => $totalStudents,
+            'newstudents' => UserResource::collection($newstudents),
+            'totalNewStudents' => $totalNewStudents,
             'schools' => SchoolResource::collection($schools),
             'totalSchools' => $totalSchools,
         ]);

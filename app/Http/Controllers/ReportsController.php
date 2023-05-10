@@ -8,11 +8,24 @@ use Inertia\Inertia;
 
 class ReportsController extends Controller
 {
+    public function getRecommendedInstitutions(Request $request)
+    {
+        $academicPerformance = $request->input('academic_performance');
+
+        if ($academicPerformance < 90) {
+            return response()->json(['message' => 'Student does not meet requirements.'], 400);
+        }
+
+        $institutions = Institution::getRecommendations($academicPerformance);
+
+        return response()->json(['institutions' => $institutions]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
+        
         return Inertia::render('Admin/Pages/Reports');
     }
 
@@ -21,7 +34,7 @@ class ReportsController extends Controller
      */
     public function create()
     {
-        //
+         
     }
 
     /**
