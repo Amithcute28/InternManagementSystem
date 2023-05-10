@@ -7,6 +7,7 @@ use App\Models\ApplicationForm;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -38,6 +39,40 @@ class StudentsController extends Controller
      */
     public function index()
     {
+        $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
+            $user = $application_form->user;
+            $student_name = $user ? $user->full_name : null;
+            return [
+                'student_id' => $user->student_id,
+                'full_name' => $student_name,
+                'program' => $user->program ?? null,
+                'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
+                'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
+                'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
+                'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
+                'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
+                'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
+                'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
+            ];
+        });
+
+        $approvedUsers = User::where('approved', 1)->where('is_admin', 0)->whereDoesntHave('applicationForms')->get()->map(function ($user) {
+            return [
+                'student_id' => $user->student_id,
+                'full_name' => $user->full_name,
+                'program' => $user->program,
+                'eslip' => null, // Or any other default value for missing files
+                'psa' => null,
+                'pros' => null,
+                'applicationF' => null,
+                'medical' => null,
+                'parent' => null,
+                'twobytwo' => null,
+            ];
+        });
+
+        $combinedData = $applicationForms->concat($approvedUsers);
+
         $files = Storage::allFiles();
         $filtered_files = collect($files)->filter(function ($value, $key) {
             $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
@@ -45,28 +80,13 @@ class StudentsController extends Controller
             return in_array(strtolower($extension), $allowed_extensions);
         })->values();
 
-        $application_forms = ApplicationForm::all()->map(function ($application_form) {
-            return [
-                'id' => $application_form->id,
-                'fname' => $application_form->fname,
-                'lname' => $application_form->lname,
-                'eslip' => asset('storage/' . $application_form->eslip),
-                'psa' =>  asset('storage/' . $application_form->psa),
-                'pros' => asset('storage/' . $application_form->pros),
-                'applicationF' =>  asset('storage/' . $application_form->applicationF),
-                'medical' =>  asset('storage/' . $application_form->medical),
-                'parent' =>  asset('storage/' . $application_form->parent),
-                'twobytwo' =>  asset('storage/' . $application_form->twobytwo),
-            ];
-        });
-
-        return Inertia::render('Admin/Pages/Students', [    
+        return Inertia::render('Admin/Pages/Students', [
             'files' => $filtered_files,
-            'application_forms' => $application_forms
+            'approved' => $combinedData
         ]);
     }
 
-    
+
     // public function index()
     // {
     //     $files = Storage::allFiles();
@@ -115,7 +135,7 @@ class StudentsController extends Controller
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',
@@ -125,10 +145,11 @@ class StudentsController extends Controller
             'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
-            
+
         ]);
 
         $user = User::create([
+            'id' => $request->id,
             'student_id' => $request->student_id,
             'password' => Hash::make($request->password),
             'program' => $request->program,
@@ -144,15 +165,68 @@ class StudentsController extends Controller
             'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
+            'approved' => 1,
+            'is_admin' => 0,
         ])->assignRole('user');
 
-        
+
+
+        $userId = $user->id;
+        $eslip = '';
+        $psa = '';
+        $pros = '';
+        $applicationF = '';
+        $medical = '';
+        $parent = '';
+        $twobytwo = '';
+
+        // Check if eslip file exists and store it
+        if ($request->hasFile('eslip')) {
+            $eslip = $request->file('eslip')->store('student', 'public');
+        }
+
+        // Check if other files exist and store them
+        if ($request->hasFile('psa')) {
+            $psa = $request->file('psa')->store('student', 'public');
+        }
+        if ($request->hasFile('pros')) {
+            $pros = $request->file('pros')->store('student', 'public');
+        }
+        if ($request->hasFile('applicationF')) {
+            $applicationF = $request->file('applicationF')->store('student', 'public');
+        }
+        if ($request->hasFile('medical')) {
+            $medical = $request->file('medical')->store('student', 'public');
+        }
+        if ($request->hasFile('parent')) {
+            $parent = $request->file('parent')->store('student', 'public');
+        }
+        if ($request->hasFile('twobytwo')) {
+            $twobytwo = $request->file('twobytwo')->store('student', 'public');
+        }
+
+        // Create new application form record in the database
+        ApplicationForm::create([
+            'user_id' => $userId,
+            'eslip' => $eslip,
+            'psa' => $psa,
+            'pros' => $pros,
+            'applicationF' => $applicationF,
+            'medical' => $medical,
+            'parent' => $parent,
+            'twobytwo' => $twobytwo,
+            'approved' => 1,
+            'is_admin' => 0,
+        ]);
+
+
+
 
         return to_route('students.index');
     }
 
-    
-   
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -169,11 +243,11 @@ class StudentsController extends Controller
     public function update(Request $request, User $student): RedirectResponse
     {
         $request->validate([
-            'student_id' => 'required|string|max:255|'.Rule::unique('users', 'student_id')->ignore($student),
+            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|'.Rule::unique('users', 'email')->ignore($student),
+            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($student),
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',
@@ -184,8 +258,8 @@ class StudentsController extends Controller
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
             'approved' => 'required|string|max:255',
-            
-            
+
+
         ]);
 
         $student->update([
@@ -206,12 +280,12 @@ class StudentsController extends Controller
             'approved' => $request->approved,
         ]);
 
-       
-
-        
 
 
-       
+
+
+
+
 
         return to_route('students.index');
     }

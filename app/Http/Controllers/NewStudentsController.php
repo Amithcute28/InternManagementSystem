@@ -26,10 +26,10 @@ class NewStudentsController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Pages/NewStudents',[
+        return Inertia::render('Admin/Pages/NewStudents', [
             'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
-            
-            
+
+
         ]);
     }
 
@@ -38,7 +38,6 @@ class NewStudentsController extends Controller
      */
     public function create(): Response
     {
-        
     }
 
     /**
@@ -46,13 +45,10 @@ class NewStudentsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-       
-
-        
     }
 
-    
-   
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -69,11 +65,11 @@ class NewStudentsController extends Controller
     public function update(Request $request, User $newstudent): RedirectResponse
     {
         $request->validate([
-            'student_id' => 'required|string|max:255|'.Rule::unique('users', 'student_id')->ignore($newstudent),
+            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($newstudent),
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|'.Rule::unique('users', 'email')->ignore($newstudent),
+            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($newstudent),
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',
@@ -83,9 +79,9 @@ class NewStudentsController extends Controller
             'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
-            
-            
-            
+
+
+
         ]);
 
         $newstudent->update([
@@ -105,13 +101,6 @@ class NewStudentsController extends Controller
             'guardian_contact' => $request->guardian_contact,
             'approved' => 1,
         ]);
-
-       
-
-        
-
-
-       
 
         return to_route('newstudents.index');
     }

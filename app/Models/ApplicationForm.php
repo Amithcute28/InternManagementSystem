@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ApplicationForm extends Model
 {
@@ -11,8 +13,7 @@ class ApplicationForm extends Model
 
     protected $fillable = [
         'id',
-        'fname',
-        'lname',
+        'user_id',
         'eslip',
         'psa',
         'pros',
@@ -23,4 +24,9 @@ class ApplicationForm extends Model
 
 
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

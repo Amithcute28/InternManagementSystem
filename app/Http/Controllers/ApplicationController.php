@@ -10,6 +10,7 @@ use App\Http\Requests\ApplicationRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\ApplicationResource;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
@@ -37,6 +38,8 @@ class ApplicationController extends Controller
     public function store(ApplicationRequest $request)
 
     {
+
+        $userId = Auth::id();
         $eslip = '';
         $psa = '';
         $pros = '';
@@ -72,8 +75,7 @@ class ApplicationController extends Controller
 
         // Create new application form record in the database
         ApplicationForm::create([
-            'fname' => $request->firstName,
-            'lname' => $request->lastName,
+            'user_id' => $userId,
             'eslip' => $eslip,
             'psa' => $psa,
             'pros' => $pros,
@@ -81,7 +83,11 @@ class ApplicationController extends Controller
             'medical' => $medical,
             'parent' => $parent,
             'twobytwo' => $twobytwo,
+            'approved' => 1,
+            'is_admin' => 0,
         ]);
+
+
 
         return Redirect::route('application.index');
     }

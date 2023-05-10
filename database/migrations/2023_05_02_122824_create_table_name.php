@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('application_forms', function (Blueprint $table) {
             $table->id();
-            $table->string('fname');
-            $table->string('lname');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('eslip');
             $table->string('psa');
             $table->string('pros');

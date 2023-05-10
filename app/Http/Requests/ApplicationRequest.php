@@ -22,8 +22,6 @@ class ApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
             'eslip' => 'required|mimes:jpeg,jpg,png,pdf,doc,docx|max:10240', // Example for image, PDF, and document file uploads
             'psa' => 'required|mimes:jpeg,jpg,png,pdf,doc,docx|max:10240',
             'pros' => 'required|mimes:jpeg,jpg,png,pdf,doc,docx|max:10240',
@@ -37,8 +35,6 @@ class ApplicationRequest extends FormRequest
     public function messages()
     {
         return [
-            'firstName.required' => 'The First Name field is required.',
-            'lastName.required' => 'The Last Name field is required.',
             'eslip.required' => 'The Entrance Slip field is required.',
             'eslip.mimes' => 'The Entrance Slip file must be a JPG, JPEG, PNG image or PDF, DOC, DOCX file.',
             'eslip.max' => 'The file size must not exceed 10MB.',

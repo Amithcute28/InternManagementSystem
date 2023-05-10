@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\ApplicationForm;
 
 class User extends Authenticatable
 {
@@ -41,6 +42,11 @@ class User extends Authenticatable
         'approved',
     ];
 
+
+    public function applicationForms()
+    {
+        return $this->hasMany(ApplicationForm::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
