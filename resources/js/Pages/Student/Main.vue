@@ -123,7 +123,7 @@ defineProps(["users"]);
                     </div>
                    
                     <Link 
-                        v-for="user in users" :key="user.id" :href="route('user.edit', user.id)" class="flex justify-center block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Edit Information</Link>
+                        v-for="user in users" :key="user.id" :href="route('user.edit', user.id)" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Edit Information</Link>
                          
                          
                 </div>

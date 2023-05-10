@@ -33,38 +33,48 @@ use Inertia\Response;
 
 class StudentsController extends Controller
 {
+
+    public function index(): Response
+    {
+        return Inertia::render('Admin/Pages/Students',[
+            'students' => UserResource::collection(User::where('approved', '=', 1)->where('is_admin', '=', 0)->get()),
+            
+            
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $files = Storage::allFiles();
-        $filtered_files = collect($files)->filter(function ($value, $key) {
-            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-            $extension = pathinfo($value, PATHINFO_EXTENSION);
-            return in_array(strtolower($extension), $allowed_extensions);
-        })->values();
+    // public function index()
+    // {
+    //     $files = Storage::allFiles();
+    //     $filtered_files = collect($files)->filter(function ($value, $key) {
+    //         $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+    //         $extension = pathinfo($value, PATHINFO_EXTENSION);
+    //         return in_array(strtolower($extension), $allowed_extensions);
+    //     })->values();
 
-        $application_forms = ApplicationForm::all()->map(function ($application_form) {
-            return [
-                'id' => $application_form->id,
-                'fname' => $application_form->fname,
-                'lname' => $application_form->lname,
-                'eslip' => asset('storage/' . $application_form->eslip),
-                'psa' =>  asset('storage/' . $application_form->psa),
-                'pros' => asset('storage/' . $application_form->pros),
-                'applicationF' =>  asset('storage/' . $application_form->applicationF),
-                'medical' =>  asset('storage/' . $application_form->medical),
-                'parent' =>  asset('storage/' . $application_form->parent),
-                'twobytwo' =>  asset('storage/' . $application_form->twobytwo),
-            ];
-        });
+    //     $application_forms = ApplicationForm::all()->map(function ($application_form) {
+    //         return [
+    //             'id' => $application_form->id,
+    //             'fname' => $application_form->fname,
+    //             'lname' => $application_form->lname,
+    //             'eslip' => asset('storage/' . $application_form->eslip),
+    //             'psa' =>  asset('storage/' . $application_form->psa),
+    //             'pros' => asset('storage/' . $application_form->pros),
+    //             'applicationF' =>  asset('storage/' . $application_form->applicationF),
+    //             'medical' =>  asset('storage/' . $application_form->medical),
+    //             'parent' =>  asset('storage/' . $application_form->parent),
+    //             'twobytwo' =>  asset('storage/' . $application_form->twobytwo),
+    //         ];
+    //     });
 
-        return Inertia::render('Admin/Pages/Students', [    
-            'files' => $filtered_files,
-            'application_forms' => $application_forms
-        ]);
-    }
+    //     return Inertia::render('Admin/Pages/Students', [    
+    //         'files' => $filtered_files,
+    //         'application_forms' => $application_forms
+    //     ]);
+    // }
 
     
     // public function index()

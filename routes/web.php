@@ -8,6 +8,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\RecommenderController;
+use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\NewStudentsController;
 use App\Http\Controllers\SchoolsController;
@@ -47,6 +48,8 @@ Route::resource('/status', StatusController::class);
 //admin dashboard
 Route::resource('/admindash', AdminDashboardController::class);
 Route::resource('/recommender', RecommenderController::class);
+Route::get('/recommendations', [RecommendationController::class, 'index'])
+    ->name('recommendations.index');
 Route::resource('/schools', SchoolsController::class);
 Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);

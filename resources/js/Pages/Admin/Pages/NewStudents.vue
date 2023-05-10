@@ -8,9 +8,14 @@ import TableRow from '@/Components/TableRow.vue';
 import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
 
-defineProps(["newstudents"]);
 
+const { newstudents } = defineProps({
+        newstudents: Array,
+    });
 
+    const totalNewStudents = newstudents.length;
+
+ defineExpose({ totalNewStudents });
 </script>
 
 <template>

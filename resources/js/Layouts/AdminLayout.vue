@@ -7,6 +7,7 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import SidebarLink from '@/Components/SidebarLink.vue';
+ 
 
 const showingNavigationDropdown = ref(false);
 let currentRoute = ref('')
@@ -22,7 +23,10 @@ const routeTitle = (route) => {
     return 'Schools Create'
   }else if (route === 'coordinators/create') {
     return 'Coordinators Create'
-  }else if (route.match(/^students\/\d+\/edit$/)) {
+  }else if (route.match(/^schools\/\d+/)) {
+  const userId = route.match(/^schools\/(\d+)/)[1];
+  return `Schools Info`;
+}else if (route.match(/^students\/\d+\/edit$/)) {
     const userId = route.match(/^students\/(\d+)\/edit$/)[1]
     return `Edit Profile`
   }else if (route.match(/^coordinators\/\d+\/edit$/)) {
@@ -40,10 +44,12 @@ const routeTitle = (route) => {
 onMounted(() => {
     currentRoute.value = routeTitle((window.location.pathname).substring(1))
 })
+
+
 </script>
 
 <template>
-    <div class="w-full h-full bg-white ">
+    <div class="w-full h-full bg-violet-200 h-screen ">
       <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
     <div>
         <div class="-mx-6 px-6 py-4">
@@ -162,7 +168,7 @@ onMounted(() => {
     </div>
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="fixed z-10 w-full bg-white lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
+    <div class="fixed z-10 w-full bg-violet-200 lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
             <h5 hidden class="text-2xl text-black font-medium lg:block">{{ currentRoute }}</h5>
             <button class="w-12 h-16 -mr-2 border-r lg:hidden">

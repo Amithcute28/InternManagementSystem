@@ -40,7 +40,7 @@ const props = defineProps({
         <div class="max-w-7xl mx-aut mt-16">
            <div class="flex justify-between">
             <h1></h1>
-            <Link :href="route('students.create')" class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">New Students</Link>
+            <Link :href="route('students.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">New Students</Link>
            </div>
             <div class="mt-6">
                 <Table>

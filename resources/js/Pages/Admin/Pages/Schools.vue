@@ -61,8 +61,9 @@ const submit = () => {
                         <img :src="school.school_logo" class="w-auto h-24 rounded-lg"/>
                         <div>
                             <p class="font-semibold text-base">{{ school.school_name }}</p>
-                            <p class="font-semibold text-sm text-gray-400">{{ school.school_address }}</p>
-                           <PrimaryButton ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton>
+                            <p class="font-semibold text-sm text-gray-400 mb-5">{{ school.school_address }}</p>
+                            <Link :href="route('schools.show', school.id)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">More Info</Link>
+                           <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
                         </div> 
 
                     </ReusableCard>

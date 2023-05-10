@@ -41,10 +41,10 @@ const submit = () => {
 
  
 
-<div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-2">
+<div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-16">
                     <div class="flex items-center justify-between  space-x-2 ml-3 font-semibold text-gray-900 leading-8">
                         <span class="tracking-wide">About</span>
-                                        <Link :href="route('students.index')" class=" px-3 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded m-4">Back</Link>       
+                                        <Link :href="route('students.index')" class=" px-3 text-white font-semibold bg-indigo-500 hover:bg-indigo-400 rounded m-4">Back</Link>       
                     </div>
                     <div class=" text-gray-700" >
                       
@@ -314,7 +314,7 @@ const submit = () => {
     <InputError class="mt-2" :message="form.errors.guardian_contact" />
 </div>
    </div>   
-   <button type="submit" class="flex justify-center block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3">Create student</button>
+   <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3">Create student</button>
  </form>                 
                         
                     </div>
