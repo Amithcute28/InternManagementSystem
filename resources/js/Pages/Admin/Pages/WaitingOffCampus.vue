@@ -19,7 +19,7 @@ import { Link } from '@inertiajs/vue3';
     <div class="mx-auto flex w-full max-w-md flex-col space-y-16">
       <div class="flex flex-col items-center justify-center text-center space-y-2">
         <div class="font-semibold text-3xl">
-          <p>Waiting for Recommendation!</p>
+          <p>Waiting for the student to choose institution.</p>
         </div>
         
      

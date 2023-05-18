@@ -83,9 +83,92 @@ class StudentsController extends Controller
 
         return Inertia::render('Admin/Pages/Students', [
             'files' => $filtered_files,
-            'approved' => $combinedData
+            'approved' => $combinedData,
+            // Add the offCampus route
         ]);
     }
+
+    public function inCampus()
+    {
+        // in-campus logic goes here
+
+        $qualifiedUsers = User::where('approved', 1)
+            ->where('is_admin', 0)
+            ->where('status', 'completed')
+            ->with(['applicationForms' => function ($query) {
+                $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+            }])
+            ->get()
+            ->map(function ($user) {
+                $applicationForm = $user->applicationForms->first(); // Get the first application form
+
+                return [
+                    'student_id' => $user->student_id,
+                    'full_name' => $user->full_name,
+                    'program' => $user->program,
+                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
+                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
+                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
+                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
+                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
+                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
+                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
+                ];
+            });
+
+        $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+            $extension = pathinfo($value, PATHINFO_EXTENSION);
+            return in_array(strtolower($extension), $allowed_extensions);
+        })->values();
+
+        return Inertia::render('Admin/Pages/InCampus', [
+            'files' => $filtered_files,
+            'approved' => $qualifiedUsers,
+        ]);
+    }
+
+    public function offCampus()
+    {
+        // in-campus logic goes here
+
+        $qualifiedUsers = User::where('approved', 1)
+            ->where('is_admin', 0)
+            ->where('is_off_campus', true)
+            ->with(['applicationForms' => function ($query) {
+                $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+            }])
+            ->get()
+            ->map(function ($user) {
+                $applicationForm = $user->applicationForms->first(); // Get the first application form
+
+                return [
+                    'student_id' => $user->student_id,
+                    'full_name' => $user->full_name,
+                    'program' => $user->program,
+                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
+                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
+                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
+                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
+                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
+                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
+                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
+                ];
+            });
+
+        $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+            $extension = pathinfo($value, PATHINFO_EXTENSION);
+            return in_array(strtolower($extension), $allowed_extensions);
+        })->values();
+
+        return Inertia::render('Admin/Pages/OffCampus', [
+            'files' => $filtered_files,
+            'approved' => $qualifiedUsers,
+        ]);
+    }
+
+
 
 
     // public function index()
@@ -281,13 +364,6 @@ class StudentsController extends Controller
             'approved' => $request->approved,
         ]);
 
-
-
-
-
-
-
-
         return to_route('students.index');
     }
 
@@ -296,7 +372,6 @@ class StudentsController extends Controller
      */
     public function destroy(User $student): RedirectResponse
     {
-        $student->delete();
-        return to_route('students.index');
+       
     }
 }

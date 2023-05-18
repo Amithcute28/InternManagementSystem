@@ -52,7 +52,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.put(route("students.update", props.student?.id));
+    form.put(route("application.update", props.student?.id));
 };
 </script>
 

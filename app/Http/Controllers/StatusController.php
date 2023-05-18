@@ -67,26 +67,27 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
 $student->recommended_institutions = $recommendedInstitutions;
 
 
-            if ($student->choosen_institution != 0) {
-                $institution = School::findOrFail($student->choosen_institution);
-                $institution->school_logo = asset('storage/'. $institution->school_logo);
-                return Inertia::render('Student/StatusRecommended', [
-                    'student' => $student,
-                    'institution' => $institution,
-                ]);
-            }elseif ($student->recommended == 1) {
-                return Inertia::render('Student/StatusChooseRecommendation', [
-                    'student' => $student,
-                ]);
-            }    else {
-                return Inertia::render('Student/StatusWaiting', [
-                    'student' => $student,
-                ]);
-            }
-        }
+if ($student->choosen_institution != 0) {
+    $institution = School::findOrFail($student->choosen_institution);
+    $institution->school_logo = asset('storage/'. $institution->school_logo);
+    return Inertia::render('Student/StatusRecommended', [
+        'student' => $student,
+        'institution' => $institution,
+    ]);
+} elseif ($student->recommended == 1) {
+    return Inertia::render('Student/StatusChooseRecommendation', [
+        'student' => $student,
+    ]);
+} else {
+    return Inertia::render('Student/StatusWaiting', [
+        'student' => $student,
+    ]);
+}
+}
     }
-
-    }
+// Return a default Inertia response or handle the case when Auth::check() is false.
+return Inertia::render('Student/StatusWaiting');
+}
 
     /**
      * Show the form for creating a new resource.

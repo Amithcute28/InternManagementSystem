@@ -21,6 +21,7 @@ class ApplicationForm extends Model
         'medical',
         'parent',
         'twobytwo',
+        'eval_form',
 
 
     ];

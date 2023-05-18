@@ -17,7 +17,7 @@ const routeTitle = (route) => {
     return "Dashboard";
   } else if (route.match(/^user\/\d+\/edit$/)) {
     const userId = route.match(/^user\/(\d+)\/edit$/)[1];
-    return `Edit Profile`;
+    return Edit `Profile`;
   } else {
     const routeLabel =
       route?.toString().charAt(0).toUpperCase() + route.substring(1);
@@ -45,7 +45,7 @@ onMounted(() => {
             class="w-10 h-10 m-auto rounded-full object-cover lg:w-16 lg:h-16"
           />
           <h5 class="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-            {{ $page.props.auth.user.full_name }}
+            
           </h5>
           <span class="hidden text-gray-400 lg:block">Student</span>
         </div>

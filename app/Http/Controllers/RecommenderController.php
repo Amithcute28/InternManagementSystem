@@ -9,17 +9,17 @@ use App\Http\Resources\StudentsResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;   
+use Inertia\Inertia;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
-use Inertia\Inertia;
 use App\Models\Institution;
 use App\Models\Student;
 use App\Models\School;
 
 class RecommenderController extends Controller
 {
-   
+
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +30,7 @@ class RecommenderController extends Controller
             
         // ]);
 
-        $students = User::where('recommended', '=', 0)->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+        $students = User::where('recommended', '=', 0)->where('approved', '=', 1)->where('is_admin', '=', 0)->where('status', '=', 'completed')->get();
 
         $institutions = School::all();
 
@@ -41,7 +41,7 @@ class RecommenderController extends Controller
         return Inertia::render('Admin/Pages/Recommender', [
             'students' => $students,
         ]);
-        }
+    }
 
         public function show(string $id)
         {
