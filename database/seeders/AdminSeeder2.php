@@ -21,6 +21,9 @@ class AdminSeeder2 extends Seeder
             'program'=> 'BSIT',
             'year_level'=> 'Fourth year',
             'full_name'=> 'Arvin G. Felicen',
+            'academic_performance' => 90,
+            'program' => 'Information Technology',
+            'skills' => 'Java, Python, MySQL, MongoDB',
             'email'=> 'admin2@gmail.com',
             'email_verified_at' => now(),
             'birthday'=> 'October 28, 2000',
@@ -33,7 +36,7 @@ class AdminSeeder2 extends Seeder
             'guardian_name'=> 'Ian Ben',
             'guardian_contact'=> '123456789',
             'remember_token' => Str::random(10),
-        ])->assignRole('admin');
+        ])->assignRole('user');
 
     
     }

@@ -11,22 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('practice_teaching_opportunities', function (Blueprint $table) {
+        Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('required_skills');
-            $table->string('subject_area');
-            $table->string('grades');
+            $table->string('name');
+            $table->string('address');
+            $table->string('school_logo');
+            $table->string('required_programs')->nullable();
+            $table->text('skills')->nullable();
+            $table->text('required_academic_performance')->nullable();
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('schools');
     }
 };

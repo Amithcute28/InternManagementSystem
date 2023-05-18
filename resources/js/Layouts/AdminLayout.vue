@@ -26,6 +26,9 @@ const routeTitle = (route) => {
   }else if (route.match(/^schools\/\d+/)) {
   const userId = route.match(/^schools\/(\d+)/)[1];
   return `Schools Info`;
+}else if (route.match(/^offcampus\/\d+/)) {
+  const userId = route.match(/^offcampus\/(\d+)/)[1];
+  return `View Recommendation`;
 }else if (route.match(/^students\/\d+\/edit$/)) {
     const userId = route.match(/^students\/(\d+)\/edit$/)[1]
     return `Edit Profile`
@@ -90,6 +93,19 @@ onMounted(() => {
                 </SidebarLink>
             </li>
 
+                <li>
+                 <SidebarLink 
+                 :href="route('offcampus.index')" 
+                :active="route().current('offcampus.index')">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path class="group-hover:text-blue-600" stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+
+
+                    <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">Off-Campus</span>
+                </SidebarLink>
+            </li>
+
              <li>
                  <SidebarLink 
                  :href="route('schools.index')" 
@@ -142,18 +158,7 @@ onMounted(() => {
                 </SidebarLink>
             </li>
 
-             <li>
-                 <SidebarLink 
-                 :href="route('reports.index')" 
-                :active="route().current('reports.index')">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path class="group-hover:text-blue-600" stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                </svg>
-
-
-                    <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">Reports</span>
-                </SidebarLink>
-            </li>
+            
 
         </ul>
     </div>

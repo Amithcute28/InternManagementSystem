@@ -19,9 +19,11 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'student_id' => $this->student_id,
             'password'=> $this->password,
-            'program'=> $this->program,
             'year_level'=> $this->year_level,
             'full_name'=> $this->full_name,
+            'academic_performance'=> $this->academic_performance,
+            'program'=> $this->program,
+            'skills'=> $this->skills,
             'email'=> $this->email,
             'birthday'=> $this->birthday,
             'gender'=> $this->gender,
@@ -33,8 +35,8 @@ class UserResource extends JsonResource
             'guardian_name'=> $this->guardian_name,
             'guardian_contact'=> $this->guardian_contact,
             'approved'=> $this->approved,
-            
+            'recommended'=> $this->recommended,
+            'choosen_institution' => $this->choosen_institution
         ];
     }
 }
-        

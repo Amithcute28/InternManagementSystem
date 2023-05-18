@@ -4,15 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\User;
 class Institution extends Model
 {
     use HasFactory;
+    protected $fillable = [
+    'name', 
+    'address', 
+    'requirements', 
+    'academic_performance',
+    'required_programs',
+    'skills',
+];
 
-    public function getRecommendations($academicPerformance)
+public function users()
 {
-    return $this->where('mentorship_rating', '>=', 4)
-        ->where('hands_on_rating', '>=', 3)
-        ->get();
+    return $this->belongsToMany(User::class)->withPivot('program');
 }
 }

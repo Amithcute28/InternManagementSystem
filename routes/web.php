@@ -13,7 +13,7 @@ use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\NewStudentsController;
 use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\CoordinatorsController;
-use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\OffCampusController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +42,7 @@ Route::get('/', function () {
 //student dashboard
 Route::resource('/application', ApplicationController::class);
 Route::resource('/status', StatusController::class);
-
+Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
 
 
 //admin dashboard
@@ -54,9 +54,18 @@ Route::resource('/schools', SchoolsController::class);
 Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
 Route::resource('/coordinators', CoordinatorsController::class);
-Route::resource('/reports', ReportsController::class);
+Route::resource('/offcampus', OffCampusController::class);
+
 Route::resource('/role', RoleController::class);
 
+Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name('recommender.update');
+Route::put('/newstudents/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
+
+Route::get('/reports/{id}', function ($id) {
+    $student = Student::findOrFail($id);
+    $recommendedInstitutions = $student->recommended_institutions()->get(['name', 'required_academic_performance']);
+    return view('reports.show', compact('student', 'recommendedInstitutions'));
+})->name('reports.show');
 
 
 Route::get('/dashboard', function () {
@@ -68,10 +77,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
+    
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admindash', [AdminDashboardController::class, 'index'])->name('admindash.index');
+    Route::put('/recommender/{id}', [RecommenderController::class, 'updateRecommender'])->name('recommender.updateRecommender');
     
 });
 

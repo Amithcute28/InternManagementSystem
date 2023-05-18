@@ -68,7 +68,7 @@ const { newstudents } = defineProps({
                             <TableDataCell class="space-x-4">
                                 <Link :href="route('newstudents.edit', newstudent.id)"  class="text-green-400 hover:text-green-600">Check</Link>
                                 <Link :href="route('newstudents.destroy', newstudent.id)" method="DELETE" as="button" class="text-red-400 hover:text-red-600">Delete</Link>
-                                <Link :href="route('newstudents.update', newstudent.id)" method="patch" as="button" class="text-green-400 hover:text-green-600">Approve</Link>
+                               <Link :href="route('newstudents.updateApproved', newstudent.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">Approve</Link>
                             </TableDataCell>
                         </TableRow>
                     </template>

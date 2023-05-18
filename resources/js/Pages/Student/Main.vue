@@ -23,7 +23,7 @@ defineProps(["users"]);
 
 
 
-<div class="bg-gray-100">
+<div class="bg-gray-100 mt-16">
  <div class="w-full text-white bg-main-color">
         <div x-data="{ open: false }"
             class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">

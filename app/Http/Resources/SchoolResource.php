@@ -20,7 +20,13 @@ class SchoolResource extends JsonResource
         'school_name' => $this->school_name,
         'school_address' => $this->school_address,
         'school_logo' => $this->school_logo,
-            
+        'required_programs' => $this->required_programs,
+        'skills' => $this->skills,   
+       
+                   
+                    
+                    
+                    
             
         ];
         

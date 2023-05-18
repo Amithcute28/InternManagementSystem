@@ -17,6 +17,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@inertiajs/inertia": "^0.11.1",
         "flowbite-datepicker": "^1.2.2",
         "primevue": "^3.27.0",
         "quasar": "^2.11.10",

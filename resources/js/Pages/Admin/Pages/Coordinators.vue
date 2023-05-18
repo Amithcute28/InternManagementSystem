@@ -6,8 +6,20 @@ import Table from '@/Components/Table.vue';
 import TableRow from '@/Components/TableRow.vue';
 import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
+import { ref } from 'vue'
 
-defineProps(["coordinators"]);
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  student: {
+    type: Object,
+    required: true,
+  },
+  institutions: {
+    type: Array,
+    default: () => [],
+  },
+});
 </script>
 
 <template>
@@ -301,6 +313,24 @@ defineProps(["coordinators"]);
         </div>
     </div>
         </div>
+
+<!-- <div>
+    <h1>{{ student.name }}'s Recommended Institutions</h1>
+    <ul>
+      <li v-for="institution in institutions" :key="institution.id">
+        <h2>{{ institution.name }}</h2>
+        <p>Location: {{ institution.location }}</p>
+        <p>Average Grade: {{ institution.average_grade }}</p>
+        <p>Requirements:</p>
+        <ul>
+          <li v-for="(weight, requirement) in institution.requirements" :key="requirement">
+            {{ requirement }} ({{ weight }})
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div> -->
+        
         
     </AdminLayout>
 </template>

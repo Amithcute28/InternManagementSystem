@@ -30,14 +30,13 @@ class UserStudentsController extends Controller
         $user = Auth::user();
 
         return Inertia::render('Student/Main', [
-        'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
+        'users' => UserResource::collection(User::where('id', '=', $user->id)->where('recommended', '=', 1)->get()),
     ]);
     }
 
     public function show($id)
 {
     $user = User::findOrFail($id);
-    dd($user);
     return Inertia::render('Student/Main', [
         'users' => new UserResource($user),
     ]);

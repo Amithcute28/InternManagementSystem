@@ -23,9 +23,11 @@ class SchoolsController extends Controller
             'schools' => School::all()->map(function($school) {
                 return [
                     'id' => $school->id,
-                    'school_name' => $school->school_name,
-                    'school_address' => $school->school_address,
-                    'school_logo' => asset('storage/'. $school->school_logo)
+                    'name' => $school->name,
+                    'address' => $school->address,
+                    'school_logo' => asset('storage/'. $school->school_logo),
+                    'required_programs' => $school->required_programs,
+                    'skills' => $school->skills,
                 ];
             
             })
@@ -35,6 +37,14 @@ class SchoolsController extends Controller
         
     }
 
+    public function show(School $school)
+    {
+        return Inertia::render('Admin/Pages/SchoolsInfo', [
+            'school' => new SchoolResource($school),
+        ]);
+    }
+
+    
     public function showSchoolsInfo(): Response
     {
         return Inertia::render('Admin/Pages/SchoolsInfo');
@@ -58,6 +68,8 @@ class SchoolsController extends Controller
             'schoolName' => 'required|string|max:255',
             'schoolAddress' => 'required|string|max:255',
             'schoolLogo' => 'nullable|file|mimes:jpeg,png|max:2048',
+            'required_programs' => 'required|string|max:255',
+            'skills' => 'required|string|max:255',
         ]);
 
         if ($request->hasFile('schoolLogo')) {
@@ -66,9 +78,11 @@ class SchoolsController extends Controller
             $schoolLogo = null;
         }
         School::create([
-            'school_name' => $request->schoolName,
-            'school_address' => $request->schoolAddress,
-            'school_logo' => $schoolLogo
+            'name' => $request->schoolName,
+            'address' => $request->schoolAddress,
+            'school_logo' => $schoolLogo,
+            'required_programs' => $request->required_programs,
+            'skills' => $request->skills,
         ]);
 
         return Redirect::route('schools.index'); 
@@ -77,13 +91,7 @@ class SchoolsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(School $school)
-    {
-        return Inertia::render('Admin/Pages/SchoolsInfo', [
-            'school' => new SchoolResource($school),
-            'image' => asset('storage/'. $school->school_logo)
-        ]);
-    }
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -99,9 +107,16 @@ class SchoolsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $student = User::find($id);
+
+        if ($student) {
+            $student->choosen_institution = $id; // Update the choosen_institution field with the institution ID
+            $student->save();
+        }
+
+        return redirect()->route('recommender.index');
     }
 
     /**

@@ -31,9 +31,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full mt-16 bg-violet-200 h-screen">
-      <aside class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white rounded-xl  transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
-    <div>
+    <div class="w-full h-full bg-violet-200 h-screen ">
+      <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+     <div>
         <div class="-mx-6 px-6 py-4">
           <a href="#" title="home"> </a>
         </div>
@@ -137,38 +137,19 @@ onMounted(() => {
         </ul>
       </div>
 
-      <div class="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-        <button
-          class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:text-amber-500"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          <Link
-            :href="route('logout')"
-            method="post"
-            as="button"
-            class="group-hover:text-amber-500"
-            >Logout</Link
-          >
+    <div class="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
+        <button class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <Link :href="route('logout')" method="post" as="button" class="group-hover:text-amber-500 font-bold">Logout</Link>
         </button>
     </div>
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="fixed top-1 z-10 w-full bg-violet-200 lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
+    <div class="fixed z-10 w-full bg-violet-200 lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
-            <h5 hidden class="text-2xl text-gray-600 font-medium lg:block">{{ currentRoute }}</h5>
+            <h5 hidden class="text-2xl text-black font-medium lg:block">{{ currentRoute }}</h5>
             <button class="w-12 h-16 -mr-2 border-r lg:hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -204,11 +185,12 @@ onMounted(() => {
                 </button>
             </div>
         </div>
-      </div>
-
-      <div class="px-6 pt-6 2xl:container">
-        <slot />
-      </div>
     </div>
-  </div>
+
+    <div class="px-6 pt-6 2xl:container">
+        <slot />
+    </div>
+</div>  
+ 
+    </div>
 </template>

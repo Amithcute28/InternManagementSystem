@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('student_id')->unique();
             $table->string('password');
-            $table->string('program');
             $table->string('year_level');
             $table->string('full_name');
+            $table->string('academic_performance')->nullable();
+            $table->string('program')->nullable();
+            $table->string('skills')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('birthday');
@@ -31,6 +33,8 @@ return new class extends Migration
             $table->string('guardian_contact');
             $table->boolean('is_admin')->default(0);
             $table->boolean('approved')->default(false);
+            $table->boolean('recommended')->default(false);
+            $table->boolean('choosen_institution')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

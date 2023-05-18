@@ -6,27 +6,67 @@ use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 use App\Models\Institution;
-use App\Models\School;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\School;
 
-class StatusController extends Controller
+class OffCampusController extends Controller
 {
+   
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
-{
-    if (Auth::check()) {
-        $user = Auth::user();
-        $id = $user->id;
+    {
+        $students = User::where('recommended', '=', 1)->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
 
-        // Check if the logged-in user is the same as the requested student
-        if ($user->approved == 1 && $user->is_admin == 0) {
-            $student = User::findOrFail($id);
-            
+        $institutions = Institution::all();
 
-            // Get institutions that match the user's program and skills
+        foreach ($students as $student) {
+            $student->recommended_institutions = [];
+        }
+
+        return Inertia::render('Admin/Pages/OffCampus', [
+            'students' => $students,
+        ]);
+    }
+    
+
+    /**
+     * Recommend institutions for a student.
+     */
+//     public function show(string $id)
+// {
+//     $student = Student::findOrFail($id);
+
+//     $institutions = Institution::where('required_programs', 'LIKE', "%{$student->program}%")->get();
+
+//     $recommendedInstitutions = [];
+
+//     foreach ($institutions as $institution) {
+//         if ($student->academic_performance >= $institution->required_academic_performance) {
+//             $recommendedInstitutions[] = $institution;
+//         }
+//     }
+
+//     $student->recommended_institutions = $recommendedInstitutions;
+
+//     if (count($recommendedInstitutions) > 0) {
+//         return Inertia::render('Admin/Pages/RecommendInstitution', [
+//             'student' => $student,
+//         ]);
+//     } else {
+//         return Inertia::render('Admin/Pages/WaitingToRecommend', [
+//             'student' => $student,
+//         ]);
+//     }
+// }
+
+public function show(string $id)
+    {
+        
+        $student = User::findOrFail($id);
+    
+       // Get institutions that match the user's program and skills
     $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student->program}%")
     ->where(function ($query) use ($student) {
         $query->where(function ($innerQuery) use ($student) {
@@ -67,33 +107,30 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
 $student->recommended_institutions = $recommendedInstitutions;
 
 
+    
             if ($student->choosen_institution != 0) {
                 $institution = School::findOrFail($student->choosen_institution);
                 $institution->school_logo = asset('storage/'. $institution->school_logo);
-                return Inertia::render('Student/StatusRecommended', [
+                return Inertia::render('Admin/Pages/ViewOffCampus', [
                     'student' => $student,
                     'institution' => $institution,
                 ]);
-            }elseif ($student->recommended == 1) {
-                return Inertia::render('Student/StatusChooseRecommendation', [
-                    'student' => $student,
-                ]);
-            }    else {
-                return Inertia::render('Student/StatusWaiting', [
+            } else {
+                return Inertia::render('Admin/Pages/WaitingOffCampus', [
                     'student' => $student,
                 ]);
             }
-        }
     }
-
-    }
+    
+    
+    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return Inertia::render('Student/StatusCreate');
+         
     }
 
     /**
@@ -107,46 +144,7 @@ $student->recommended_institutions = $recommendedInstitutions;
     /**
      * Display the specified resource.
      */
-
-
-    
-        
-        // $student = User::findOrFail($id);
-    
-        //     $institutions = Institution::where('required_programs', 'LIKE', "%{$student->program}%")->get();
-    
-        //     $recommendedInstitutions = [];
-    
-        //     foreach ($institutions as $institution) {
-        //         if ($student->academic_performance >= $institution->required_academic_performance) {
-        //             $recommendedInstitutions[] = $institution;
-        //         }
-        //     }
-    
-        //     $student->recommended_institutions = $recommendedInstitutions;
-    
-        //     return Inertia::render('Student/StatusCreate',[
-        //         'student' => $student,
-        //     ]);
-        public function show($id)
-{
-    $institution = School::findOrFail($id);
-    return Inertia::render('Student/StatusRecommended', [
-        'institution' => School::findOrfail($id)->map(function($institution) {
-            return [
-                'id' => $school->id,
-                'name' => $school->name,
-                'address' => $school->address,
-                'school_logo' => asset('storage/'. $school->school_logo),
-                'required_programs' => $school->required_programs,
-                'skills' => $school->skills,
-            ];
-        
-        })
-    ]);
-}
-  
-
+   
     /**
      * Show the form for editing the specified resource.
      */
@@ -158,19 +156,10 @@ $student->recommended_institutions = $recommendedInstitutions;
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $studentId, $institutionId)
-{
-   $student = User::find($studentId);
-   $institution = School::find($institutionId);
-
-   if ($student && $institution) {
-       $student->choosen_institution = $institution->id; // Update the choosen_institution field with the institution ID
-       $student->save();
-   }
-
-   return to_route('status.index');
-
-}
+    public function update(Request $request, string $id)
+    {
+        //
+    }
 
     /**
      * Remove the specified resource from storage.

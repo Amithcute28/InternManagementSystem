@@ -3,15 +3,17 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Head } from '@inertiajs/vue3';
 
 
- const { students,newstudents,schools } = defineProps({
+ const { students,newstudents,schools,deployed } = defineProps({
         students: Array,
         newstudents: Array,
         schools: Array,
+        deployed:Array,
     });
 
     const totalStudents = students.length;
     const totalNewStudents = newstudents.length;
     const totalSchools = schools.length;
+    const totalDeployed = deployed.length;
 </script>
 
 const schools = [
@@ -121,7 +123,7 @@ const schools = [
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">150</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{{ totalDeployed }}</div>
 
                                                     <div class="mt-1 text-base text-gray-600">Deployed</div>
                                                 </div>
@@ -129,6 +131,8 @@ const schools = [
                                         </div>
                                     </a>
                                 </div>
+
+                                
 
         <div class="px-6 pt-6 2xl:container">
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

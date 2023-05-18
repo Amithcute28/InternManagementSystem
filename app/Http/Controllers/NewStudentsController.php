@@ -113,6 +113,20 @@ class NewStudentsController extends Controller
         return to_route('newstudents.index');
     }
 
+    public function updateApproved($id)
+    {
+        $newstudent = User::find($id);
+        
+      
+            $newstudent->approved = 1;
+            $newstudent->save();
+        
+        
+        // Add any additional logic or response handling as needed
+        
+        return redirect()->route('newstudents.index');
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -91,7 +91,6 @@ class ApplicationController extends Controller
 
         return Redirect::route('application.index');
     }
-
     /**
      * Display the specified resource.
      */

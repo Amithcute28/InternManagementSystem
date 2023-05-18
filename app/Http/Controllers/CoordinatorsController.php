@@ -13,6 +13,7 @@ use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;   
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
+use App\Models\Institution;
 
 class CoordinatorsController extends Controller
 {
@@ -22,11 +23,19 @@ class CoordinatorsController extends Controller
     public function index(): Response
     {
     
-    return Inertia::render('Admin/Pages/Coordinators', [
-        'coordinators' => UserResource::collection(User::where('is_admin', 1)->get()),
+    // return Inertia::render('Admin/Pages/Coordinators', [
+    //     'coordinators' => UserResource::collection(User::where('is_admin', 1)->get()),
         
-    ]);
+    // ]);
+
+    $students = Student::all();
+
+        return Inertia::render('Admin/Pages/Coordinators', [
+            'students' => $students
+        ]);
+          
     }
+    
 
     /**
      * Show the form for creating a new resource.

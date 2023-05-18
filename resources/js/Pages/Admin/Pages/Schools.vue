@@ -21,6 +21,8 @@ const form = useForm({
   schoolName: "",
   schoolAddress: "",
   schoolLogo: null,
+  required_programs: "",
+  skills: "",
 });
 
 const submit = () => {
@@ -28,11 +30,22 @@ const submit = () => {
   formData.append("schoolName", form.schoolName);
   formData.append("schoolAddress", form.schoolAddress);
   formData.append("schoolLogo", form.schoolLogo);
+  formData.append("required_programs", form.required_programs);
+  formData.append("skills", form.skills);
 
   form.post(route("schools.store"), formData, {
-    onFinish: () => form.reset("schoolName", "schoolAddress", "schoolLogo"),
+    onFinish: () => form.reset("schoolName", "schoolAddress", "schoolLogo", "required_programs", "skills"),
   });
+
+  modalActive.value = false;
 };
+
+const selectedInstitution = ref(null);
+
+function openModal(school) {
+  selectedInstitution.value = school;
+  document.getElementById('myModal').showModal();
+}
 </script>
 
 
@@ -42,11 +55,12 @@ const submit = () => {
     <AdminLayout>
 
       
-<div class="h-full mt-16">
+<div class="h-screen mt-16">
     <div class="flex justify-end">
             
             <!-- <Link :href="route('schools.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded" @click="toggleModal" @close-modal="toggleModal">Add New School</Link> -->
              <PrimaryButton class="px-3 py-2 mx-6 text-white font-semibold rounded" @click="toggleModal" >Add New School</PrimaryButton>
+           
            </div>
         <div class="grid grid-cols-2 gap-0">
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8 px-6 py-6">
@@ -55,9 +69,9 @@ const submit = () => {
                        
                         <img :src="school.school_logo" class="w-auto h-24 rounded-lg"/>
                         <div>
-                            <p class="font-semibold text-base">{{ school.school_name }}</p>
-                            <p class="font-semibold text-sm text-gray-400 mb-5">{{ school.school_address }}</p>
-                            <Link :href="route('schools.show', school.id)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">More Info</Link>
+                            <p class="font-semibold text-base">{{ school.name }}</p>
+                            <p class="font-semibold text-sm text-gray-400 mb-5">{{ school.address }}</p>
+                           <button @click="openModal(school)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">More info</button>
                            <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
                         </div> 
 
@@ -66,7 +80,7 @@ const submit = () => {
                         
 
     <form
-      class="py-2 "
+      class="py-2"
       @submit.prevent="submit"
       action="https://formbold.com/s/FORM_ID"
       method="POST"
@@ -83,6 +97,21 @@ const submit = () => {
       School Address:
     </label>
     <input type="text" v-model="form.schoolAddress" name="schoolAddress" id="schoolAddress" placeholder="Address of the school" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-5">
+  <div class="col-span-1 mb-5">
+    <label for="schoolName" class="mb-3 block text-base font-medium text-[#07074D]">
+      Needed Program:
+    </label>
+    <input type="text" v-model="form.required_programs" name="required_programs" id="required_programs" placeholder="Programs" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+  </div>
+  <div class="col-span-1 mb-5">
+    <label for="schoolName" class="mb-3 block text-base font-medium text-[#07074D]">
+      Additional Skills:
+    </label>
+    <input type="text" v-model="form.skills" name="schoolAddress" id="skills" placeholder="Skills" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
   </div>
 </div>
 
@@ -200,5 +229,120 @@ const submit = () => {
         </div>
       </div>
     </div>
+
+    <dialog id="myModal" class="p-5  bg-white rounded-md ">
+        
+   <div class="flex flex-col w-full h-auto ">
+        <!-- Header -->
+        <div class="flex w-full h-auto justify-between items-center">
+          <div class="flex h-auto py-3 justify-center items-center text-2xl font-bold">
+                Institution Information
+          </div>
+          <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+        </div>
+          <!--Header End-->
+          <!-- Modal Content-->
+           
+<div class="container my-4 px-6 mx-auto">
+
+<!-- Section: Design Block -->
+<section class="text-gray-800">
+  
+  <div class="flex flex-wrap">
+      <div class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
+        <div class="map-container-2 w-full">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1956.657715528662!2d125.00004053842936!3d11.238190528016471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3308772c87c4c367%3A0xa5e5c080ec6a88ef!2sLeyte%20Normal%20University!5e0!3m2!1sen!2sph!4v1683656352509!5m2!1sen!2sph" class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>  
+      <div class="grow-0 shrink-0 basis-auto w-full lg:w-6/12 xl:w-8/12">
+      <div class="bg-white p-3 flex items-center justify-between ml-6 mb-4">
+                  <div class="flex space-x-6 items-center" v-if="selectedInstitution">
+                    
+                      <img :src="selectedInstitution.school_logo" class="w-auto h-24 rounded-lg"/>
+                      <div >
+                          <p class="font-semibold text-2xl">{{ selectedInstitution.name }}</p>
+                          <p class="font-semibold text-lg text-gray-400">{{ selectedInstitution.address }}</p>
+                      </div>              
+                  </div>
+              </div>
+        <div class="flex flex-col justify-center items-center" v-if="selectedInstitution">
+            <div class="relative flex flex-col items-center rounded-[20px] w-[700px] max-w-[95%] mx-auto bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none p-3">
+                <div class="grid grid-cols-2 gap-4 px-2 w-full">
+                    <div class="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+                    <p class="text-lg text-gray-600">Address</p>
+                    <p class="text-base font-medium text-navy-700 dark:text-white">
+                        {{ selectedInstitution.address }}
+                    </p>
+                    </div>
+
+                    <div class="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+                    <p class="text-lg text-gray-600">Requirements</p>
+                    <p class="text-base font-medium text-navy-700 dark:text-white">
+                        {{ selectedInstitution.requirements }}
+                    </p>
+                    </div>
+
+                    <div class="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+                    <p class="text-lg text-gray-600">Required Programs</p>
+                    <p class="text-base font-medium text-navy-700 dark:text-white">
+                        {{ selectedInstitution.required_programs }}
+                    </p>
+                    </div>
+
+                    <div class="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+                    <p class="text-lg text-gray-600">Required Skills</p>
+                    <p class="text-base font-medium text-navy-700 dark:text-white">
+                        {{ selectedInstitution.skills }}
+                    </p>
+                    </div>
+
+                  
+                </div>
+            </div>  
+           
+        </div>
+        
+      </div>
+        
+    </div>
+  
+</section>
+<!-- Section: Design Block -->
+
+</div>
+          <!-- End of Modal Content-->
+          
+          
+          
+        </div>
+</dialog>
   </AdminLayout>
 </template>
+
+<style>
+.map-container-2 {
+        height: 500px;
+}
+ .modal-dialog-open {
+    animation: appear .15s cubic-bezier(0, 1.8, 1, 1.8);
+  }
+
+  .modal-dialog-backdrop {
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.5), rgba(54, 54, 54, 0.5));
+    backdrop-filter: blur(3px);
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateX(-3rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  } 
+</style>

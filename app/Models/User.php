@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\ApplicationForm;
+use App\Models\Institution;
+use App\Models\School;
 
 class User extends Authenticatable
 {
@@ -25,9 +27,11 @@ class User extends Authenticatable
         'id',
         'student_id',
         'password',
-        'program',
         'year_level',
         'full_name',
+        'academic_performance',
+        'program',
+        'skills',
         'email',
         'birthday',
         'gender',
@@ -40,12 +44,23 @@ class User extends Authenticatable
         'guardian_contact',
         'is_admin',
         'approved',
+        'recommended',
+        'choosen_institution',
     ];
 
 
     public function applicationForms()
     {
         return $this->hasMany(ApplicationForm::class);
+    }
+
+    public function institutions()
+    {
+        return $this->belongsToMany(Institution::class);
+    }
+    public function schools()
+    {
+        return $this->belongsToMany(School::class);
     }
     /**
      * The attributes that should be hidden for serialization.

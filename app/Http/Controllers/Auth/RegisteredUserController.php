@@ -35,9 +35,11 @@ class RegisteredUserController extends Controller
         $request->validate([
             'student_id' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
+            'academic_performance' => 'required|string|max:255',
+            'program' => 'required|string|max:255',
+            'skills' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
@@ -51,14 +53,17 @@ class RegisteredUserController extends Controller
             
             
             
+            
         ]);
 
         $user = User::create([
         'student_id' => $request->student_id,
         'password' => Hash::make($request->password),
-        'program' => $request->program,
         'year_level' => $request->year_level,
         'full_name' => $request->full_name,
+        'academic_performance'=> $request->academic_performance,
+        'program'=> $request->program,
+        'skills'=> $request->skills,
         'email' => $request->email,
         'birthday' => $request->birthday,
         'gender' => $request->gender,
@@ -70,10 +75,11 @@ class RegisteredUserController extends Controller
         'guardian_name' => $request->guardian_name,
         'guardian_contact' => $request->guardian_contact,
         'approved' => 0,
+        'recommended' => 0,
+
 
         ])->assignRole('user');
        
-        
 
     
 

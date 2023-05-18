@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class UserTeaching extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'name',
         'email',
-        'academic_performance',
-        'program:',
-        'skills',
+        'subject',
+        'grade',
+        'school_level',
+        'school_subjects',
+        'school_skills'
     ];
-
-    public function institutions()
-    {
-        return $this->belongsToMany(Institution::class);
-    }
 }

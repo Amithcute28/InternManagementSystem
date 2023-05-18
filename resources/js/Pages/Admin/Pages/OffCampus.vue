@@ -1,40 +1,28 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+ import AdminLayout from '@/Layouts/AdminLayout.vue';
     import { Head } from '@inertiajs/vue3';
-    import { Link, router } from "@inertiajs/vue3";
+    import { Link} from "@inertiajs/vue3";
+    import { defineProps } from 'vue';
     import Table from '@/Components/Table.vue';
     import TableRow from '@/Components/TableRow.vue';
     import TableHeaderCell from '@/Components/TableHeaderCell.vue';
     import TableDataCell from '@/Components/TableDataCell.vue';
 
-    import { defineProps } from 'vue';
 
     const props = defineProps({
         students: {
             type: Array,
             required: true,
         },
-        institutions: {
-        type: Array,
-        required: true
-    },
     });
-
-const updateRecommendation = institutionId => {
-  window.location.href = `/recommender/updateInstitution/${userId}/${institutionId}`;
-};
-
-const recommendUpdated = (student) => {
-  console.log(student.id);
-  router.put(route("recommender.updateRecommender", { id: student.id }));
-};
 </script>
 
 <template>
-    <Head title="Recommender" />
+    <Head title="Off Campus" />
 
     <AdminLayout>
-        <!-- <div class="mt-16">
+        <!-- <div class="mt-16 flex">
+
             <div class="w-full">
                 <h1 class="text-xl font-bold mb-4">Students</h1>
                 <div class="bg-white shadow-md rounded my-6">
@@ -46,11 +34,6 @@ const recommendUpdated = (student) => {
                                 <th class="py-3 px-4 text-left">Email</th>
                                 <th class="py-3 px-4 text-left">Academic Performance</th>
                                 <th class="py-3 px-4 text-left"></th>
-                        <TableHeaderCell>Student ID</TableHeaderCell>
-                        <TableHeaderCell>Name</TableHeaderCell>
-                        <TableHeaderCell>Program</TableHeaderCell>
-                        <TableHeaderCell>Status</TableHeaderCell>
-                        <TableHeaderCell>Action</TableHeaderCell>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
@@ -59,10 +42,9 @@ const recommendUpdated = (student) => {
                                 <td class="py-3 px-4">{{ student.program }}</td>
                                 <td class="py-3 px-4">{{ student.email }}</td>
                                 <td class="py-3 px-4">{{ student.academic_performance }}</td>
-                                <td class="py-3 px-4 space-x-6">
-                                    <Link :href="route('recommender.edit', { id: student.id })" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">check</Link>
-                                      <Link :href="route('recommender.update', student.id)" method="PUT" as="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Recommend na</Link>
-                                    <ul v-if="student.recommended_institutions">
+                                <td class="py-3 px-4">
+                                    <Link :href="route('offcampus.show', { id: student.id })" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View</Link>
+                                    <ul v-if="student.recommended_institutions.length > 0">
                                         <li v-for="institution in student.recommended_institutions" :key="institution.id">
                                             {{ institution.name }} - {{ institution.required_academic_performance }}
                                         </li>
@@ -75,8 +57,7 @@ const recommendUpdated = (student) => {
             </div>
         </div> -->
 
-       
-   <div class="mt-16">
+        <div class="mt-16">
             <div class="flex justify-between">
             <h1>List of students</h1>
            </div>
@@ -93,7 +74,7 @@ const recommendUpdated = (student) => {
                         <TableHeaderCell>Student ID</TableHeaderCell>
                         <TableHeaderCell>Name</TableHeaderCell>
                         <TableHeaderCell>Program</TableHeaderCell>
-                        <TableHeaderCell>Application Form</TableHeaderCell>
+                        <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>Action</TableHeaderCell>
                     </TableRow>
                     </template>
@@ -119,12 +100,12 @@ const recommendUpdated = (student) => {
                              <TableDataCell>{{ student.program }}</TableDataCell>
                             <TableDataCell>
                              <div class="flex items-center">
-                                <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Pending
+                                <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Deployed
                              </div>
                             </TableDataCell>
                             <TableDataCell class="space-x-4">
-                                <Link :href="route('recommender.edit', student.id)"  class="text-green-400 hover:text-green-600">Check</Link>
-                                <Link :href="route('recommender.update', student.id)" method="PUT" as="button" class="text-red-400 hover:text-red-600">Recommend</Link>
+                                <Link :href="route('offcampus.show', student.id)"  class="text-green-400 hover:text-green-600">View</Link>
+                               
                             </TableDataCell>
                         </TableRow>
                     </template>
@@ -132,8 +113,6 @@ const recommendUpdated = (student) => {
         </div>
         </div>
 
-  
-    
-
     </AdminLayout>
 </template>
+
