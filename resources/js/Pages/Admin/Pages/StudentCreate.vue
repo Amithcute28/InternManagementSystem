@@ -32,12 +32,32 @@ const form = useForm({
   guardian_name: "",
   guardian_contact: "",
   terms: false,
+  eslip: "",
+  psa: "",
+  pros: "",
+  applicationF: "",
+  medical: "",
+  parent: "",
+  twobytwo: "",
+  preserveState: true,
 });
 
-const submit = () => {
-  form.post(route("students.store"), {
+const submit = async () => {
+  form.processing = true;
+
+  // Submit the application form
+  await form.post("/application");
+  await form.put("/application", {
+    _method: "put",
+  });
+
+  // Submit the student form
+  await form.post(route("students.store"), {
     onFinish: () => form.reset("password", "password_confirmation"),
   });
+
+  form.processing = false;
+  form.reset();
 };
 </script>
 
@@ -45,35 +65,43 @@ const submit = () => {
   <AdminLayout>
     <Head title="Create student" />
 
-
-
- 
-
-<div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-16">
-                    <div class="flex items-center justify-between  space-x-2 ml-3 font-semibold text-gray-900 leading-8">
-                        <span class="tracking-wide">About</span>
-                                        <Link :href="route('students.index')" class=" px-3 text-white font-semibold bg-indigo-500 hover:bg-indigo-400 rounded m-4">Back</Link>       
-                    </div>
-                    <div class=" text-gray-700" >
-                      
-    <form @submit.prevent="submit" action="#" method="POST">
-    <div class="grid md:grid-cols-2 text-sm md:gap-x-4 ">
-
-    <div class="relative z-0 w-full mb-6 group">
-    <input 
-    type="text" 
-    id="student_id" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-    placeholder=" "
-    v-model="form.student_id"
-    required
-    autofocus
-    autocomplete="student_id" />
-    <label 
-    for="student_id" 
-    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Student ID</label>
-    <InputError class="mt-2" :message="form.errors.student_id" />
-    </div>
+    <div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-16">
+      <div
+        class="flex items-center justify-between space-x-2 ml-3 font-semibold text-gray-900 leading-8"
+      >
+        <span class="tracking-wide">About</span>
+        <Link
+          :href="route('students.index')"
+          class="px-3 text-white font-semibold bg-indigo-500 hover:bg-indigo-400 rounded m-4"
+          >Back</Link
+        >
+      </div>
+      <div class="text-gray-700">
+        <form
+          @submit.prevent="submit"
+          method="POST"
+          action="/upload"
+          enctype="multipart/form-data"
+        >
+          <div class="grid md:grid-cols-2 text-sm md:gap-x-4">
+            <div class="relative z-0 w-full mb-6 group">
+              <input
+                type="text"
+                id="student_id"
+                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                v-model="form.student_id"
+                required
+                autofocus
+                autocomplete="student_id"
+              />
+              <label
+                for="student_id"
+                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                >Student ID</label
+              >
+              <InputError class="mt-2" :message="form.errors.student_id" />
+            </div>
 
             <div class="grid md:grid-cols-2 md:gap-4">
               <div class="relative z-0 w-full mb-6 group">
@@ -351,36 +379,108 @@ const submit = () => {
               <InputError class="mt-2" :message="form.errors.guardian_name" />
             </div>
 
-<div class="relative z-0 w-full mb-6 group">
-    <input 
-     type="text" 
-    id="guardian_contact" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-    placeholder=" "
-    v-model="form.guardian_contact"
-    required
-    autofocus
-    autocomplete="guardian_contact" />
-    <label 
-    for="guardian_contact" 
-    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Guardian Contact Number</label>
-    <InputError class="mt-2" :message="form.errors.guardian_contact" />
-</div>
-   </div>   
-   <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3">Create student</button>
- </form>                 
-                        
-                    </div>
-                   
-                         
-                         
- 
+            <div class="relative z-0 w-full mb-6 group">
+              <input
+                type="text"
+                id="guardian_contact"
+                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                v-model="form.guardian_contact"
+                required
+                autofocus
+                autocomplete="guardian_contact"
+              />
+              <label
+                for="guardian_contact"
+                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                >Guardian Contact Number</label
+              >
+              <InputError
+                class="mt-2"
+                :message="form.errors.guardian_contact"
+              />
+            </div>
+          </div>
 
+          <div class="space-y-12">
+            <div class="border-b border-gray-900/10 pb-12">
+              <h2 class="text-base font-semibold leading-7 text-gray-900">
+                Application Form
+              </h2>
+              <p class="mt-1 text-sm leading-6 text-gray-600">
+                The practice teaching internship provides a chance for
+                individuals pursuing a career in teaching to acquire hands-on
+                teaching experience in a real classroom environment.
+              </p>
 
+              <div
+                class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+              >
+                <div class="sm:col-span-2 sm:col-start-1">
+                  <label
+                    for="country"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Entrance Slip</label
+                  >
+                  <div class="mt-2">
+                    <label>
+                      <input
+                        id="eslip"
+                        name="eslip"
+                        type="file"
+                        @input="form.eslip = $event.target.files[0]"
+                        class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700"
+                      /><br />
+                      <span v-if="errors.eslip" class="text-red-500 text-sm">{{
+                        errors.eslip
+                      }}</span>
+                    </label>
+                  </div>
+                </div>
 
-  
+                <div class="sm:col-span-2">
+                  <label
+                    for="country"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >PSA Livebirth</label
+                  >
+                  <div class="mt-2">
+                    <label>
+                      <input
+                        id="psa"
+                        name="psa"
+                        type="file"
+                        @input="form.psa = $event.target.files[0]"
+                        class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700"
+                      /><br />
+                      <span v-if="errors.psa" class="text-red-500 text-sm">{{
+                        errors.psa
+                      }}</span>
+                    </label>
+                  </div>
+                </div>
 
-        </div>
+                <div class="sm:col-span-2">
+                  <label
+                    for="country"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Prospectus</label
+                  >
+                  <div class="mt-2">
+                    <label>
+                      <input
+                        id="pros"
+                        name="pros"
+                        type="file"
+                        @input="form.pros = $event.target.files[0]"
+                        class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700"
+                      /><br />
+                      <span v-if="errors.pros" class="text-red-500 text-sm">{{
+                        errors.pros
+                      }}</span>
+                    </label>
+                  </div>
+                </div>
 
                 <div class="sm:col-span-2">
                   <label
@@ -477,7 +577,7 @@ const submit = () => {
           </div>
           <button
             type="submit"
-            class="flex justify-center block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3"
+            class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3"
           >
             Create student
           </button>

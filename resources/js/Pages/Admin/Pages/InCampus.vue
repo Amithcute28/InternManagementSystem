@@ -45,91 +45,6 @@ const props = defineProps({
           >New Students</Link
         >
       </div>
-      <!-- <div class="mt-6">
-        <Table>
-          <template #header>
-            <TableRow>
-              <th scope="col" class="p-4 bg-white">
-                <div class="flex items-center bg-white">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label for="checkbox-all-search" class="sr-only"
-                    >checkbox</label
-                  >
-                </div>
-              </th>
-              <TableHeaderCell>ID</TableHeaderCell>
-              <TableHeaderCell>Name</TableHeaderCell>
-              <TableHeaderCell>Program</TableHeaderCell>
-              <TableHeaderCell>Status</TableHeaderCell>
-              <TableHeaderCell>Action</TableHeaderCell>
-            </TableRow>
-          </template>
-
-          <template #default>
-            <TableRow
-              class="overflow-auto"
-              v-for="student in students"
-              :key="student.id"
-            >
-              <td class="w-4 p-4 bg-white">
-                <div class="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label for="checkbox-table-search-1" class="sr-only"
-                    >checkbox</label
-                  >
-                </div>
-              </td>
-
-              <TableDataCell>{{ student.student_id }}</TableDataCell>
-              <TableDataCell
-                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src="@/Assets/profile.jpg"
-                  alt="Jese image"
-                />
-                <div class="pl-3">
-                  <div class="text-base font-semibold">
-                    {{ student.full_name }}
-                  </div>
-                  <div class="font-normal text-gray-500">
-                    {{ student.email }}
-                  </div>
-                </div>
-              </TableDataCell>
-              <TableDataCell>{{ student.program }}</TableDataCell>
-              <TableDataCell>
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                  Online
-                </div>
-              </TableDataCell>
-              <TableDataCell class="space-x-4">
-                <Link
-                  :href="route('students.edit', student.id)"
-                  class="text-green-400 hover:text-green-600"
-                  >Edit</Link
-                >
-                <Link
-                  :href="route('students.destroy', student.id)"
-                  method="DELETE"
-                  as="button"
-                  class="text-red-400 hover:text-red-600"
-                  >Delete</Link
-                >
-              </TableDataCell>
-            </TableRow>
-          </template>
-        </Table> -->
     </div>
     <div class="mt-6">
       <Table>
@@ -140,25 +55,27 @@ const props = defineProps({
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
-            <!-- <TableHeaderCell class="whitespace-nowrap"
-              >Entrance Slip</TableHeaderCell
-            >
             <TableHeaderCell class="whitespace-nowrap"
-              >PSA LiveBirth</TableHeaderCell
+              >Requirements</TableHeaderCell
             >
+            <TableHeaderCell class="whitespace-nowrap">CBAR</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap"
-              >Prospectus</TableHeaderCell
+              >E-Portfolio</TableHeaderCell
             >
-            <TableHeaderCell class="whitespace-nowrap"
-              >Application Form</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap"
-              >Medical Certificate</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap"
-              >Parent's Permit</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap">2x2 ID</TableHeaderCell> -->
+
+            <TableHeaderCell class="bg-purple-100 text-center">
+              Evaluation Form
+              <TableHeaderCell class="whitespace-nowrap"
+                >Medical Certificate</TableHeaderCell
+              >
+              <TableHeaderCell class="whitespace-nowrap"
+                >Dental Certificate</TableHeaderCell
+              >
+              <TableHeaderCell class="whitespace-nowrap"
+                >Parent's Permit</TableHeaderCell
+              >
+            </TableHeaderCell>
+
             <TableHeaderCell>Action</TableHeaderCell>
           </TableRow>
         </template>
@@ -179,9 +96,105 @@ const props = defineProps({
               {{ form.full_name }}</TableDataCell
             >
             <TableDataCell>{{ form.program }}</TableDataCell>
+            <TableDataCell></TableDataCell>
+            <TableDataCell></TableDataCell>
+            <TableDataCell></TableDataCell>
+            <TableDataCell>
+              <TableDataCell
+                ><a v-if="isImage(form.eslip)" :href="form.psa" target="_blank">
+                  <img
+                    :src="form.eslip"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.eslip)"
+                  :href="form.eslip"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else-if="isDoc(form.eslip)"
+                  :href="form.eslip"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                >
+                <a
+                  v-else
+                  :href="form.eslip"
+                  target="_blank"
+                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                  >MISSING</a
+                ></TableDataCell
+              >
+              <TableDataCell></TableDataCell>
+              <TableDataCell>
+                <a v-if="isImage(form.psa)" :href="form.psa" target="_blank">
+                  <img
+                    :src="form.psa"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.psa)"
+                  :href="form.psa"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else-if="isDoc(form.psa)"
+                  :href="form.psa"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                >
+                <a
+                  v-else
+                  :href="form.psa"
+                  target="_blank"
+                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                  >MISSING</a
+                >
+              </TableDataCell>
+
+              <TableDataCell></TableDataCell>
+
+              <TableDataCell>
+                <a v-if="isImage(form.pros)" :href="form.pros" target="_blank">
+                  <img
+                    :src="form.pros"
+                    style="max-width: 100%; max-height: 100px"
+                  />
+                </a>
+                <a
+                  v-else-if="isPdf(form.pros)"
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                  >PDF</a
+                >
+                <a
+                  v-else-if="isDoc(form.pros)"
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                  >DOC FILE</a
+                >
+                <a
+                  v-else
+                  :href="form.pros"
+                  target="_blank"
+                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                  >MISSING</a
+                ></TableDataCell
+              >
+            </TableDataCell>
 
             <TableDataCell
-              ><div class="flex item-center">
+              ><div class="flex item-center justify-center">
                 <div
                   class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
                 >

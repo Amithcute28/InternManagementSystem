@@ -8,7 +8,6 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\RecommenderController;
-use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\NewStudentsController;
 use App\Http\Controllers\SchoolsController;
@@ -48,8 +47,6 @@ Route::resource('/status', StatusController::class);
 //admin dashboard
 Route::resource('/admindash', AdminDashboardController::class);
 Route::resource('/recommender', RecommenderController::class);
-Route::get('/recommendations', [RecommendationController::class, 'index'])
-    ->name('recommendations.index');
 Route::resource('/schools', SchoolsController::class);
 Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
@@ -60,29 +57,29 @@ Route::resource('/role', RoleController::class);
 
 
 Route::get('/dashboard', function () {
-    
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admindash', [AdminDashboardController::class, 'index'])->name('admindash.index');
-    
+    Route::get('in-campus', [StudentsController::class, 'inCampus'])->name('students.inCampus');
+    Route::get('off-campus', [StudentsController::class, 'offCampus'])->name('students.offCampus');
+    Route::get('in-campus-application', [ApplicationController::class, 'inCampusApplication'])->name('applications.inCampusApplication');
+    Route::get('off-campus-application', [ApplicationController::class, 'offCampusApplication'])->name('applications.offCampusApplication');
+    Route::put('off-campus-application/{id}', [ApplicationController::class, 'updateStatus'])->name('applications.updateStatus');
 });
 
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
-   
-
 });
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-     
+
     protected $fillable = [
         'id',
         'student_id',
@@ -40,6 +40,9 @@ class User extends Authenticatable
         'guardian_contact',
         'is_admin',
         'approved',
+        'is_off_campus',
+        'in_campus',
+        'status',
     ];
 
 

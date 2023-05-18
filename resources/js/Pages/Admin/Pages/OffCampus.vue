@@ -140,25 +140,15 @@ const props = defineProps({
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
-            <!-- <TableHeaderCell class="whitespace-nowrap"
-              >Entrance Slip</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap"
-              >PSA LiveBirth</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap"
-              >Prospectus</TableHeaderCell
-            >
-            <TableHeaderCell class="whitespace-nowrap"
-              >Application Form</TableHeaderCell
-            >
             <TableHeaderCell class="whitespace-nowrap"
               >Medical Certificate</TableHeaderCell
             >
             <TableHeaderCell class="whitespace-nowrap"
+              >Dental Certificate</TableHeaderCell
+            >
+            <TableHeaderCell class="whitespace-nowrap"
               >Parent's Permit</TableHeaderCell
             >
-            <TableHeaderCell class="whitespace-nowrap">2x2 ID</TableHeaderCell> -->
             <TableHeaderCell>Action</TableHeaderCell>
           </TableRow>
         </template>
@@ -179,9 +169,97 @@ const props = defineProps({
               {{ form.full_name }}</TableDataCell
             >
             <TableDataCell>{{ form.program }}</TableDataCell>
+            <TableDataCell
+              ><a v-if="isImage(form.eslip)" :href="form.psa" target="_blank">
+                <img
+                  :src="form.eslip"
+                  style="max-width: 100%; max-height: 100px"
+                />
+              </a>
+              <a
+                v-else-if="isPdf(form.eslip)"
+                :href="form.eslip"
+                target="_blank"
+                class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                >PDF</a
+              >
+              <a
+                v-else-if="isDoc(form.eslip)"
+                :href="form.eslip"
+                target="_blank"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                >DOC FILE</a
+              >
+              <a
+                v-else
+                :href="form.eslip"
+                target="_blank"
+                class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                >MISSING</a
+              ></TableDataCell
+            >
+            <TableDataCell>
+              <a v-if="isImage(form.psa)" :href="form.psa" target="_blank">
+                <img
+                  :src="form.psa"
+                  style="max-width: 100%; max-height: 100px"
+                />
+              </a>
+              <a
+                v-else-if="isPdf(form.psa)"
+                :href="form.psa"
+                target="_blank"
+                class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                >PDF</a
+              >
+              <a
+                v-else-if="isDoc(form.psa)"
+                :href="form.psa"
+                target="_blank"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                >DOC FILE</a
+              >
+              <a
+                v-else
+                :href="form.psa"
+                target="_blank"
+                class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                >MISSING</a
+              >
+            </TableDataCell>
+
+            <TableDataCell>
+              <a v-if="isImage(form.pros)" :href="form.pros" target="_blank">
+                <img
+                  :src="form.pros"
+                  style="max-width: 100%; max-height: 100px"
+                />
+              </a>
+              <a
+                v-else-if="isPdf(form.pros)"
+                :href="form.pros"
+                target="_blank"
+                class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
+                >PDF</a
+              >
+              <a
+                v-else-if="isDoc(form.pros)"
+                :href="form.pros"
+                target="_blank"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
+                >DOC FILE</a
+              >
+              <a
+                v-else
+                :href="form.pros"
+                target="_blank"
+                class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                >MISSING</a
+              ></TableDataCell
+            >
 
             <TableDataCell
-              ><div class="flex item-center">
+              ><div class="flex item-center justify-center">
                 <div
                   class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
                 >
