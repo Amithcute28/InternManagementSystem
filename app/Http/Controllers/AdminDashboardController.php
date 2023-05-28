@@ -16,13 +16,13 @@ class AdminDashboardController extends Controller
      */
     public function index(): Response
     {
-        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->where('program', 'BEED')->get();
         $totalStudents = $students->count();
 
-        $deployed = User::where('is_admin', '=', 0)->where('approved', '=', 1)->where('recommended', '=', 1)->where('choosen_institution', '!=', 0)->get();
+        $deployed = User::where('is_admin', '=', 0)->where('program', 'BEED')->where('approved', '=', 1)->where('is_off_campus', '=', 1)->where('choosen_institution', '!=', 0)->get();
         $totalDeployed = $deployed->count();
 
-        $newstudents = User::where('approved', '=', 0)->get();
+        $newstudents = User::where('approved', '=', 0)->where('program', 'BEED')->get();
         $totalNewStudents = $newstudents->count();
     
         $schools = School::all();

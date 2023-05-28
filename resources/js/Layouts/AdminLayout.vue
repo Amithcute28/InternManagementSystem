@@ -7,6 +7,12 @@ import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import SidebarLink from "@/Components/SidebarLink.vue";
+import { initFlowbite } from 'flowbite'
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+    initFlowbite();
+})
 
 const showingNavigationDropdown = ref(false);
 let currentRoute = ref("");
@@ -59,57 +65,42 @@ const toggleApplicationsDropdown = () => {
 </script>
 
 <template>
-  <div class="w-full h-full bg-violet-200 h-screen">
-    <aside
-      class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
-    >
-      <div>
-        <div class="-mx-6 px-6 py-4">
-          <a href="#" title="home"> </a>
-        </div>
+<!-- <aside
+      class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-blue transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
+    > -->
 
-        <div class="mt-4 text-center">
-          <img
-            src="@/Assets/profile.jpg"
-            alt=""
-            class="w-10 h-10 m-auto rounded-full object-cover lg:w-16 lg:h-16"
-          />
-          <h5 class="hidden mt-4 text-md font-semibold text-gray-600 lg:block">
-            {{ $page.props.auth.user.full_name }}
-          </h5>
-          <span class="hidden text-gray-400 lg:block">Admin</span>
-        </div>
 
-        <ul class="space-y-2 tracking-wide mt-8">
+    <div class="w-full h-full bg-darkWhite h-screen">
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]" aria-label="Sidebar">
+   <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
+      <a href="https://flowbite.com/" class="flex items-center pl-2.5 mt-2">
+         <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
+         <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">PracTEACH</span>
+      </a>
+        
+
+        
+
+        <ul class="space-y-2 tracking-wide mt-10">
           <li>
             <SidebarLink
               :href="route('admindash.index')"
               :active="route().current('admindash.index')"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  class="group-hover:text-blue-600"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                />
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
               <span
-                class="-mr-1 font-medium group-hover:text-blue-600 transition duration-300 ease-in-out"
+                class="ml-4"
                 >Dashboard</span
               >
             </SidebarLink>
           </li>
 
           <li>
-            <SidebarLink
+            <!-- <SidebarLink
               :href="route('recommender.index')"
               :active="route().current('recommender.index')"
             >
@@ -133,7 +124,7 @@ const toggleApplicationsDropdown = () => {
                 class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out"
                 >Recommender</span
               >
-            </SidebarLink>
+            </SidebarLink> -->
           </li>
 
           <li>
@@ -145,7 +136,7 @@ const toggleApplicationsDropdown = () => {
                 </svg>
 
 
-                    <span class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out">Off-Campus</span>
+                    <span class="ml-4">Off-Campus</span>
                 </SidebarLink>
             </li>
           <li>
@@ -171,7 +162,7 @@ const toggleApplicationsDropdown = () => {
 
               <span
                 class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out"
-                >Schools</span
+                >Host Training Establishments</span
               >
             </SidebarLink>
           </li>
@@ -179,7 +170,7 @@ const toggleApplicationsDropdown = () => {
           <li>
             <a
               @click.prevent="toggleApplicationsDropdown"
-              class="flex items-center justify-between w-full py-2 text-left font-semibold text-gray-600 hover:text-gray-800 focus:outline-none"
+              class="flex ml-4 space-x-4 w-full py-2 font-semibold text-white hover:text-yellow-200 text-sm focus:outline-none "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +178,7 @@ const toggleApplicationsDropdown = () => {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6 ml-4"
+                class="w-6 h-6 ml-3 text-white"
               >
                 <path
                   stroke-linecap="round"
@@ -197,7 +188,7 @@ const toggleApplicationsDropdown = () => {
               </svg>
 
               <span
-                class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out"
+                class="text-white"
                 >Applications</span
               >
               <svg
@@ -234,7 +225,7 @@ const toggleApplicationsDropdown = () => {
             <transition name="fade">
               <ul
                 v-if="isApplicationDropdownOpen"
-                class="space-y-2 tracking-wide mt-2"
+                class="space-y-2 tracking-wide mt-2 ml-10"
               >
                 <li>
                   <SidebarLink
@@ -244,25 +235,6 @@ const toggleApplicationsDropdown = () => {
                       route().current('applications.inCampusApplication')
                     "
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-10 h-10 mr-2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                      />
-                    </svg>
                     In-campus Application
                   </SidebarLink>
                     </li>
@@ -276,21 +248,6 @@ const toggleApplicationsDropdown = () => {
                       route().current('applications.offCampusApplication')
                     "
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-10 h-10 mr-2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.107 1.107 0 00-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 01-1.652.928l-.679-.906a1.125 1.125 0 00-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 00-8.862 12.872M12.75 3.031a9 9 0 016.69 14.036m0 0l-.177-.529A2.25 2.25 0 0017.128 15H16.5l-.324-.324a1.453 1.453 0 00-2.328.377l-.036.073a1.586 1.586 0 01-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 01-5.276 3.67m0 0a9 9 0 01-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25"
-                      />
-                    </svg>
-
                     Off-Campus Application
                   </SidebarLink>
                 </li>
@@ -382,65 +339,19 @@ const toggleApplicationsDropdown = () => {
             </SidebarLink>
           </li>
         </ul>
+        
       </div>
 
-      <div class="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-        <button
-          class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:text-amber-500"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          <Link
-            :href="route('logout')"
-            method="post"
-            as="button"
-            class="group-hover:text-amber-500 font-bold"
-            >Logout</Link
-          >
-        </button>
-      </div>
+      
     </aside>
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
       <div
-        class="fixed z-10 w-full bg-violet-200 lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]"
+        class="fixed z-10 w-full bg-blue border-b-4 border-gold lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]"
       >
         <div
-          class="px-6 flex items-center justify-between space-x-4 2xl:container"
+          class="pr-6 flex items-center justify-between space-x-4 2xl:container"
         >
-          <h5 hidden class="text-2xl text-black font-medium lg:block">
-            {{ currentRoute }}
-          </h5>
-          <button class="w-12 h-16 -mr-2 border-r lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 my-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-          <div class="flex space-x-4">
-            <!--search bar -->
-            <div hidden class="md:block">
+         <div hidden class="md:block">
               <div
                 class="relative flex items-center text-gray-400 focus-within:text-cyan-400"
               >
@@ -468,6 +379,15 @@ const toggleApplicationsDropdown = () => {
                 />
               </div>
             </div>
+          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+   <span class="sr-only">Open sidebar</span>
+   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+   </svg>
+</button>
+          <div class="flex space-x-4">
+            <!--search bar -->
+            
             <!--/search bar -->
             <button
               aria-label="search"
@@ -504,21 +424,31 @@ const toggleApplicationsDropdown = () => {
                 />
               </svg>
             </button>
-            <button
-              aria-label="notification"
-              class="w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 m-auto text-gray-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
-                />
-              </svg>
-            </button>
+
+           
+
+           <span class="hidden text-right lg:block flex items-center mt-1">
+            <span class="block text-sm font-medium text-white dark:text-white">{{ $page.props.auth.user.full_name }}</span>
+            <span class="block text-xs font-medium text-gold">BEED, Internship Coordinator</span>
+            
+          </span>
+           <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName" class="flex items-center text-sm font-medium text-white rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:outline-none transition duration-200 ease-in-out" type="button">
+    <span class="sr-only">Open user menu</span>
+     <img class="w-10 h-10 m-auto border-2 border-gold rounded-full object-cover lg:w-12 lg:h-12" src="@/Assets/maamAriaso.jpg" alt="user photo">
+    <svg class="w-5 h-5 mx-1.5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</button>
+
+<!-- Dropdown menu -->
+<div id="dropdownAvatarName" class=" z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
+      <li>
+        <a href="#" class="block px-4 py-2 hover:text-gold">Profile</a>
+      </li>
+      <li>
+        <Link :href="route('logout')" method="post" as="button" class="block px-4 py-2  hover:text-gold focus:outline-none">Log out</Link>
+      </li>
+    </ul>
+</div>
           </div>
         </div>
       </div>

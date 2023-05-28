@@ -77,7 +77,7 @@
                   <div class="flex space-x-6 items-center">
                       <img :src="institution.school_logo" class="w-auto h-24 rounded-lg"/>
                       <div>
-                          <p class="font-semibold text-2xl">{{ institution.name }}</p>
+                          <p class="font-semibold text-2xl">{{ student.program === 'BSED' ? institution.namebsed : institution.name }}</p>
                           <p class="font-semibold text-lg text-gray-400">{{ institution.address }}</p>
                       </div>              
                   </div>

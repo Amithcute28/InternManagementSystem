@@ -8,8 +8,20 @@ import TableRow from '@/Components/TableRow.vue';
 import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
 
+import { onMounted } from 'vue'
+import { initFlowbite } from 'flowbite'
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+    initFlowbite();
+})
+
 
 defineProps(["users"]);
+
+
+
+// Component registration
 
 
 </script>
@@ -18,11 +30,6 @@ defineProps(["users"]);
     <Head title="Student Profile" />
 
     <UserLayout>
-
-
-
-
-
 <div class="bg-gray-100 mt-16">
  <div class="w-full text-white bg-main-color">
         <div x-data="{ open: false }"
@@ -32,6 +39,7 @@ defineProps(["users"]);
         </div>
     </div>
     <!-- End of Navbar -->
+    
 
     <div class="container mx-auto bg-white">
         <div class="md:flex no-wrap md:-mx-2 ">
@@ -42,6 +50,9 @@ defineProps(["users"]);
                 <!-- Profile tab -->
                 <!-- About Section -->
                 <div class="bg-white p-3 rounded-xl shadow-md">
+                    
+
+
                     <div class="flex items-center  space-x-2 ml-3 font-semibold text-gray-900 leading-8">
                         <span clas="text-green-500">
                             <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -74,10 +85,6 @@ defineProps(["users"]);
                                 <div class="px-4 py-2">{{ $page.props.auth.user.program }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Year Level.</div>
-                                <div class="px-4 py-2">{{ $page.props.auth.user.year_level }}</div>
-                            </div>
-                            <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Email</div>
                                 <div class="px-4 py-2">{{ $page.props.auth.user.email }}</div>
                             </div>
@@ -104,10 +111,6 @@ defineProps(["users"]);
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Home Address</div>
                                 <div class="px-4 py-2">{{ $page.props.auth.user.home_address }}</div>
-                            </div>
-                            <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Zip Code</div>
-                                <div class="px-4 py-2">{{ $page.props.auth.user.zip_code }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Guardian Name</div>

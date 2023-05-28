@@ -37,8 +37,10 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        if ($user->is_admin && $user->approved) {
+        if ($user->is_admin && $user->approved && $user->program == 'BEED') {
             return redirect()->intended(RouteServiceProvider::HOME);
+        }elseif ($user->is_admin && $user->approved && $user->program == 'BSED') {
+            return redirect('/admindashbsed');
         } elseif ($user->approved) {
             return redirect('/user');
         } else {

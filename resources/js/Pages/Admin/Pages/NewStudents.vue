@@ -13,6 +13,7 @@ const { newstudents } = defineProps({
         newstudents: Array,
     });
 
+console.log(newstudents);
     const totalNewStudents = newstudents.length;
 
  defineExpose({ totalNewStudents });

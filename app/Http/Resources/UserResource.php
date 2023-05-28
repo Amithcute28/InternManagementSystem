@@ -16,10 +16,9 @@ class UserResource extends JsonResource
     {
         return [
             
-            'id' => $this->id,
+            'id' => $this->id,  
             'student_id' => $this->student_id,
             'password'=> $this->password,
-            'year_level'=> $this->year_level,
             'full_name'=> $this->full_name,
             'academic_performance'=> $this->academic_performance,
             'program'=> $this->program,
@@ -31,11 +30,10 @@ class UserResource extends JsonResource
             'nationality'=> $this->nationality,
             'contact_number'=> $this->contact_number,
             'home_address'=> $this->home_address,
-            'zip_code'=> $this->zip_code,
             'guardian_name'=> $this->guardian_name,
             'guardian_contact'=> $this->guardian_contact,
             'approved'=> $this->approved,
-            'recommended'=> $this->recommended,
+            'new_intern'=> $this->new_intern,
             'choosen_institution' => $this->choosen_institution
         ];
     }

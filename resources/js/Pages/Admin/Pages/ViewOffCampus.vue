@@ -45,7 +45,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 bg-white border-b border-gray-200">
-          <h1 class="text-2xl font-bold mb-4">Recommended Institutions for {{ student.full_name }}</h1>
+          <h1 class="text-2xl font-bold mb-4">{{ student.full_name }}</h1>
           
           <div class="mb-4 grid md:grid-cols-2">
             <p><strong>Program:</strong> {{ student.program }}</p>
@@ -53,6 +53,8 @@
             <p><strong>Academic Performance:</strong> {{ student.academic_performance }}</p>
             <p><strong>Skills:</strong> {{ student.skills }}</p>
           </div>
+          
+           <h1 class="text-2xl font-bold mb-4">Recommended Institution:</h1>
           <!-- <ul>
             <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
               <div class="font-bold">{{ institution.name }}</div>

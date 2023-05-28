@@ -18,11 +18,9 @@ class AdminSeeder2 extends Seeder
         User::create([
             'student_id'=> '2',
             'password'=> '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'program'=> 'BSIT',
-            'year_level'=> 'Fourth year',
             'full_name'=> 'Arvin G. Felicen',
             'academic_performance' => 90,
-            'program' => 'Information Technology',
+            'program' => 'BSED',
             'skills' => 'Java, Python, MySQL, MongoDB',
             'email'=> 'admin2@gmail.com',
             'email_verified_at' => now(),
@@ -32,11 +30,10 @@ class AdminSeeder2 extends Seeder
             'nationality'=> 'Filipino',
             'contact_number'=> '09691277480',
             'home_address'=> 'Tacloban City',
-            'zip_code'=> '6810',
             'guardian_name'=> 'Ian Ben',
             'guardian_contact'=> '123456789',
             'remember_token' => Str::random(10),
-        ])->assignRole('user');
+        ])->assignRole('admin');
 
     
     }

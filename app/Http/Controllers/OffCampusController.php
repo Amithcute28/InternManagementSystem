@@ -17,9 +17,9 @@ class OffCampusController extends Controller
      */
     public function index(): Response
     {
-        $students = User::where('recommended', '=', 1)->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+        $students = User::where('is_off_campus', '=', 1)->where('program', 'BEED')->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
 
-        $institutions = Institution::all();
+        $institutions = School::all();
 
         foreach ($students as $student) {
             $student->recommended_institutions = [];

@@ -59,7 +59,7 @@ function openModal(school) {
     <div class="flex justify-end">
             
             <!-- <Link :href="route('schools.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded" @click="toggleModal" @close-modal="toggleModal">Add New School</Link> -->
-             <PrimaryButton class="px-3 py-2 mx-6 text-white font-semibold rounded" @click="toggleModal" >Add New School</PrimaryButton>
+             <PrimaryButton class="px-3 py-2 mx-6 text-white font-semibold rounded" @click="toggleModal" >Add New HTE</PrimaryButton>
            
            </div>
         <div class="grid grid-cols-2 gap-0">

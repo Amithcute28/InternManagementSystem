@@ -20,6 +20,39 @@ const isDoc = (url) => {
   return /\.(doc|docx)$/i.test(url);
 };
 
+const offCampus = (form) => {
+  return (
+    form.eslip &&
+    form.psa &&
+    form.pros &&
+    form.applicationF &&
+    form.medical &&
+    form.parent &&
+    form.twobytwo && 
+    form.eval_form && 
+    form.is_off_campus === 1
+  );
+};
+
+const inCampus = (form) => {
+  return (
+    form.eslip &&
+    form.psa &&
+    form.pros &&
+    form.applicationF &&
+    form.medical &&
+    form.parent &&
+    form.twobytwo && 
+    form.eval_form && 
+    form.is_off_campus === 0
+  );
+};
+
+
+
+
+
+
 const props = defineProps({
   files: {
     type: Array,
@@ -140,6 +173,7 @@ const props = defineProps({
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
+            <TableHeaderCell class="whitespace-nowrap">Status</TableHeaderCell>
             <!-- <TableHeaderCell class="whitespace-nowrap"
               >Entrance Slip</TableHeaderCell
             >
@@ -176,11 +210,52 @@ const props = defineProps({
                   class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"
                 ></span>
               </div>
-              {{ form.full_name }}</TableDataCell
-            >
+              {{ form.full_name }}</TableDataCell>
             <TableDataCell>{{ form.program }}</TableDataCell>
+             <TableDataCell>
+              <template v-if="offCampus(form)">
+                <a
+                  target="_blank"
+                  class="bg-green-200 text-green-600 py-1 px-5 rounded-full text-xs"
+                >
+                  OFF-CAMPUS
+                </a>
+              </template>
 
-            <TableDataCell
+              <template v-else-if="inCampus(form)">
+                <a
+                  target="_blank"
+                  class="bg-green-200 text-green-600 py-1 px-5 rounded-full text-xs"
+                >
+                  IN-CAMPUS
+                </a>
+              </template>
+              
+              <template v-else>
+                <a
+                  target="_blank"
+                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+                >
+                  Submitting IN-CAMPUS
+                </a>
+              </template></TableDataCell>
+
+            <TableDataCell class="space-x-4">
+                <Link
+                  :href="route('students.edit', form.id)"
+                  class="text-green-400 hover:text-green-600"
+                  >Edit</Link
+                >
+                <Link
+                  :href="route('students.destroy', form.id)"
+                  method="DELETE"
+                  as="button"
+                  class="text-red-400 hover:text-red-600"
+                  >Delete</Link
+                >
+              </TableDataCell>
+
+            <!-- <TableDataCell
               ><div class="flex item-center">
                 <div
                   class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
@@ -239,7 +314,7 @@ const props = defineProps({
                     />
                   </svg>
                 </div></div
-            ></TableDataCell>
+            ></TableDataCell> -->
           </TableRow>
         </template>
       </Table>

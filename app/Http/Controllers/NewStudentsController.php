@@ -29,7 +29,7 @@ class NewStudentsController extends Controller
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
             
-            $newstudents = User::where('approved', '=', 0)->get();
+            $newstudents = User::where('approved', '=', 0)->where('program', 'BEED')->get();
             $totalNewStudents = $newstudents->count();
 
             return Inertia::render('Admin/Pages/NewStudents',[
@@ -41,6 +41,12 @@ class NewStudentsController extends Controller
         
     }
 
+    public function edit(User $newstudent): Response
+    {
+        return Inertia::render('Admin/Pages/NewStudentsApproval', [
+            'newstudent' => $newstudent,
+        ]);
+    }   
     /**
      * Show the form for creating a new resource.
      */
@@ -60,12 +66,7 @@ class NewStudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $newstudent): Response
-    {
-        return Inertia::render('Admin/Pages/NewStudentsApproval', [
-            'newstudent' => new UserResource($newstudent)
-        ]);
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -75,19 +76,9 @@ class NewStudentsController extends Controller
         $request->validate([
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($newstudent),
             'program' => 'required|string|max:255',
-            'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($newstudent),
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'home_address' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
-
+           
 
 
         ]);
@@ -95,18 +86,8 @@ class NewStudentsController extends Controller
         $newstudent->update([
             'student_id' => $request->student_id,
             'program' => $request->program,
-            'year_level' => $request->year_level,
             'full_name' => $request->full_name,
             'email' => $request->email,
-            'birthday' => $request->birthday,
-            'gender' => $request->gender,
-            'relationship' => $request->relationship,
-            'nationality' => $request->nationality,
-            'contact_number' => $request->contact_number,
-            'home_address' => $request->home_address,
-            'zip_code' => $request->zip_code,
-            'guardian_name' => $request->guardian_name,
-            'guardian_contact' => $request->guardian_contact,
             'approved' => 1,
         ]);
 

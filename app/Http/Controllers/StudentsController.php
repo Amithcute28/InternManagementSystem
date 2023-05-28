@@ -44,7 +44,10 @@ class StudentsController extends Controller
             $user = $application_form->user;
             $student_name = $user ? $user->full_name : null;
             return [
+                'id' => $user->id,
                 'student_id' => $user->student_id,
+                'is_off_campus' => $user->is_off_campus,
+                'in_campus' => $user->in_campus,
                 'full_name' => $student_name,
                 'program' => $user->program ?? null,
                 'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
@@ -54,12 +57,16 @@ class StudentsController extends Controller
                 'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
                 'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
                 'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
+                'eval_form' => $application_form->eval_form ? asset('storage/' . $application_form->eval_form) : null,
             ];
         });
 
-        $approvedUsers = User::where('approved', 1)->where('is_admin', 0)->whereDoesntHave('applicationForms')->get()->map(function ($user) {
+        $approvedUsers = User::where('approved', 1)->where('is_admin', 0)->where('program', 'BEED')->whereDoesntHave('applicationForms')->get()->map(function ($user) {
             return [
+                'id' => $user->id,
                 'student_id' => $user->student_id,
+                'is_off_campus' => $user->is_off_campus,
+                'in_campus' => $user->in_campus,
                 'full_name' => $user->full_name,
                 'program' => $user->program,
                 'eslip' => null, // Or any other default value for missing files
@@ -69,6 +76,7 @@ class StudentsController extends Controller
                 'medical' => null,
                 'parent' => null,
                 'twobytwo' => null,
+                'eval_form' => null,
             ];
         });
 
@@ -88,14 +96,20 @@ class StudentsController extends Controller
         ]);
     }
 
+    public function edit($student): Response
+    {
+
+        $student = User::findOrFail($student);
+        return Inertia::render('Admin/Pages/StudentEdit', [
+            'student' => new UserResource($student)
+        ]);
+    }
+
     public function inCampus()
     {
         // in-campus logic goes here
 
-        $qualifiedUsers = User::where('approved', 1)
-            ->where('is_admin', 0)
-            ->where('status', 'completed')
-            ->with(['applicationForms' => function ($query) {
+        $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('status', 'completed')->with(['applicationForms' => function ($query) {
                 $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
             }])
             ->get()
@@ -122,7 +136,7 @@ class StudentsController extends Controller
             return in_array(strtolower($extension), $allowed_extensions);
         })->values();
 
-        return Inertia::render('Admin/Pages/InCampus', [
+        return Inertia::render('Admin/PagesBSED/InCampus', [
             'files' => $filtered_files,
             'approved' => $qualifiedUsers,
         ]);
@@ -132,10 +146,7 @@ class StudentsController extends Controller
     {
         // in-campus logic goes here
 
-        $qualifiedUsers = User::where('approved', 1)
-            ->where('is_admin', 0)
-            ->where('is_off_campus', true)
-            ->with(['applicationForms' => function ($query) {
+        $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('is_off_campus', true)->with(['applicationForms' => function ($query) {
                 $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
             }])
             ->get()
@@ -314,13 +325,7 @@ class StudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $student): Response
-    {
-        return Inertia::render('Admin/Pages/StudentEdit', [
-            'student' => new UserResource($student)
-        ]);
-    }
-
+   
     /**
      * Update the specified resource in storage.
      */
@@ -329,7 +334,6 @@ class StudentsController extends Controller
         $request->validate([
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
             'program' => 'required|string|max:255',
-            'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($student),
             'birthday' => 'required|string|max:255',
@@ -338,18 +342,15 @@ class StudentsController extends Controller
             'nationality' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
             'home_address' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
-            'approved' => 'required|string|max:255',
 
 
         ]);
-
+        $Student = Auth::user();
         $student->update([
             'student_id' => $request->student_id,
             'program' => $request->program,
-            'year_level' => $request->year_level,
             'full_name' => $request->full_name,
             'email' => $request->email,
             'birthday' => $request->birthday,
@@ -358,10 +359,8 @@ class StudentsController extends Controller
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
             'home_address' => $request->home_address,
-            'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
-            'approved' => $request->approved,
         ]);
 
         return to_route('students.index');

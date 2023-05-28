@@ -7,15 +7,25 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
+        "./node_modules/flowbite/**/*.js"
+        
     ],
 
     theme: {
         extend: {
+            colors: {
+                'blue': '#070372',
+                'gold': '#eab117',
+                'darkWhite': '#f5f5f5'
+                
+              },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
     },
 
-    plugins: [require('@tailwindcss/forms')],
+    plugins: [require('@tailwindcss/forms'),require('flowbite/plugin')],
 };
+
+

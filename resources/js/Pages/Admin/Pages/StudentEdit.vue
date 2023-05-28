@@ -36,7 +36,6 @@ const props = defineProps({
 const form = useForm({
         student_id: props.student?.student_id,
         program: props.student?.program,
-        year_level: props.student?.year_level,
         full_name: props.student?.full_name,
         email: props.student?.email,
         birthday: props.student?.birthday,
@@ -45,14 +44,14 @@ const form = useForm({
         nationality: props.student?.nationality,
         contact_number: props.student?.contact_number,
         home_address: props.student?.home_address,
-        zip_code: props.student?.zip_code,
+       
         guardian_name: props.student?.guardian_name,
         guardian_contact: props.student?.guardian_name,
         approved: props.student?.approved,
 })
 
 const submit = () => {
-    form.put(route("application.update", props.student?.id));
+    form.put(route("students.update", props.student?.id));
 };
 </script>
 
@@ -102,21 +101,6 @@ const submit = () => {
         for="program" 
         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Program</label>
         <InputError class="mt-2" :message="form.errors.program" />
-    </div>
-    <div class="relative z-0 w-full mb-6 group">
-       <input 
-        type="text" 
-        id="year_level" 
-        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-        placeholder=" "
-        v-model="form.year_level"
-        required
-        autofocus
-        autocomplete="year_level" />
-        <label 
-        for="year_level" 
-        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Year Level</label>
-        <InputError class="mt-2" :message="form.errors.year_level" />
     </div>
   </div>
 
@@ -237,21 +221,7 @@ const submit = () => {
         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Contact Number</label>
         <InputError class="mt-2" :message="form.errors.contact_number" />
     </div>
-    <div class="relative z-0 w-full mb-6 group">
-       <input 
-       type="text" 
-        id="zip_code" 
-        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-        placeholder=" "
-        v-model="form.zip_code"
-        required
-        autofocus
-        autocomplete="zip_code" />
-        <label 
-        for="zip_code" 
-        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Zip Code</label>
-        <InputError class="mt-2" :message="form.errors.zip_code" />
-    </div>
+    
   </div>
             
             <div class="relative z-0 w-full mb-6 group">

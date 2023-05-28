@@ -7,6 +7,7 @@ use Inertia\Response;
 use Inertia\Inertia;
 use App\Models\Institution;
 use App\Models\School;
+use App\Models\Schoolbsed;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,69 +25,107 @@ class StatusController extends Controller
         // Check if the logged-in user is the same as the requested student
         if ($user->approved == 1 && $user->is_admin == 0) {
             $student = User::findOrFail($id);
-            
 
-            // Get institutions that match the user's program and skills
-    $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student->program}%")
-    ->where(function ($query) use ($student) {
-        $query->where(function ($innerQuery) use ($student) {
-            $innerQuery->whereIn('skills', explode(',', $student->skills));
-        });
-    })
-    ->get()
-    ->map(function ($institution) {
-        return [
-            'id' => $institution->id,
-            'name' => $institution->name,
-            'address' => $institution->address,
-            'school_logo' => asset('storage/'. $institution->school_logo),
-            'required_programs' => $institution->required_programs,
-            'required_academic_performance' => $institution->required_academic_performance,
-            'skills' => $institution->skills,
-        ];
-    });
+            // Check the student's program and set the matching institutions accordingly
+            if ($student->program == 'BSED') {
+                $matchingInstitutions = Schoolbsed::where(function ($query) use ($student) {
+                    $query->where(function ($innerQuery) use ($student) {
+                        $innerQuery->whereIn('skills', explode(',', $student->skills));
+                    });
+                })
+                ->get()
+                ->map(function ($institution) {
+                    return [
+                        'id' => $institution->id,
+                        'namebsed' => $institution->namebsed,
+                        'address' => $institution->address,
+                        'school_logo' => asset('storage/'. $institution->school_logo),
+                        'required_programs' => $institution->required_programs,
+                        'required_academic_performance' => $institution->required_academic_performance,
+                        'skills' => $institution->skills,
+                    ];
+                });
+            } else {
+                $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student->program}%")
+                    ->where(function ($query) use ($student) {
+                        $query->where(function ($innerQuery) use ($student) {
+                            $innerQuery->whereIn('skills', explode(',', $student->skills));
+                        });
+                    })
+                    ->get()
+                    ->map(function ($institution) {
+                        return [
+                            'id' => $institution->id,
+                            'name' => $institution->name,
+                            'address' => $institution->address,
+                            'school_logo' => asset('storage/'. $institution->school_logo),
+                            'required_programs' => $institution->required_programs,
+                            'required_academic_performance' => $institution->required_academic_performance,
+                            'skills' => $institution->skills,
+                        ];
+                    });
+            }
 
-// Get institutions that match the required_programs of the user
+           // Get institutions that match the required_programs of the user for School and SchoolBSED
 $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student->program}%")
-    ->whereNotIn('id', $matchingInstitutions->pluck('id')) // Exclude institutions already matched by program and skills
-    ->get()
-    ->map(function ($institution) {
-        return [
-            'id' => $institution->id,
-            'name' => $institution->name,
-            'address' => $institution->address,
-            'school_logo' => asset('storage/'. $institution->school_logo),
-            'required_programs' => $institution->required_programs,
-            'required_academic_performance' => $institution->required_academic_performance,
-            'skills' => $institution->skills,
-        ];
-    });
+->whereNotIn('id', $matchingInstitutions->pluck('id')) // Exclude institutions already matched by program and skills
+->get()
+->map(function ($institution) {
+    return [
+        'id' => $institution->id,
+        'name' => $institution->name,
+        'address' => $institution->address,
+        'school_logo' => asset('storage/'. $institution->school_logo),
+        'required_programs' => $institution->required_programs,
+        'required_academic_performance' => $institution->required_academic_performance,
+        'skills' => $institution->skills,
+    ];
+});
 
-$recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+$requiredProgramsMatchbsed = Schoolbsed::where('required_programs', 'LIKE', "%{$student->program}%")
+->whereNotIn('id', $matchingInstitutions->pluck('id')) // Exclude institutions already matched by program and skills
+->get()
+->map(function ($institution) {
+    return [
+        'id' => $institution->id,
+        'namebsed' => $institution->namebsed,
+        'address' => $institution->address,
+        'school_logo' => asset('storage/'. $institution->school_logo),
+        'required_programs' => $institution->required_programs,
+        'required_academic_performance' => $institution->required_academic_performance,
+        'skills' => $institution->skills,
+    ];
+});
 
-$student->recommended_institutions = $recommendedInstitutions;
+$recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)->concat($requiredProgramsMatchbsed);
 
+            $student->recommended_institutions = $recommendedInstitutions;
 
-if ($student->choosen_institution != 0) {
-    $institution = School::findOrFail($student->choosen_institution);
-    $institution->school_logo = asset('storage/'. $institution->school_logo);
-    return Inertia::render('Student/StatusRecommended', [
-        'student' => $student,
-        'institution' => $institution,
-    ]);
-} elseif ($student->recommended == 1) {
-    return Inertia::render('Student/StatusChooseRecommendation', [
-        'student' => $student,
-    ]);
-} else {
-    return Inertia::render('Student/StatusWaiting', [
-        'student' => $student,
-    ]);
-}
-}
+            if ($student->choosen_institution != 0) {
+                if ($student->program == 'BSED') {
+                    $institution = Schoolbsed::findOrFail($student->choosen_institution);
+                } else {
+                    $institution = School::findOrFail($student->choosen_institution);
+                }
+                $institution->school_logo = asset('storage/'. $institution->school_logo);
+                return Inertia::render('Student/StatusRecommended', [
+                    'student' => $student,
+                    'institution' => $institution,
+                ]);
+            } elseif ($student->is_off_campus == 1) {
+                return Inertia::render('Student/StatusChooseRecommendation', [
+                    'student' => $student,
+                ]);
+            } else {
+                return Inertia::render('Student/StatusWaiting', [
+                    'student' => $student,
+                ]);
+            }
+        }
     }
-// Return a default Inertia response or handle the case when Auth::check() is false.
-return Inertia::render('Student/StatusWaiting');
+
+    // Return a default Inertia response or handle the case when Auth::check() is false.
+    return Inertia::render('Student/StatusWaiting');
 }
 
     /**

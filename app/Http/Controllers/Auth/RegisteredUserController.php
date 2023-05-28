@@ -34,22 +34,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'student_id' => 'required|string|max:255',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'year_level' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'academic_performance' => 'required|string|max:255',
             'program' => 'required|string|max:255',
-            'skills' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'home_address' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+           
             
             
             
@@ -58,22 +47,10 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
         'student_id' => $request->student_id,
-        'password' => Hash::make($request->password),
-        'year_level' => $request->year_level,
-        'full_name' => $request->full_name,
-        'academic_performance'=> $request->academic_performance,
         'program'=> $request->program,
-        'skills'=> $request->skills,
+        'full_name' => $request->full_name,
         'email' => $request->email,
-        'birthday' => $request->birthday,
-        'gender' => $request->gender,
-        'relationship' => $request->relationship,
-        'nationality' => $request->nationality,
-        'contact_number' => $request->contact_number,
-        'home_address' => $request->home_address,
-        'zip_code' => $request->zip_code,
-        'guardian_name' => $request->guardian_name,
-        'guardian_contact' => $request->guardian_contact,
+        'password' => Hash::make($request->password),
         'approved' => 0,
         'recommended' => 0,
 

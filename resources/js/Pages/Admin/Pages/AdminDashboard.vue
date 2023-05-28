@@ -29,7 +29,7 @@ const schools = [
   <AdminLayout>
     <div class="grid grid-cols-12 gap-6 mt-16">
       <a
-        class="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+        class="transform hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
         href="#"
       >
         <div class="p-5">
@@ -60,13 +60,13 @@ const schools = [
                 {{ totalStudents }}
               </div>
 
-              <div class="mt-1 text-base text-gray-600">Students</div>
+              <div class="mt-1 text-base text-gray-600">Interns</div>
             </div>
           </div>
         </div>
       </a>
       <a
-        class="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+        class="transform hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
         href="#"
       >
         <div class="p-5">
@@ -97,13 +97,13 @@ const schools = [
                 {{ totalSchools }}
               </div>
 
-              <div class="mt-1 text-base text-gray-600">Schools</div>
+              <div class="mt-1 text-base text-gray-600">HTE</div>
             </div>
           </div>
         </div>
       </a>
       <a
-        class="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+        class="transform hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
         href="#"
       >
         <div class="p-5">
@@ -140,12 +140,12 @@ const schools = [
                 {{ totalNewStudents }}
               </div>
 
-                                                    <div class="mt-1 text-base text-gray-600">New Students</div>
+                                                    <div class="mt-1 text-base text-gray-600">New Interns</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                    <a class="transform  hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
                                         href="#">
                                         <div class="p-5">
                                             <div class="flex justify-between">
@@ -176,13 +176,13 @@ const schools = [
         <div class="px-6 pt-6 2xl:container">
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <div class="md:col-span-2 lg:col-span-1 transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1" >
-                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-lg rounded-lg">
+                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-md rounded-lg">
                    
                   
                 </div>
             </div>
             <div>
-                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-lg rounded-lg transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1">
+                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-md rounded-lg transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1">
 
                  </div>   
             </div>

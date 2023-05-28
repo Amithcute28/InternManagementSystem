@@ -79,7 +79,8 @@ class RecommenderController extends Controller
     $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student->program}%")
         ->where(function ($query) use ($student) {
             $query->where(function ($innerQuery) use ($student) {
-                $innerQuery->whereIn('skills', explode(',', $student->skills));
+                $innerQuery->whereRaw("FIND_IN_SET('Computer', skills) > 0");
+                $innerQuery->orWhereIn('skills', explode(',', $student->skills));
             });
         })
         ->get()

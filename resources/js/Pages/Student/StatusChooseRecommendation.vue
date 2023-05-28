@@ -90,7 +90,7 @@ function openModal(institution) {
                        
                         <img :src="institution.school_logo" class="w-auto h-24 rounded-lg"/>
                         <div>
-                            <p class="font-semibold text-base">{{ institution.name }}</p>
+                            <p class="font-semibold text-base">{{ student.program === 'BSED' ? institution.namebsed : institution.name }}</p>
                             <p class="font-semibold text-sm text-gray-400">{{ institution.address }}</p>
                             <p class="font-semibold text-sm text-gray-400">{{ institution.required_programs }}</p>
                             <p class="font-semibold text-sm text-gray-400">{{ institution.skills }}</p>
@@ -141,7 +141,7 @@ function openModal(institution) {
                     
                       <img :src="selectedInstitution.school_logo" class="w-auto h-24 rounded-lg"/>
                       <div >
-                          <p class="font-semibold text-2xl">{{ selectedInstitution.name }}</p>
+                          <p class="font-semibold text-2xl">{{ student.program === 'BSED' ? selectedInstitution.namebsed : selectedInstitution.name }}</p>
                           <p class="font-semibold text-lg text-gray-400">{{ selectedInstitution.address }}</p>
                       </div>              
                   </div>

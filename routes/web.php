@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserStudentsController;
 use App\Http\Controllers\ApplicationController;
@@ -17,6 +16,36 @@ use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+//adminBSED*/
+use App\Http\Controllers\ApplicationControllerBSED;
+use App\Http\Controllers\AdminDashboardControllerBSED;
+use App\Http\Controllers\StudentsControllerBSED;
+use App\Http\Controllers\NewStudentsControllerBSED;
+use App\Http\Controllers\SchoolsControllerBSED;
+use App\Http\Controllers\OffCampusControllerBSED;
+use App\Http\Controllers\CoordinatorsControllerBSED;
+
+
+//admin dashboard BSED
+Route::resource('/admindashbsed', AdminDashboardControllerBSED::class);
+Route::resource('/schoolsbsed', SchoolsControllerBSED::class);
+Route::resource('/studentsbsed', StudentsControllerBSED::class);
+Route::resource('/newstudentsbsed', NewStudentsControllerBSED::class);
+Route::resource('/coordinatorsbsed', CoordinatorsControllerBSED::class);
+Route::resource('/offcampusbsed', OffCampusControllerBSED::class);
+Route::resource('/applicationbsed', ApplicationControllerBSED::class);
+
+Route::put('/newstudentsbsed/{id}', [NewStudentsControllerBSED::class, 'updateApproved'])->name('newstudentsbsed.updateApproved');
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admindashbsed', [AdminDashboardControllerBSED::class, 'index'])->name('admindashbsed.index');
+    Route::get('in-campusbsed', [StudentsControllerBSED::class, 'inCampus'])->name('studentsbsed.inCampus');
+    Route::get('off-campusbsed', [StudentsControllerBSED::class, 'offCampus'])->name('studentsbsed.offCampus');
+    Route::get('in-campus-applicationbsed', [ApplicationControllerBSED::class, 'inCampusApplication'])->name('applicationsbsed.inCampusApplication');
+    Route::get('off-campus-applicationbsed', [ApplicationControllerBSED::class, 'offCampusApplication'])->name('applicationsbsed.offCampusApplication');
+    Route::put('off-campus-applicationbsed/{id}', [ApplicationControllerBSED::class, 'updateStatus'])->name('applicationsbsed.updateStatus');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +73,7 @@ Route::resource('/status', StatusController::class);
 Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
 
 
-//admin dashboard
+//admin dashboard BEED
 Route::resource('/admindash', AdminDashboardController::class);
 Route::resource('/recommender', RecommenderController::class);
 Route::resource('/schools', SchoolsController::class);
@@ -52,11 +81,13 @@ Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
 Route::resource('/coordinators', CoordinatorsController::class);
 Route::resource('/offcampus', OffCampusController::class);
+Route::resource('/offcampus', OffCampusController::class);
 
 Route::resource('/role', RoleController::class);
 
 Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name('recommender.update');
 Route::put('/newstudents/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
+Route::put('/applications/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applications.updateOffcampus');
 
 Route::get('/reports/{id}', function ($id) {
     $student = Student::findOrFail($id);
@@ -83,14 +114,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('in-campus-application', [ApplicationController::class, 'inCampusApplication'])->name('applications.inCampusApplication');
     Route::get('off-campus-application', [ApplicationController::class, 'offCampusApplication'])->name('applications.offCampusApplication');
     Route::put('off-campus-application/{id}', [ApplicationController::class, 'updateStatus'])->name('applications.updateStatus');
+    Route::get('in-campus-application-edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+    Route::DELETE('in-campus-application-destroy', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 });
 
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
+    
+    Route::post('/user', [UserStudentsController::class, 'showProfile'])->name('user.showProfile');
+   
 });
 
+Route::post('/user', [UserStudentsController::class, 'updateNewIntern'])->name('user.updateNewIntern');
 
 
 require __DIR__ . '/auth.php';

@@ -29,10 +29,26 @@ class UserStudentsController extends Controller
     {
         $user = Auth::user();
 
-        return Inertia::render('Student/Main', [
-        'users' => UserResource::collection(User::where('id', '=', $user->id)->where('recommended', '=', 1)->get()),
+        if ($user->new_intern == 0) {
+            return Inertia::render('Student/NewIntern', [
+                'users' => UserResource::collection(User::where('id', '=', $user->id)->where('is_off_campus', '=', 1)->get()),
+            ]);
+        } else {
+            return Inertia::render('Student/Main', [
+                'users' => UserResource::collection(User::where('id', '=', $user->id)->where('is_off_campus', '=', 1)->get()),
+            ]);
+        }
+
+   
+    }   
+
+    public function showProfile($id)
+{
+    $user = User::findOrFail($id);
+    return Inertia::render('Student/Main', [
+        'users' => new UserResource($user),
     ]);
-    }
+}
 
     public function show($id)
 {
@@ -47,16 +63,33 @@ class UserStudentsController extends Controller
      */
     public function create(): Response
     {
-        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
+
+        // $twobytwo = '';
         
-        
+        // if ($request->hasFile('eslip')) {
+        //     $eslip = $request->file('eslip')->store('student', 'public');
+        // }
+
+        // ApplicationForm::create([
+        //     'user_id' => $userId,
+        //     'eslip' => $eslip,
+        //     'psa' => $psa,
+        //     'pros' => $pros,
+        //     'applicationF' => $applicationF,
+        //     'medical' => $medical,
+        //     'parent' => $parent,
+        //     'twobytwo' => $twobytwo,
+        //     'approved' => 1,
+        //     'is_admin' => 0,
+        // ]);
     }
 
     
@@ -70,6 +103,57 @@ class UserStudentsController extends Controller
             'user' => new UserResource($user)
         ]);
     }
+
+    public function updateNewIntern(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            
+            'skills' => 'required|string|max:255',
+            'birthday' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'relationship' => 'required|string|max:255',
+            'nationality' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:255',
+            'home_address' => 'required|string|max:255',
+            'guardian_name' => 'required|string|max:255',
+            'guardian_contact' => 'required|string|max:255',
+            'profile' => 'nullable|file',
+            
+        ]);
+
+        $user = Auth::user();
+        $profile = '';
+
+        if ($request->hasFile('profile')) {
+            $profile = $request->file('profile')->store('student', 'public');
+        }
+
+        
+
+      
+        
+        $user->update([
+            'skills' => $request->input('skills'),
+            'birthday' => $request->input('birthday'),
+            'gender' => $request->input('gender'),
+            'relationship' => $request->input('relationship'),
+            'nationality' => $request->input('nationality'),
+            'contact_number' => $request->input('contact_number'),
+            'home_address' => $request->input('home_address'),
+            'guardian_name' => $request->input('guardian_name'),
+            'guardian_contact' => $request->input('guardian_contact'),
+            'new_intern' => 1,
+            'profile' => $profile,
+            
+           
+        ]);
+
+        
+        
+
+        return to_route('user.index');
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -94,6 +178,8 @@ class UserStudentsController extends Controller
             
             
         ]);
+
+              
 
         $user->update([
             'student_id' => $request->student_id,

@@ -28,7 +28,7 @@ class CoordinatorsController extends Controller
         
     // ]);
 
-    $students = Student::all();
+    $students = User::all();
 
         return Inertia::render('Admin/Pages/Coordinators', [
             'students' => $students
@@ -40,117 +40,74 @@ class CoordinatorsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function show()
     {
-        return Inertia::render('Admin/Pages/CoordinatorsCreate');
+        return view('profile');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        /** 
-         *  SRP (Single Responsibility Principle)
-         *  Use FormRequest for validation instead of the validate
-         */
-        $request->validate([
-            'student_id' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
-            'gender' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-            'current_address' => 'required|string|max:255',
-            'permanent_address' => 'required|string|max:255',
-            'birthday' => 'required|string|max:255',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            
-        ]);
-
-        User::create([
-            
-            /**
-             * Set is_admin column to 1 when saving
-             * to make the user an admin.
-             */
-            // 'is_admin' => 1,
-            
-            'student_id' => $request->student_id,
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'gender' => $request->gender,
-            'contact' => $request->contact,
-            'current_address' => $request->current_address,
-            'permanent_address' => $request->permanent_address,
-            'birthday' => $request->birthday,
-            'password' => Hash::make($request->password),
-            'is_admin' => 1,
-            
-        ])->assignRole('admin');
-
-        
-
-        return to_route('coordinators.index');
-    }
-
-    
-   
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $coordinator): Response
-    {
-        return Inertia::render('Admin/Pages/CoordinatorsEdit', [
-            'coordinator' => new UserResource($coordinator)
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $coordinator): RedirectResponse
+    public function upload(Request $request)
     {
         $request->validate([
-            
-            'student_id' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($coordinator),
-            'gender' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-            'current_address' => 'required|string|max:255',
-            'permanent_address' => 'required|string|max:255',
-            'birthday' => 'required|string|max:255',
-            
-            
-            
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $coordinator->update([
-            'student_id' => $request->student_id,
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'gender' => $request->gender,
-            'contact' => $request->contact,
-            'current_address' => $request->current_address,
-            'permanent_address' => $request->permanent_address,
-            'birthday' => $request->birthday,
-            
-        ]);
+        $user = Auth::user();
 
-        
+        // Delete old profile image if exists
+        if ($user->profile_image) {
+            $this->deleteProfileImage($user->profile_image);
+        }
 
+        // Upload new profile image
+        $imagePath = $request->file('profile_image')->store('profile_images');
 
-       
+        // Update user's profile image column
+        $user->profile_image = $imagePath;
+        $user->save();
 
-        return to_route('coordinators.index');
+        return redirect()->back()->with('success', 'Profile image uploaded successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy( User $coordinator): RedirectResponse
+    public function update(Request $request)
     {
-        $coordinator->delete();
-        return to_route('coordinators.index');
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old profile image if exists
+        if ($user->profile_image) {
+            $this->deleteProfileImage($user->profile_image);
+        }
+
+        // Upload new profile image
+        $imagePath = $request->file('profile_image')->store('profile_images');
+
+        // Update user's profile image column
+        $user->profile_image = $imagePath;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile image updated successfully.');
+    }
+
+    public function delete()
+    {
+        $user = Auth::user();
+
+        // Delete profile image if exists
+        if ($user->profile_image) {
+            $this->deleteProfileImage($user->profile_image);
+            $user->profile_image = null;
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Profile image deleted successfully.');
+    }
+
+    private function deleteProfileImage($imagePath)
+    {
+        // Delete the profile image file from storage
+        Storage::delete($imagePath);
     }
 }

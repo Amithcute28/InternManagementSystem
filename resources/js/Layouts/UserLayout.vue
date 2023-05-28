@@ -8,9 +8,20 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import SidebarLink from "@/Components/SidebarLink.vue";
 
+import { reactive } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+const page = usePage();
+const user = reactive({ ...page.props.auth.user});
+
+
 const showingNavigationDropdown = ref(false);
 
 let currentRoute = ref("");
+
+const isImage = (url) => {
+  return /\.(jpeg|jpg|png|gif)$/i.test(url);
+};
+
 
 const routeTitle = (route) => {
   if (route === "user") {
@@ -31,23 +42,26 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full bg-violet-200 h-screen ">
-      <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-white border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+    <div class="w-full h-full bg-darkWhite h-screen ">
+      <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-blue border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
      <div>
         <div class="-mx-6 px-6 py-4">
           <a href="#" title="home"> </a>
         </div>
 
+ 
+
         <div class="mt-4 text-center">
+          <!-- <p>{{ user.profile }}</p>
+          <p class="text-white"> {{ user.full_name }}</p> -->
           <img
-            src="@/Assets/profile.jpg"
+            :src="user.profile"
             alt=""
-            class="w-10 h-10 m-auto rounded-full object-cover lg:w-16 lg:h-16"
           />
-          <h5 class="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-            
+          <h5 class="hidden mt-4 text-xl font-semibold text-white  lg:block">
+            {{ user.full_name }}
           </h5>
-          <span class="hidden text-gray-400 lg:block">Student</span>
+          <span class="hidden text-gold lg:block">Student</span>
         </div>
 
         <ul class="space-y-2 tracking-wide mt-8">
@@ -147,9 +161,9 @@ onMounted(() => {
     </div>
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="fixed z-10 w-full bg-violet-200 lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
+    <div class="fixed z-10 w-full bg-blue lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
-            <h5 hidden class="text-2xl text-black font-medium lg:block">{{ currentRoute }}</h5>
+            <h5 hidden class="text-2xl text-white font-medium lg:block">{{ currentRoute }}</h5>
             <button class="w-12 h-16 -mr-2 border-r lg:hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

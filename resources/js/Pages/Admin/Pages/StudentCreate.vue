@@ -412,7 +412,7 @@ const submit = async () => {
                 individuals pursuing a career in teaching to acquire hands-on
                 teaching experience in a real classroom environment.
               </p>
-
+            </div>
               <div
                 class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
               >
@@ -572,6 +572,11 @@ const submit = async () => {
                     </label>
                   </div>
                 </div>
+              </div>
+          </div>
+        </form>
+      </div>
+      </div>
            
           <button
             type="submit"
