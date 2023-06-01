@@ -40,7 +40,7 @@ class StudentsController extends Controller
      */
     public function index()
 {
-    $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
+    $applicationForms = ApplicationForm::with('user')->paginate(8)->map(function ($application_form) {
         $user = $application_form->user;
         $student_name = $user ? $user->full_name : null;
         return [
@@ -100,6 +100,8 @@ class StudentsController extends Controller
         return $item['program'] === 'BEED';
     });
 
+    
+    
     return Inertia::render('Admin/Pages/Students', [
         'files' => $filtered_files,
         'approved' => $filteredData,

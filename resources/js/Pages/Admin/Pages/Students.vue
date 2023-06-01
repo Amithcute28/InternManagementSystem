@@ -302,7 +302,7 @@ const submit = () => {
           </TableRow>
         </template>
         <template #default>
-          <TableRow class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" v-for="form in approved.data" :key="form.id">
+          <TableRow class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" v-for="form in approved" :key="form.id">
              <TableDataCell>{{ form.student_id }}</TableDataCell>
                             <TableDataCell class="flex items-center px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white">
                                 <img class="w-8 h-8 rounded-full"  :src="`storage/${form.profile}`" alt="">
@@ -409,8 +409,6 @@ const submit = () => {
           </TableRow>
         </template>
       </Table>
-      <Pagination :links="approved.meta.links" />
-      
     
 
     <dialog id="myModal" class="h-auto w-11/12 md:w-1/2 p-5  bg-white rounded-md ">

@@ -11,6 +11,8 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\ApplicationForm;
 use App\Models\Institution;
 use App\Models\School;
+use App\Models\Schoolbsed;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -26,8 +28,8 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'student_id',
+        'profile',
         'password',
-        'year_level',
         'full_name',
         'academic_performance',
         'program',
@@ -39,16 +41,16 @@ class User extends Authenticatable
         'nationality',
         'contact_number',
         'home_address',
-        'zip_code',
         'guardian_name',
         'guardian_contact',
         'is_admin',
         'approved',
+        'new_intern',
         'is_off_campus',
         'in_campus',
         'status',
-        'recommended',
         'choosen_institution',
+        ''
     ];
 
 
@@ -65,6 +67,43 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(School::class);
     }
+    public function school_bseds()
+    {
+        return $this->belongsToMany(Schoolbsed::class);
+    }
+    public function scopeApproved(Builder $query)
+    {
+        $query->where('approved', 1)
+        ->where('is_admin', 0)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        ->whereDoesntHave('applicationForms')
+        ->get()
+        ->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'student_id' => $user->student_id,
+                'profile' => $user->profile,
+                'email' => $user->email,
+                'is_off_campus' => $user->is_off_campus,
+                'in_campus' => $user->in_campus,
+                'full_name' => $user->full_name,
+                'program' => $user->program,
+                'eslip' => null, // Or any other default value for missing files
+                'psa' => null,
+                'pros' => null,
+                'applicationF' => null,
+                'medical' => null,
+                'parent' => null,
+                'twobytwo' => null,
+                'eval_form' => null,
+            ];
+        });
+    }
+
+    
+
+   
+    
     /**
      * The attributes that should be hidden for serialization.
      *
