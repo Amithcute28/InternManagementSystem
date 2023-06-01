@@ -76,28 +76,7 @@ class User extends Authenticatable
         $query->where('approved', 1)
         ->where('is_admin', 0)
         ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-        ->whereDoesntHave('applicationForms')
-        ->get()
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'student_id' => $user->student_id,
-                'profile' => $user->profile,
-                'email' => $user->email,
-                'is_off_campus' => $user->is_off_campus,
-                'in_campus' => $user->in_campus,
-                'full_name' => $user->full_name,
-                'program' => $user->program,
-                'eslip' => null, // Or any other default value for missing files
-                'psa' => null,
-                'pros' => null,
-                'applicationF' => null,
-                'medical' => null,
-                'parent' => null,
-                'twobytwo' => null,
-                'eval_form' => null,
-            ];
-        });
+        ->whereDoesntHave('applicationForms');
     }
 
     
