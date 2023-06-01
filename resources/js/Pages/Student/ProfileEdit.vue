@@ -60,7 +60,7 @@ const submit = () => {
         <Head title="Update student" />
 
 
-<div class="bg-white pb-10 px-10 rounded-xl shadow-md mt-2">
+<div class="bg-white pb-10 px-10 rounded-xl shadow-md mt-16">
                     <div class="flex items-center justify-between  space-x-2 ml-3 font-semibold text-gray-900 leading-8">
                         <span class="tracking-wide">About</span>
                                         <Link :href="route('user.index')" class=" px-3 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded m-4">Back</Link>       

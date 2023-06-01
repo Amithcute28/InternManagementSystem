@@ -12,6 +12,7 @@ use App\Models\ApplicationForm;
 use App\Models\Institution;
 use App\Models\School;
 use App\Models\Schoolbsed;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -49,6 +50,7 @@ class User extends Authenticatable
         'in_campus',
         'status',
         'choosen_institution',
+        ''
     ];
 
 
@@ -69,6 +71,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Schoolbsed::class);
     }
+    public function scopeApproved(Builder $query)
+    {
+        $query->where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd']);
+    }
+
+   
+    
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -83,12 +83,7 @@ function openModal(form) {
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
       <div class="flex justify-between">
-        <h1></h1>
-        <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        >
+        <h1>In-Campus List</h1>
       </div>
     </div>
     <div class="mt-6">
@@ -125,41 +120,28 @@ function openModal(form) {
           </TableRow>
         </template>
         <template #default>
-          <TableRow v-for="form in approved" :key="form.id">
+          <TableRow class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" v-for="form in approved" :key="form.id">
             <TableDataCell>{{ form.student_id }}</TableDataCell>
-            <TableDataCell class="flex items-center gap-3">
-              <div class="relative h-10 w-10">
-                <img
-                  class="h-full w-full rounded-full object-cover object-center"
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <span
-                  class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"
-                ></span>
-              </div>
-              {{ form.full_name }}</TableDataCell
-            >
+             <TableDataCell class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <img class="w-8 h-8 rounded-full" :src="`storage/${form.profile}`" alt="">
+                                    <div class="pl-3">
+                                    <div class="text-base font-semibold">{{ form.full_name }}</div>
+                                    <div class="font-normal text-gray-500">{{ form.email }}</div>
+                                     </div>  
+                            </TableDataCell>
             <TableDataCell>{{ form.program }}</TableDataCell>
             
           <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
            <TableDataCell>
               <template v-if="isComplete(form)">
-                <a
-                  @click="updateStatus(form)"
-                  target="_blank"
-                  class="bg-green-200 text-green-600 py-1 px-5 rounded-full text-xs cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-300 hover:text-green-700 transform hover:scale-110"
-                >
-                  COMPLETED
-                </a>
+             <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Completed
+                  </div>
               </template>
               <template v-else>
-                <a
-                  target="_blank"
-                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
-                >
-                  INCOMPLETE
-                </a>
+                <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div> Incomplete
+                  </div>
               </template></TableDataCell>
             <!-- <TableDataCell
               ><a v-if="isImage(form.eslip)" :href="form.psa" target="_blank">
@@ -404,6 +386,13 @@ function openModal(form) {
               </template></TableDataCell
             > -->
              <TableDataCell class="space-x-4">
+               <Link
+                  :href="route('applications.updateIncampus', form.id)" 
+                  method="PUT" 
+                  as="button"
+                  class="text-green-400 hover:text-green-600"
+                  >Proceed</Link
+                >
                 <Link
                   :href="route('applications.edit', form.id)"
                   class="text-green-400 hover:text-green-600"

@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -21,14 +21,14 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('coordinatorsbsed.store'), {
+    form.post(route('coordinators.store'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
 </script>
 
  <template>
-<AdminLayoutBSED>
+<AdminLayout>
         <Head title="Create student" />
 
 
@@ -38,7 +38,7 @@ const submit = () => {
   <div class="max-w-7xl mx-auto py-4">
     <div class="flex justify-between">
                 
-            <Link :href="route('coordinatorsbsed.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
+            <Link :href="route('coordinators.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
            </div>
     <div class="w-80 h-100">
 
@@ -230,5 +230,5 @@ const submit = () => {
 
 
         
-    </AdminLayoutBSED>
+    </AdminLayout>
 </template>

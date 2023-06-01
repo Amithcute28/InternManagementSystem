@@ -27,7 +27,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.put(route("schoolsbsed.update", props.school?.id));
+    form.put(route("schools.update", props.school?.id));
 };
 
 </script>
@@ -250,7 +250,7 @@ const submit = () => {
               </div>
             </div>
           </div>
-          <Link  :href="route('schoolsbsed.edit', school.id)" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs py-3 my-4 ml-6">Edit Information</Link>
+          <Link  :href="route('schools.edit', school.id)" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs py-3 my-4 ml-6">Edit Information</Link>
           
           
         </div>

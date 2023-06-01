@@ -42,9 +42,14 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full bg-darkWhite h-screen ">
-      <aside class="ml-[-100%] fixed z-10  top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-blue border-r transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
-     <div>
+    <div class="w-full h-full bg-darkWhite h-screen">
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]" aria-label="Sidebar">
+   <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
+      <a class="flex items-center pl-2.5 mt-2 ml-5">
+         <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" /> -->
+         <span class="self-center text-3xl font-semibold whitespace-nowrap text-white">PracTEACH</span>
+      </a>
+
         <div class="-mx-6 px-6 py-4">
           <a href="#" title="home"> </a>
         </div>
@@ -55,8 +60,9 @@ onMounted(() => {
           <!-- <p>{{ user.profile }}</p>
           <p class="text-white"> {{ user.full_name }}</p> -->
           <img
-            :src="user.profile"
+            :src="`storage/${user.profile}`"
             alt=""
+            class="h-16 w-16 rounded-full border-2 border-gold flex justify-center items-center ml-28"
           />
           <h5 class="hidden mt-4 text-xl font-semibold text-white  lg:block">
             {{ user.full_name }}
@@ -149,26 +155,30 @@ onMounted(() => {
             </SidebarLink>
           </li>
         </ul>
-      </div>
 
-    <div class="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-        <button class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:text-amber-500">
+         <button class="ml-4 mt-52 px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group hover:text-amber-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             <Link :href="route('logout')" method="post" as="button" class="group-hover:text-amber-500 font-bold">Logout</Link>
         </button>
-    </div>
+      </div>
+
 </aside>
 <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-    <div class="fixed z-10 w-full bg-blue lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]">
+    <div
+        class="fixed z-10 w-full bg-blue border-b-4 border-gold lg:py-2.5 lg:w-[85%] xl:w-[80%] 2xl:w-[85%]"
+      >
         <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
             <h5 hidden class="text-2xl text-white font-medium lg:block">{{ currentRoute }}</h5>
-            <button class="w-12 h-16 -mr-2 border-r lg:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+            <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+   <span class="sr-only">Open sidebar</span>
+   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+   </svg>
+</button>
+
+            
             <div class="flex space-x-4">
                 <!--search bar -->
                 <div hidden class="md:block">

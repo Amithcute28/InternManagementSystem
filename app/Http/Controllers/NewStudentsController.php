@@ -29,11 +29,18 @@ class NewStudentsController extends Controller
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
             
-            $newstudents = User::where('approved', '=', 0)->where('program', 'BEED')->get();
-            $totalNewStudents = $newstudents->count();
+        $newstudentsbeed = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+        $totalNewStudents = $newstudentsbeed->count();
+
+            $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
+           
+            
+            
 
             return Inertia::render('Admin/Pages/NewStudents',[
                 'newstudents' => UserResource::collection($newstudents),
+
+                'newstudentsbeed' => UserResource::collection($newstudentsbeed),
                 'totalNewStudents' => $totalNewStudents,
             ]);
 

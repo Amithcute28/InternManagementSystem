@@ -31,11 +31,11 @@ class UserStudentsController extends Controller
 
         if ($user->new_intern == 0) {
             return Inertia::render('Student/NewIntern', [
-                'users' => UserResource::collection(User::where('id', '=', $user->id)->where('is_off_campus', '=', 1)->get()),
+                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
             ]);
         } else {
             return Inertia::render('Student/Main', [
-                'users' => UserResource::collection(User::where('id', '=', $user->id)->where('is_off_campus', '=', 1)->get()),
+                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
             ]);
         }
 
@@ -128,10 +128,6 @@ class UserStudentsController extends Controller
             $profile = $request->file('profile')->store('student', 'public');
         }
 
-        
-
-      
-        
         $user->update([
             'skills' => $request->input('skills'),
             'birthday' => $request->input('birthday'),

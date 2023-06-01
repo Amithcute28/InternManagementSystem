@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 import AdminLayoutBSED from "@/Layouts/AdminLayoutBSED.vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
@@ -23,14 +23,14 @@ const props = defineProps({
   <Head title="Coordinators" />
 
   <AdminLayoutBSED>
-    <div class="mt-16">
+    <div class="mt-24">
       <div class="flex justify-between">
         <h1></h1>
-        <Link
+        <!-- <Link
           :href="route('coordinatorsbsed.create')"
           class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded"
           >New Coordinator</Link
-        >
+        > -->
       </div>
       <div class="mt-6">
         <!-- <Table>

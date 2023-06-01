@@ -91,7 +91,7 @@
 
                             <TableDataCell>{{ student.student_id }}</TableDataCell>
                             <TableDataCell class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                <img class="w-10 h-10 rounded-full" src="@/Assets/profile.jpg" alt="Jese image">
+                                <img class="w-10 h-10 rounded-full" :src="`storage/${student.profile}`" alt="Jese image">
                                     <div class="pl-3">
                                     <div class="text-base font-semibold">{{ student.full_name }}</div>
                                     <div class="font-normal text-gray-500">{{ student.email }}</div>

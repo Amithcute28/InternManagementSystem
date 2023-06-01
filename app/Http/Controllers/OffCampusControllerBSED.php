@@ -8,7 +8,6 @@ use Inertia\Inertia;
 use App\Models\Institution;
 use App\Models\User;
 use App\Models\Schoolbsed;
-use App\Http\Resources\SchoolBSEDResource;
 
 class OffCampusControllerBSED extends Controller
 {
@@ -18,7 +17,7 @@ class OffCampusControllerBSED extends Controller
      */
     public function index(): Response
     {
-        $students = User::where('status', '=', 'completed')->where('program', 'BSED')->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+        $students = User::where('is_off_campus', '=', 1)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
 
         $institutions = Schoolbsed::all();
 

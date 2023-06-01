@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             
             'id' => $this->id,  
             'student_id' => $this->student_id,
+            'profile' => $this->profile,
             'password'=> $this->password,
             'full_name'=> $this->full_name,
             'academic_performance'=> $this->academic_performance,
@@ -34,7 +35,8 @@ class UserResource extends JsonResource
             'guardian_contact'=> $this->guardian_contact,
             'approved'=> $this->approved,
             'new_intern'=> $this->new_intern,
-            'choosen_institution' => $this->choosen_institution
+            'choosen_institution' => $this->choosen_institution,
+            'created_at' => $this->created_at->format('d-m-y H:i:s'),
         ];
     }
 }

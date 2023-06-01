@@ -25,7 +25,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.put(route("coordinatorsbsed.update", props.coordinator?.id));
+    form.put(route("coordinators.update", props.coordinator?.id));
 };
 </script>
 
@@ -40,7 +40,7 @@ const submit = () => {
   <div class="max-w-7xl mx-auto py-4">
     <div class="flex justify-between">
             <h1>Update student</h1>
-            <Link :href="route('coordinatorsbsed.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
+            <Link :href="route('coordinators.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
            </div>
     <div class="w-80 h-100">
 

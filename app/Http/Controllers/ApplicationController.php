@@ -21,8 +21,10 @@ class ApplicationController extends Controller
      */
     public function index(): Response
     {
+        $user = Auth::user();
+
         return Inertia::render('Student/ApplicationIndex', [
-            'application_forms' => ApplicationResource::collection(ApplicationForm::all())
+            'application_forms' => ApplicationResource::collection(ApplicationForm::where('user_id', $user->id)->get() ?? []),
         ]);
     }
 
@@ -32,13 +34,11 @@ class ApplicationController extends Controller
 
     $qualifiedUsers = User::where('approved', 1)
         ->where('is_admin', 0)
-        ->where('program', 'BEED')
-        ->where('is_off_campus', 0)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
         ->where(function ($query) {
             $query->where('in_campus', 0)
                 ->orWhere(function ($query) {
-                    $query->where('in_campus', 1)
-                        ->whereHas('applicationForms');
+                    $query->where('in_campus', 1)->doesntHave('applicationForms');
                 });
         })
         ->with(['applicationForms' => function ($query) {
@@ -51,6 +51,8 @@ class ApplicationController extends Controller
             return [
                 'id' => $user->id,
                 'student_id' => $user->student_id,
+                'profile' => $user->profile,
+                'email' => $user->email,
                 'full_name' => $user->full_name,
                 'program' => $user->program,
                 'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
@@ -80,7 +82,11 @@ class ApplicationController extends Controller
     {
         // in-campus logic goes herea
 
-        $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)->where('program', 'BEED')->where('in_campus', 1)->with(['applicationForms' => function ($query) {
+        $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        ->where('in_campus', 1)
+        ->where('is_off_campus', 0)
+        ->with(['applicationForms' => function ($query) {
                 $query->select('user_id', 'eval_form','eslip','psa','pros','applicationF','medical','parent','twobytwo');
             }])
             ->get()
@@ -90,8 +96,11 @@ class ApplicationController extends Controller
                 return [
                     'id' => $user->id,
                     'student_id' => $user->student_id,
+                    'email' => $user->email,
+                    'profile' => $user->profile,
                     'full_name' => $user->full_name,
                     'program' => $user->program,
+                    'in_campus' => $user->in_campus,
                     'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
                     'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
                     'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
@@ -240,6 +249,19 @@ class ApplicationController extends Controller
         ]);
     }
     
+    public function updateIncampus($id)
+    {
+        $student = User::find($id);
+        
+            $student->in_campus = 1;
+            $student->save();
+        
+        
+        // Add any additional logic or response handling as needed
+        
+        return redirect()->route('applications.inCampusApplication');
+    }
+
     public function updateOffcampus($id)
     {
         $student = User::find($id);

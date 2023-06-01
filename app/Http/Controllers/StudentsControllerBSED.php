@@ -39,27 +39,41 @@ class StudentsControllerBSED extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
-            $user = $application_form->user;
-            $student_name = $user ? $user->full_name : null;
-            return [
-                'student_id' => $user->student_id,
-                'full_name' => $student_name,
-                'program' => $user->program ?? null,
-                'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
-                'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
-                'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
-                'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
-                'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
-                'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
-                'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
-            ];
-        });
+{
+    $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
+        $user = $application_form->user;
+        $student_name = $user ? $user->full_name : null;
+        return [
+            'id' => $user->id,
+            'student_id' => $user->student_id,
+            'profile' => $user->profile,
+            'is_off_campus' => $user->is_off_campus,
+            'in_campus' => $user->in_campus,
+            'full_name' => $student_name,
+            'program' => $user->program ?? null,
+            'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
+            'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
+            'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
+            'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
+            'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
+            'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
+            'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
+            'eval_form' => $application_form->eval_form ? asset('storage/' . $application_form->eval_form) : null,
+        ];
+    });
 
-        $approvedUsers = User::where('approved', 1)->where('is_admin', 0)->where('program', 'BSED')->whereDoesntHave('applicationForms')->get()->map(function ($user) {
+    $approvedUsers = User::where('approved', 1)
+        ->where('is_admin', 0)
+        ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
+        ->whereDoesntHave('applicationForms')
+        ->get()
+        ->map(function ($user) {
             return [
+                'id' => $user->id,
                 'student_id' => $user->student_id,
+                'profile' => $user->profile,
+                'is_off_campus' => $user->is_off_campus,
+                'in_campus' => $user->in_campus,
                 'full_name' => $user->full_name,
                 'program' => $user->program,
                 'eslip' => null, // Or any other default value for missing files
@@ -69,22 +83,34 @@ class StudentsControllerBSED extends Controller
                 'medical' => null,
                 'parent' => null,
                 'twobytwo' => null,
+                'eval_form' => null,
             ];
         });
 
-        $combinedData = $applicationForms->concat($approvedUsers);
+    $combinedData = $applicationForms->concat($approvedUsers);
 
-        $files = Storage::allFiles();
-        $filtered_files = collect($files)->filter(function ($value, $key) {
-            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-            $extension = pathinfo($value, PATHINFO_EXTENSION);
-            return in_array(strtolower($extension), $allowed_extensions);
-        })->values();
+    $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+        $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+        $extension = pathinfo($value, PATHINFO_EXTENSION);
+        return in_array(strtolower($extension), $allowed_extensions);
+    })->values();
 
-        return Inertia::render('Admin/PagesBSED/Students', [
-            'files' => $filtered_files,
-            'approved' => $combinedData,
-            // Add the offCampus route
+    $filteredData = $combinedData->filter(function ($item, $key) {
+        return in_array($item['program'], ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies']);
+    });
+
+    return Inertia::render('Admin/PagesBSED/Students', [
+        'files' => $filtered_files,
+        'approved' => $filteredData,
+        // Add the offCampus route
+    ]);
+}
+    public function edit($student): Response
+    {
+
+        $student = User::findOrFail($student);
+        return Inertia::render('Admin/PagesBSED/StudentEdit', [
+            'student' => new UserResource($student)
         ]);
     }
 
@@ -92,7 +118,7 @@ class StudentsControllerBSED extends Controller
     {
         // in-campus logic goes here
 
-        $qualifiedUsers = User::where('approved', 1)->where('program', 'BSED')->where('is_admin', 0)->where('status', 'completed')->with(['applicationForms' => function ($query) {
+        $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('status', 'completed')->with(['applicationForms' => function ($query) {
                 $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
             }])
             ->get()
@@ -129,7 +155,7 @@ class StudentsControllerBSED extends Controller
     {
         // in-campus logic goes here
 
-        $qualifiedUsers = User::where('approved', 1)->where('program', 'BSED')->where('is_admin', 0)->where('is_off_campus', 0)->with(['applicationForms' => function ($query) {
+        $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('is_off_campus', true)->with(['applicationForms' => function ($query) {
                 $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
             }])
             ->get()
@@ -156,7 +182,7 @@ class StudentsControllerBSED extends Controller
             return in_array(strtolower($extension), $allowed_extensions);
         })->values();
 
-        return Inertia::render('Admin/PagesBSED/OffCampus', [
+        return Inertia::render('Admin/Pages/OffCampus', [
             'files' => $filtered_files,
             'approved' => $qualifiedUsers,
         ]);
@@ -199,7 +225,7 @@ class StudentsControllerBSED extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Admin/Pages/StudentCreate');
+        return Inertia::render('Admin/PagesBSED/StudentCreate');
     }
 
     /**
@@ -211,7 +237,6 @@ class StudentsControllerBSED extends Controller
             'student_id' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'program' => 'required|string|max:255',
-            'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . User::class,
             'birthday' => 'required|string|max:255',
@@ -220,18 +245,16 @@ class StudentsControllerBSED extends Controller
             'nationality' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
             'home_address' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
 
+            
         ]);
 
         $user = User::create([
-            'id' => $request->id,
             'student_id' => $request->student_id,
             'password' => Hash::make($request->password),
             'program' => $request->program,
-            'year_level' => $request->year_level,
             'full_name' => $request->full_name,
             'email' => $request->email,
             'birthday' => $request->birthday,
@@ -240,62 +263,62 @@ class StudentsControllerBSED extends Controller
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
             'home_address' => $request->home_address,
-            'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
             'approved' => 1,
             'is_admin' => 0,
+            'new_intern' => 1,
         ])->assignRole('user');
 
 
 
-        $userId = $user->id;
-        $eslip = '';
-        $psa = '';
-        $pros = '';
-        $applicationF = '';
-        $medical = '';
-        $parent = '';
-        $twobytwo = '';
+        // $userId = $user->id;
+        // $eslip = '';
+        // $psa = '';
+        // $pros = '';
+        // $applicationF = '';
+        // $medical = '';
+        // $parent = '';
+        // $twobytwo = '';
 
-        // Check if eslip file exists and store it
-        if ($request->hasFile('eslip')) {
-            $eslip = $request->file('eslip')->store('student', 'public');
-        }
+        // // Check if eslip file exists and store it
+        // if ($request->hasFile('eslip')) {
+        //     $eslip = $request->file('eslip')->store('student', 'public');
+        // }
 
-        // Check if other files exist and store them
-        if ($request->hasFile('psa')) {
-            $psa = $request->file('psa')->store('student', 'public');
-        }
-        if ($request->hasFile('pros')) {
-            $pros = $request->file('pros')->store('student', 'public');
-        }
-        if ($request->hasFile('applicationF')) {
-            $applicationF = $request->file('applicationF')->store('student', 'public');
-        }
-        if ($request->hasFile('medical')) {
-            $medical = $request->file('medical')->store('student', 'public');
-        }
-        if ($request->hasFile('parent')) {
-            $parent = $request->file('parent')->store('student', 'public');
-        }
-        if ($request->hasFile('twobytwo')) {
-            $twobytwo = $request->file('twobytwo')->store('student', 'public');
-        }
+        // // Check if other files exist and store them
+        // if ($request->hasFile('psa')) {
+        //     $psa = $request->file('psa')->store('student', 'public');
+        // }
+        // if ($request->hasFile('pros')) {
+        //     $pros = $request->file('pros')->store('student', 'public');
+        // }
+        // if ($request->hasFile('applicationF')) {
+        //     $applicationF = $request->file('applicationF')->store('student', 'public');
+        // }
+        // if ($request->hasFile('medical')) {
+        //     $medical = $request->file('medical')->store('student', 'public');
+        // }
+        // if ($request->hasFile('parent')) {
+        //     $parent = $request->file('parent')->store('student', 'public');
+        // }
+        // if ($request->hasFile('twobytwo')) {
+        //     $twobytwo = $request->file('twobytwo')->store('student', 'public');
+        // }
 
-        // Create new application form record in the database
-        ApplicationForm::create([
-            'user_id' => $userId,
-            'eslip' => $eslip,
-            'psa' => $psa,
-            'pros' => $pros,
-            'applicationF' => $applicationF,
-            'medical' => $medical,
-            'parent' => $parent,
-            'twobytwo' => $twobytwo,
-            'approved' => 1,
-            'is_admin' => 0,
-        ]);
+        // // Create new application form record in the database
+        // ApplicationForm::create([
+        //     'user_id' => $userId,
+        //     'eslip' => $eslip,
+        //     'psa' => $psa,
+        //     'pros' => $pros,
+        //     'applicationF' => $applicationF,
+        //     'medical' => $medical,
+        //     'parent' => $parent,
+        //     'twobytwo' => $twobytwo,
+        //     'approved' => 1,
+        //     'is_admin' => 0,
+        // ]);
 
 
 
@@ -308,13 +331,7 @@ class StudentsControllerBSED extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $student): Response
-    {
-        return Inertia::render('Admin/Pages/StudentEdit', [
-            'student' => new UserResource($student)
-        ]);
-    }
-
+   
     /**
      * Update the specified resource in storage.
      */
@@ -323,7 +340,6 @@ class StudentsControllerBSED extends Controller
         $request->validate([
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
             'program' => 'required|string|max:255',
-            'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($student),
             'birthday' => 'required|string|max:255',
@@ -332,18 +348,15 @@ class StudentsControllerBSED extends Controller
             'nationality' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
             'home_address' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
-            'approved' => 'required|string|max:255',
 
 
         ]);
-
+        $Student = Auth::user();
         $student->update([
             'student_id' => $request->student_id,
             'program' => $request->program,
-            'year_level' => $request->year_level,
             'full_name' => $request->full_name,
             'email' => $request->email,
             'birthday' => $request->birthday,
@@ -352,10 +365,8 @@ class StudentsControllerBSED extends Controller
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
             'home_address' => $request->home_address,
-            'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
-            'approved' => $request->approved,
         ]);
 
         return to_route('students.index');

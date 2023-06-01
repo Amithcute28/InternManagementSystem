@@ -16,19 +16,80 @@ class OffCampusController extends Controller
      * Display a listing of the resource.
      */
     public function index(): Response
-    {
-        $students = User::where('is_off_campus', '=', 1)->where('program', 'BEED')->where('approved', '=', 1)->where('is_admin', '=', 0)->get();
+{
+    $students = User::where('is_off_campus', '=', 1)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        ->where('approved', '=', 1)
+        ->where('is_admin', '=', 0)
+        ->with(['applicationForms' => function ($query) {
+            $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+        }])
+        ->get()
+        ->map(function ($user) {
+            $applicationForm = $user->applicationForms->first(); // Get the first application form
 
-        $institutions = School::all();
+            return [
+                'id' => $user->id,
+                'student_id' => $user->student_id,
+                'email' => $user->email,
+                'profile' => $user->profile,
+                'full_name' => $user->full_name,
+                'program' => $user->program,
+                'skills' => $user->skills,
+                'in_campus' => $user->in_campus,
+                'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
+                'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
+                'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
+                'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
+                'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
+                'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
+                'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
+                'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
+            ];
+        });
 
-        foreach ($students as $student) {
-            $student->recommended_institutions = [];
-        }
+    $students->each(function ($student) {
+        $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student['program']}%")
+            ->where(function ($query) use ($student) {
+                $query->whereIn('skills', explode(',', $student['skills']));
+            })
+            ->get()
+            ->map(function ($institution) {
+                return [
+                    'id' => $institution->id,
+                    'name' => $institution->name,
+                    'address' => $institution->address,
+                    'school_logo' => asset('storage/' . $institution->school_logo),
+                    'required_programs' => $institution->required_programs,
+                    'required_academic_performance' => $institution->required_academic_performance,
+                    'skills' => $institution->skills,
+                ];
+            });
 
-        return Inertia::render('Admin/Pages/OffCampus', [
-            'students' => $students,
-        ]);
-    }
+        $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student['program']}%")
+            ->whereNotIn('id', $matchingInstitutions->pluck('id'))
+            ->get()
+            ->map(function ($institution) {
+                return [
+                    'id' => $institution->id,
+                    'name' => $institution->name,
+                    'address' => $institution->address,
+                    'school_logo' => asset('storage/' . $institution->school_logo),
+                    'required_programs' => $institution->required_programs,
+                    'required_academic_performance' => $institution->required_academic_performance,
+                    'skills' => $institution->skills,
+                ];
+            });
+
+        $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+
+        $student['recommended_institutions'] = $recommendedInstitutions;
+    });
+
+    return Inertia::render('Admin/Pages/OffCampus', [
+        'students' => $students,
+    ]);
+}
     
 
     /**

@@ -16,13 +16,13 @@ class AdminDashboardControllerBSED extends Controller
      */
     public function index(): Response
     {
-        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->where('program', 'BSED')->get();
+        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
         $totalStudents = $students->count();
 
-        $deployed = User::where('is_admin', '=', 0)->where('program', 'BSED')->where('approved', '=', 1)->where('is_off_campus', '=', 1)->where('choosen_institution', '!=', 0)->get();
+        $deployed = User::where('is_admin', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->where('approved', '=', 1)->where('is_off_campus', '=', 1)->where('choosen_institution', '!=', 0)->get();
         $totalDeployed = $deployed->count();
 
-        $newstudents = User::where('approved', '=', 0)->where('program', 'BSED')->get();
+        $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
         $totalNewStudents = $newstudents->count();
     
         $schools = Schoolbsed::all();

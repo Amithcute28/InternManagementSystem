@@ -73,9 +73,9 @@ const toggleApplicationsDropdown = () => {
     <div class="w-full h-full bg-darkWhite h-screen">
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]" aria-label="Sidebar">
    <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
-      <a href="https://flowbite.com/" class="flex items-center pl-2.5 mt-2">
-         <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
-         <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">PracTEACH</span>
+      <a class="flex items-center pl-2.5 mt-2 ml-5">
+         <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" /> -->
+         <span class="self-center text-3xl font-semibold whitespace-nowrap text-white">PracTEACH</span>
       </a>
         
 

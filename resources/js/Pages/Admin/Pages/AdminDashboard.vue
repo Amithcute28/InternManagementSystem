@@ -48,11 +48,7 @@ const schools = [
                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
               />
             </svg>
-            <div
-              class="bg-violet-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm"
-            >
-              <span class="flex items-center">30%</span>
-            </div>
+           
           </div>
           <div class="ml-2 w-full flex-1">
             <div>
@@ -85,11 +81,7 @@ const schools = [
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
               />
             </svg>
-            <div
-              class="bg-red-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm"
-            >
-              <span class="flex items-center">30%</span>
-            </div>
+           
           </div>
           <div class="ml-2 w-full flex-1">
             <div>
@@ -128,11 +120,7 @@ const schools = [
                 d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
               />
             </svg>
-            <div
-              class="bg-yellow-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm"
-            >
-              <span class="flex items-center">30%</span>
-            </div>
+           
           </div>
           <div class="ml-2 w-full flex-1">
             <div>
@@ -155,10 +143,7 @@ const schools = [
                                                         stroke-width="2"
                                                         d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                                                 </svg>
-                                                <div
-                                                    class="bg-blue-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
-                                                    <span class="flex items-center">30%</span>
-                                                </div>
+                                              
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
@@ -169,11 +154,13 @@ const schools = [
           </div>
         </div>
       </a>
+
+      
     </div>
 
                                 
 
-        <div class="px-6 pt-6 2xl:container">
+        <!-- <div class="px-6 pt-6 2xl:container">
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <div class="md:col-span-2 lg:col-span-1 transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1" >
                 <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-md rounded-lg">
@@ -194,6 +181,6 @@ const schools = [
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
   </AdminLayout>
 </template>

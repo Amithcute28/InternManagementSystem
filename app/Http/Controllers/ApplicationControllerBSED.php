@@ -27,64 +27,64 @@ class ApplicationControllerBSED extends Controller
     }
 
     public function inCampusApplication()
-    {
-        // in-campus logic goes here
+{
+    // in-campus logic goes here
 
-        $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
-            $user = $application_form->user;
-            $student_name = $user ? $user->full_name : null;
+    $qualifiedUsers = User::where('approved', 1)
+        ->where('is_admin', 0)
+        ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
+        ->where(function ($query) {
+            $query->where('in_campus', 0)
+                ->orWhere(function ($query) {
+                    $query->where('in_campus', 1)->doesntHave('applicationForms');
+                });
+        })
+        ->with(['applicationForms' => function ($query) {
+            $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+        }])
+        ->get()
+        ->map(function ($user) {
+            $applicationForm = $user->applicationForms->first(); // Get the first application form
+
             return [
                 'id' => $user->id,
-                'full_name' => $student_name,
-                'program' => $user->program ?? null,
-                'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
-                'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
-                'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
-                'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
-                'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
-                'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
-                'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
-            ];
-        });
-
-        $approvedUsers = User::where('approved', 1)->where('is_admin', 0)->where('program', 'BSED')->whereDoesntHave('applicationForms')->get()->map(function ($user) {
-            return [
-                'id' => $user->id,
+                'student_id' => $user->student_id,
+                'profile' => $user->profile,
                 'full_name' => $user->full_name,
                 'program' => $user->program,
-                'eslip' => null, // Or any other default value for missing files
-                'psa' => null,
-                'pros' => null,
-                'applicationF' => null,
-                'medical' => null,
-                'parent' => null,
-                'twobytwo' => null,
-                'status' => $user->status = 0,
+                'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
+                'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
+                'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
+                'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
+                'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
+                'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
+                'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
+                'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
             ];
         });
 
-        $combinedData = $applicationForms->concat($approvedUsers);
+    $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+        $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+        $extension = pathinfo($value, PATHINFO_EXTENSION);
+        return in_array(strtolower($extension), $allowed_extensions);
+    })->values();
 
-        $files = Storage::allFiles();
-        $filtered_files = collect($files)->filter(function ($value, $key) {
-            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-            $extension = pathinfo($value, PATHINFO_EXTENSION);
-            return in_array(strtolower($extension), $allowed_extensions);
-        })->values();
+    return Inertia::render('Admin/PagesBSED/InCampusApplication', [
+        'files' => $filtered_files,
+        'approved' => $qualifiedUsers,
+    ]);
+}
 
-        return Inertia::render('Admin/PagesBSED/InCampusApplication', [
-            'files' => $filtered_files,
-            'approved' => $combinedData,
-            // Add the offCampus route
-        ]);
-    }
+   
 
     public function offCampusApplication()
     {
         // in-campus logic goes herea
 
-        $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)->where('program', 'BSED')->where('status', 'completed')->with(['applicationForms' => function ($query) {
-                $query->select('user_id', 'eval_form',);
+        $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
+        ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
+        ->where('in_campus', 1)->with(['applicationForms' => function ($query) {
+                $query->select('user_id', 'eval_form','eslip','psa','pros','applicationF','medical','parent','twobytwo');
             }])
             ->get()
             ->map(function ($user) {
@@ -93,10 +93,19 @@ class ApplicationControllerBSED extends Controller
                 return [
                     'id' => $user->id,
                     'student_id' => $user->student_id,
+                    'email' => $user->email,
+                    'profile' => $user->profile,
                     'full_name' => $user->full_name,
                     'program' => $user->program,
+                    'in_campus' => $user->in_campus,
                     'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
-
+                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
+                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
+                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
+                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
+                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
+                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
+                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
                 ];
             });
 
@@ -118,7 +127,7 @@ class ApplicationControllerBSED extends Controller
         $user = User::findOrFail($id);
 
         // Update the status to "completed"
-        $user->status = 'completed';
+        $user->in_campus = 1;
         $user->save();
 
         return back()->with('success', 'Status updated successfully.');
@@ -209,7 +218,7 @@ class ApplicationControllerBSED extends Controller
 
 
 
-        return Redirect::route('application.index');
+        return Redirect::route('applicationbsed.index');
     }
     /**
      * Display the specified resource.
@@ -231,10 +240,37 @@ class ApplicationControllerBSED extends Controller
 
 
 
-        return Inertia::render('Admin/Pages/OffCampusEdit', [
+        return Inertia::render('Admin/PagesBSED/OffCampusEdit', [
 
             'offCampus' => new UserResource($offCampus)
         ]);
+    }
+    
+    public function updateIncampus($id)
+    {
+        $student = User::find($id);
+        
+            $student->in_campus = 1;
+            $student->save();
+        
+        
+        // Add any additional logic or response handling as needed
+        
+        return redirect()->route('applicationsbsed.inCampusApplication');
+    }
+
+    public function updateOffcampus($id)
+    {
+        $student = User::find($id);
+        
+      
+            $student->is_off_campus = 1;
+            $student->save();
+        
+        
+        // Add any additional logic or response handling as needed
+        
+        return redirect()->route('applicationsbsed.offCampusApplication');
     }
 
 
@@ -265,7 +301,7 @@ class ApplicationControllerBSED extends Controller
         $application->save();
 
         // Redirect back to the previous page or show a success message
-        return to_route('applications.offCampusApplication');
+        return to_route('applicationsbsed.offCampusApplication');
     }
 
 
@@ -275,6 +311,6 @@ class ApplicationControllerBSED extends Controller
     public function destroy(User $application)
     {
         $application->delete();
-        return to_route('admindash.index');
+        return to_route('applicationsbsed.inCampusApplication');
     }
 }

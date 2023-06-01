@@ -1,5 +1,5 @@
 <script setup>
- import AdminLayout from '@/Layouts/AdminLayout.vue';
+ import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
  import ReusableCard from "@/Components/ReusableCard.vue";
   import { Head } from '@inertiajs/vue3';
    import { Link } from '@inertiajs/vue3';
@@ -50,7 +50,7 @@ function openModal(institution) {
 </script>
 
 <template>
-<AdminLayout>
+<AdminLayoutBSED>
 
   <div class="py-12">
     <div>
@@ -200,7 +200,7 @@ function openModal(institution) {
 
 <Link :href="route('recommender.update', student.id)" method="PUT" as="button" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Recommend na</Link>
   
-  </AdminLayout>
+  </AdminLayoutBSED>
 </template>
 
 

@@ -33,7 +33,7 @@ const submit = () => {
 <section class="flex flex-col md:flex-row h-screen items-center">
 
   <div class="bg-white-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-    <img src="@/Assets/login.png" alt="" class="w-full h-full object-cover">
+    <img src="@/Assets/loginlogo4.jpg" alt="" class="w-full h-full object-cover">
   </div>
 
   <div class="bg-white w-20 md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
@@ -59,7 +59,7 @@ const submit = () => {
           v-model="form.email"
           class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
           placeholder=" "
-          autofocus 
+       
           required 
           autocomplete="username">
           <InputError class="mt-2" :message="form.errors.email" />
@@ -75,7 +75,7 @@ const submit = () => {
           minlength="6" 
           class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
           placeholder=" " 
-          autofocus 
+          
           required 
           autocomplete="current-password">
           <InputError class="mt-2" :message="form.errors.password" />
@@ -105,7 +105,7 @@ const submit = () => {
 
             
  
-        <button type="submit" class="w-80 py-2.5 block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+        <button type="submit" class="w-80 py-2.5 block bg-gold hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
               px-4 py-3 mt-6" :class=" {'opacity-25': form.processing }" :disabled="form.processing">Log In</button>
       </form>
 

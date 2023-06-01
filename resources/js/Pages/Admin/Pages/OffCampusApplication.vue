@@ -1,7 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { Link } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import ModalDialog from "@/Components/ModalDialog.vue";
 import Table from "@/Components/Table.vue";
@@ -32,11 +32,37 @@ const props = defineProps({
   },
 });
 
+const forms = useForm({
+  studentId: props.offCampus?.id,
+  studentName: props.offCampus?.full_name,
+  program: props.offCampus?.program,
+  evalForm: null,
+});
+
+const submit = () => {
+  router.post(route("applications.update", props.offCampus?.id), {
+    _method: "put",
+    studentId: forms.studentId,
+    studentName: forms.studentName,
+    program: forms.program,
+    evalForm: forms.evalForm,
+  });
+};
+
 const isComplete = (form) => {
   return (
-    (form.is_off_campus !== 0) // Add the condition for is_off_campus
+    form.eslip &&
+    form.psa &&
+    form.pros &&
+    form.applicationF &&
+    form.medical &&
+    form.parent &&
+    form.twobytwo && 
+    form.eval_form 
+   
   );
 };
+
 
 console.log(props.offCampus);
 
@@ -51,6 +77,13 @@ function openModal(form) {
   applications.value = form;
   document.getElementById('myModal').showModal();
 }
+
+const evalForm = ref(null);
+
+function openModalEvalForm(form) {
+  evalForm.value = form;
+  document.getElementById('myModalEvalForm').showModal();
+}
 </script>
 
 <template>
@@ -59,12 +92,7 @@ function openModal(form) {
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
       <div class="flex justify-between">
-        <h1></h1>
-        <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        >
+        <h1>Off-Campus List</h1>
       </div>
     </div>
     <div class="mt-6">
@@ -78,28 +106,22 @@ function openModal(form) {
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
              <TableHeaderCell class="whitespace-nowrap">In-Campus</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap"
-              >Evaluation Form</TableHeaderCell
-            >
-
+              >Evaluation Form</TableHeaderCell>
+            <TableHeaderCell>Status</TableHeaderCell>
             <TableHeaderCell>Action</TableHeaderCell>
           </TableRow>
         </template>
         <template #default>
-          <TableRow v-for="form in offCampus" :key="form.id">
-            <TableDataCell>{{ form.student_id }}</TableDataCell>
-            <TableDataCell class="flex items-center gap-3">
-              <div class="relative h-10 w-10">
-                <img
-                  class="h-full w-full rounded-full object-cover object-center"
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <span
-                  class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"
-                ></span>
-              </div>
-              {{ form.full_name }}</TableDataCell
-            >
+          <TableRow class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" v-for="form in offCampus" :key="form.id">
+           <TableDataCell>{{ form.student_id }}</TableDataCell>
+            <TableDataCell class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <img class="w-8 h-8 rounded-full" :src="`storage/${form.profile}`" alt="">
+                                    <div class="pl-3">
+                                    <div class="text-base font-semibold">{{ form.full_name }}</div>
+                                    <div class="font-normal text-gray-500">{{ form.email }}</div>
+                                     </div>  
+                            </TableDataCell>
+            
             <TableDataCell>{{ form.program }}</TableDataCell>
             <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
             <TableDataCell
@@ -111,6 +133,7 @@ function openModal(form) {
                 <img
                   :src="form.eval_form"
                   style="max-width: 100%; max-height: 100px"
+                  class="h-16 w-16"
                 />
               </a>
               <a
@@ -137,24 +160,20 @@ function openModal(form) {
 
               <TableDataCell>
               <template v-if="isComplete(form)">
-                <a
-                  target="_blank"
-                  class="bg-green-200 text-green-600 py-1 px-5 rounded-full text-xs"
-                >
-                  COMPLETED
-                </a>
+             <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Completed
+                  </div>
               </template>
               <template v-else>
-                <a
-                  target="_blank"
-                  class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
-                >
-                  INCOMPLETE
-                </a>
+                <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div> Incomplete
+                  </div>
               </template></TableDataCell>
-            <Link :href="route('applications.updateOffcampus', form.id)" method="PUT" as="button" class="text-red-400 hover:text-red-600">Recommend</Link>
+
             <TableDataCell
-              ><div class="flex item-center">
+              ><div class="flex item-center space-x-2">
+               
+                 <Link :href="route('applications.updateOffcampus', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">Recommend</Link>
                 <Link
                   class="w-4 mr-2 mb-2 transform hover:text-purple-500 hover:scale-110"
                   :href="route('application.edit', form.id)"
@@ -549,6 +568,8 @@ function openModal(form) {
   
    
 </dialog>
+
+
   </AdminLayout>
 </template>
 

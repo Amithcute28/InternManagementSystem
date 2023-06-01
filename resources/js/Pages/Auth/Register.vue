@@ -55,15 +55,15 @@ function submitForm() {
     <section class="flex flex-col md:flex-row h-screen items-center">
     
        <div class="bg-white-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-    <img src="@/Assets/signup5.png" alt="" class="w-full h-full object-cover">
+    <img src="@/Assets/registerlogo2.jpg" alt="" class="w-full h-full object-cover">
   </div>
     
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 ">
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 z-20 mx-6">
      
       
 
 
-      <div class="mt-8">
+      <div class="mt-20">
         <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
          
 
@@ -72,11 +72,11 @@ function submitForm() {
     <input 
     type="text" 
     id="student_id" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none  focus:border-blue peer" 
     placeholder=" "
     v-model="form.student_id"
     required
-    autofocus
+   
     autocomplete="student_id" />
     <label 
     for="student_id" 
@@ -87,11 +87,11 @@ function submitForm() {
         <input 
         type="text" 
         id="program" 
-        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none  focus:border-blue peer" 
         placeholder=" "
         v-model="form.program"
         required
-        autofocus
+       
         autocomplete="program" />
         <label 
         for="program" 
@@ -104,11 +104,11 @@ function submitForm() {
     <input 
     type="text" 
     id="full_name" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none  focus:border-blue peer" 
     placeholder=" "
     v-model="form.full_name"
     required
-    autofocus
+    
     autocomplete="full_name" />
     <label 
     for="full_name" 
@@ -121,11 +121,11 @@ function submitForm() {
     <input 
      type="email" 
     id="email" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none  focus:border-blue peer" 
     placeholder=" "
     v-model="form.email"
     required
-    autofocus
+    
     autocomplete="email" />
     <label 
     for="email" 
@@ -137,11 +137,11 @@ function submitForm() {
     <input 
     type="password" 
     id="password" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-blue bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer" 
     placeholder=" "
     v-model="form.password"
     required
-    autofocus
+    
     autocomplete="password" />
     <label 
     for="password" 
@@ -153,11 +153,11 @@ function submitForm() {
     <input 
     type="password" 
     id="password_confirmation" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none  focus:border-blue peer" 
     placeholder=" "
     v-model="form.password_confirmation"
     required
-    autofocus
+   
     autocomplete="password_confirmation" />
     <label 
     for="password_confirmation" 
@@ -165,7 +165,8 @@ function submitForm() {
     <InputError class="mt-2" :message="form.errors.password_confirmation" />
 </div>
 
-<button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg">Register</button>
+<button type="submit" class="w-80 py-2.5 block bg-gold hover:bg-gold/80 focus:bg-gold/90 text-white font-semibold rounded-lg
+              px-4 py-3 mt-6 ml-5">Register</button>
         </form>
          
       </div>

@@ -26,20 +26,48 @@ class NewStudentsControllerBSED extends Controller
      */
     public function index(): Response
     {
-        // return Inertia::render('Admin/Pages/NewStudents',[
-        //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
-            
-        $newstudentsbsed = User::where('approved', '=', 0)->where('program', 'BSED')->get();
-        $totalNewStudents = $newstudentsbsed->count();
-
-        return Inertia::render('Admin/PagesBSED/NewStudentsBSED',[
-            'newstudentsbsed' => UserResource::collection($newstudentsbsed),
+        $newstudents = User::where('approved', '=', 0)
+                            ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
+                            ->get();
+        $totalNewStudents = $newstudents->count();
+    
+        return Inertia::render('Admin/PagesBSED/NewStudents',[
+            'newstudents' => UserResource::collection($newstudents),
             'totalNewStudents' => $totalNewStudents,
         ]);
-          
-        
     }
 
+    // public function edit($newstudentbsed): Response
+    // {
+    //     $newstudentbsed = User::findOrFail($newstudentbsed);
+    //     return Inertia::render('Admin/PagesBSED/NewStudentsApproval', [
+    //         'newstudentbsed' => $newstudentbsed,
+    //     ]);
+    // }   
+
+    public function edit($id): Response
+    {
+        $newstudentbsed = User::find($id);
+        return Inertia::render('Admin/PagesBSED/NewStudentsApproval', [
+            'newstudentbsed' => $newstudentbsed,
+        ]);
+    }   
+
+    public function updateNewStudent($id)
+    {
+        $student = User::find($id);
+        
+      
+            $student->approved = 1;
+            $student->save();
+        
+        
+        // Add any additional logic or response handling as needed
+        
+        return redirect()->route('newstudentsbsed.index');
+    }
+
+   
     /**
      * Show the form for creating a new resource.
      */
@@ -59,48 +87,33 @@ class NewStudentsControllerBSED extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): Response
-    {
-        $newstudentbsed = User::findOrFail($id);
-        return Inertia::render('Admin/PagesBSED/NewStudentsApproval', [
-            'newstudentbsed' => new UserResource($newstudentbsed)
-        ]);
-    }
+   
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, User $newstudent): RedirectResponse
     {
-        $newstudentbsed = User::findOrFail($id);
-    
         $request->validate([
-            'student_id' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('users', 'student_id')->ignore($newstudentbsed),
-            ],
+            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($newstudent),
             'program' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($newstudentbsed),
-            ],
+            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($newstudent),
+           
+
+
         ]);
-    
-        $newstudentbsed->update([
+
+        $newstudent = Auth::user();
+        $newstudent->update([
             'student_id' => $request->student_id,
             'program' => $request->program,
             'full_name' => $request->full_name,
             'email' => $request->email,
             'approved' => 1,
         ]);
-    
-        return redirect()->route('newstudentsbsed.index');
+
+        return to_route('newstudentsbsed.index');
     }
 
     public function updateApproved($id)

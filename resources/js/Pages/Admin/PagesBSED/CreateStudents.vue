@@ -18,7 +18,7 @@ defineProps(["users"]);
         <div class="max-w-7xl mx-auto py-4">
            <div class="flex justify-between">
             <h1>Students</h1>
-            <Link :href="route('studentsbsed.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Students</Link>
+            <Link :href="route('students.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Students</Link>
            </div>
             <div class="mt-6">
                 <Table>

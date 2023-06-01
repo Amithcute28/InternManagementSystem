@@ -21,7 +21,7 @@ const submit = () => {
   formData.append('schoolAddress', form.schoolAddress);
   formData.append('schoolLogo', form.schoolLogo);
 
-  form.post(route('schoolsbsed.store'), formData, {
+  form.post(route('schools.store'), formData, {
     onFinish: () => form.reset('schoolName', 'schoolAddress', 'schoolLogo'),
   });
 };
@@ -29,7 +29,7 @@ const submit = () => {
 let currentRoute = ref('')
 
 const routeTitle = (route) => {
-    if(route == 'schoolsbsed/create') return 'Schools Create'
+    if(route == 'schools/create') return 'Schools Create'
 
     const routeLabel = route?.toString().charAt(0).toUpperCase() + route.substring(1)
 

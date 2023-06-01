@@ -53,7 +53,8 @@
             <p><strong>Academic Performance:</strong> {{ student.academic_performance }}</p>
             <p><strong>Skills:</strong> {{ student.skills }}</p>
           </div>
-          <h1 class="text-2xl font-bold mb-4">Recommended Institution:</h1>
+          
+           <h1 class="text-2xl font-bold mb-4">Recommended Institution:</h1>
           <!-- <ul>
             <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
               <div class="font-bold">{{ institution.name }}</div>

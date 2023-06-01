@@ -244,7 +244,7 @@ _method: 'put',
 
          
             </div>
-             <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+             <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-gold hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
           Submit
         </button>
         </form>

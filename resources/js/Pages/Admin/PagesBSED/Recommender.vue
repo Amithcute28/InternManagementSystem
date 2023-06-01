@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
     import { Head } from '@inertiajs/vue3';
     import { Link, router } from "@inertiajs/vue3";
     import Table from '@/Components/Table.vue';
@@ -33,7 +33,7 @@ const recommendUpdated = (student) => {
 <template>
     <Head title="Recommender" />
 
-    <AdminLayout>
+    <AdminLayoutBSED>
         <!-- <div class="mt-16">
             <div class="w-full">
                 <h1 class="text-xl font-bold mb-4">Students</h1>
@@ -135,5 +135,5 @@ const recommendUpdated = (student) => {
   
     
 
-    </AdminLayout>
+    </AdminLayoutBSED>
 </template>

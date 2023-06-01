@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
 import { Head } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
@@ -13,7 +13,7 @@ const form = useForm({
 <template>
     <Head title="Create new role" />
 
-    <AdminLayout>
+    <AdminLayoutBSED>
         <div class="max-w-7xl mx-auto py-4">
            <div class="flex justify-between">
             
@@ -52,7 +52,7 @@ const form = useForm({
       </form>
             </div>
         </div>
-    </AdminLayout>
+    </AdminLayoutBSED>
 
   
 </template>

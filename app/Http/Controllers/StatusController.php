@@ -27,7 +27,7 @@ class StatusController extends Controller
             $student = User::findOrFail($id);
 
             // Check the student's program and set the matching institutions accordingly
-            if ($student->program == 'BSED') {
+            if ($student->program == 'BSED' || $student->program == 'BSED English' || $student->program == 'BSED Filipino' || $student->program == 'BSED Mathematics' || $student->program == 'BSED Science' || $student->program == 'BSED Social Studies') {
                 $matchingInstitutions = Schoolbsed::where(function ($query) use ($student) {
                     $query->where(function ($innerQuery) use ($student) {
                         $innerQuery->whereIn('skills', explode(',', $student->skills));
@@ -113,9 +113,20 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
                     'institution' => $institution,
                 ]);
             } elseif ($student->is_off_campus == 1) {
+               
+
+                if ($student->program == 'BSED' || $student->program == 'BSED English' || $student->program == 'BSED Filipino' || $student->program == 'BSED Mathematics' || $student->program == 'BSED Science' || $student->program == 'BSED Social Studies') {
+                    $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatchbsed);
+                } else {
+                    $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+                }
+                $student->recommended_institutions = $recommendedInstitutions;
                 return Inertia::render('Student/StatusChooseRecommendation', [
                     'student' => $student,
+                    
                 ]);
+                
+                $student->recommended_institutions = $recommendedInstitutions;
             } else {
                 return Inertia::render('Student/StatusWaiting', [
                     'student' => $student,

@@ -32,13 +32,12 @@ const props = defineProps({
     required: true,
   },
 });
-
-console.log(props.newstudentbsed);
+console.log(props.newstudent);
 
 const form = useForm({
   student_id: props.newstudentbsed?.student_id,
   program: props.newstudentbsed?.program,
-  full_name: props.newstudentbsed.full_name,
+  full_name: props.newstudentbsed?.full_name,
   email: props.newstudentbsed?.email,
   approved: props.newstudentbsed?.approved,
 });
@@ -46,13 +45,11 @@ const form = useForm({
 const submit = () => {
   form.put(route("newstudentsbsed.update", props.newstudentbsed?.id));
 };
-
-
 </script>
 
 <template>
   <AdminLayoutBSED>
-     <Head title="Update student" />
+    <Head title="Update student" />
 
 
 <div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-16">
@@ -134,7 +131,8 @@ const submit = () => {
 
          
       </div> 
-   <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Approve</button>
+      <Link :href="route('newstudentsbsed.updateNewStudent', newstudentbsed.id)" method="PUT" as="button" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-gold hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Approve</Link>
+   <!-- <button type="submit" class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Approve</button> -->
  </form>                 
                         
                     </div>
