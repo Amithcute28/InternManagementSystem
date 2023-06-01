@@ -39,7 +39,6 @@ class NewStudentsController extends Controller
 
             return Inertia::render('Admin/Pages/NewStudents',[
                 'newstudents' => UserResource::collection($newstudents),
-
                 'newstudentsbeed' => UserResource::collection($newstudentsbeed),
                 'totalNewStudents' => $totalNewStudents,
             ]);

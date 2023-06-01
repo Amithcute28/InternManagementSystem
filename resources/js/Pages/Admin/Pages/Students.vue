@@ -410,6 +410,7 @@ const submit = () => {
         </template>
       </Table>
       <Pagination :links="approved.meta.links" />
+      
     
 
     <dialog id="myModal" class="h-auto w-11/12 md:w-1/2 p-5  bg-white rounded-md ">
