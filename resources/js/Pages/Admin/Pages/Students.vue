@@ -64,7 +64,7 @@ const { approved, interns, files } = defineProps({
 
     });
 
-const totalInterns = approved.length;
+const totalInterns = interns.length;
 
 
 const form = useForm({
@@ -131,7 +131,7 @@ const submit = () => {
               <div class="flex items-center flex-1 space-x-4">
                   <h5>
                       <span class="text-gray-500">All Interns: </span>
-                      <span class="dark:text-white">{{ totalNewStudents }}</span>
+                      <span class="dark:text-white">{{ totalInterns }}</span>
                   </h5>
         
               </div>
@@ -715,17 +715,17 @@ const submit = () => {
             </div>
           </div>
 
-          
-        </form>
-      </div>
-      </div>
-           
-          <button
-            type="submit"
+            <button
+            type="submit"  :href="route('students.index')"
             class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3"
           >
             Create student
           </button>
+        </form>
+      </div>
+      </div>
+           
+        
           <!-- End of Modal Content-->
           
           

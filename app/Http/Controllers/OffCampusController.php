@@ -86,8 +86,13 @@ class OffCampusController extends Controller
         $student['recommended_institutions'] = $recommendedInstitutions;
     });
 
+    $interns = User::where('approved', 1)->where('is_admin', 0)->where('is_off_campus', 1)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+    $totalInterns = $interns->count();
+
     return Inertia::render('Admin/Pages/OffCampus', [
         'students' => $students,
+        'interns' => $interns,
+        'totalInterns' => $totalInterns,
     ]);
 }
     

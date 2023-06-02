@@ -97,14 +97,19 @@ class StudentsController extends Controller
     })->values();
 
     $filteredData = $combinedData->filter(function ($item, $key) {
-        return $item['program'] === 'BEED';
+        $allowedPrograms = ['BEED', 'BECEd', 'BSNEd', 'BPEd'];
+        return in_array($item['program'], $allowedPrograms);
     });
 
     
+    $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();;
+    $totalInterns = $interns->count();
     
     return Inertia::render('Admin/Pages/Students', [
         'files' => $filtered_files,
         'approved' => $filteredData,
+        'interns' => $interns,
+        'totalInterns' => $totalInterns,
         // Add the offCampus route
     ]);
 }

@@ -90,7 +90,7 @@ Route::resource('/offcampus', OffCampusController::class);
 Route::resource('/role', RoleController::class);
 
 Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name('recommender.update');
-Route::put('/newstudents/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
+Route::put('/newstudentsupdateApprove/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
 Route::put('/applications/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applications.updateOffcampus');
 Route::put('/applicationsUpdate/{id}', [ApplicationController::class, 'updateIncampus'])->name('applications.updateIncampus');
 

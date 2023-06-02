@@ -26,15 +26,25 @@ class NewStudentsControllerBSED extends Controller
      */
     public function index(): Response
     {
-        $newstudents = User::where('approved', '=', 0)
-                            ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
-                            ->get();
-        $totalNewStudents = $newstudents->count();
-    
-        return Inertia::render('Admin/PagesBSED/NewStudents',[
-            'newstudents' => UserResource::collection($newstudents),
-            'totalNewStudents' => $totalNewStudents,
-        ]);
+        // return Inertia::render('Admin/Pages/NewStudents',[
+        //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
+            
+        $newstudentsbeed = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
+        $totalNewStudents = $newstudentsbeed->count();
+
+            $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->paginate(8);
+           
+            
+            
+
+            return Inertia::render('Admin/PagesBSED/NewStudents',[
+                'newstudents' => UserResource::collection($newstudents),
+                'newstudentsbeed' => UserResource::collection($newstudentsbeed),
+                'totalNewStudents' => $totalNewStudents,
+            ]);
+
+          
+        
     }
 
     // public function edit($newstudentbsed): Response

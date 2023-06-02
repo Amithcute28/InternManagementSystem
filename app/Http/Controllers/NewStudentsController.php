@@ -102,11 +102,11 @@ class NewStudentsController extends Controller
 
     public function updateApproved($id)
     {
-        $newstudent = User::find($id);
+        $student = User::find($id);
         
       
-            $newstudent->approved = 1;
-            $newstudent->save();
+            $student->approved = 1;
+            $student->save();
         
         
         // Add any additional logic or response handling as needed

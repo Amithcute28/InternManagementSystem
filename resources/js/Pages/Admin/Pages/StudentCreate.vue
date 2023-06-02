@@ -358,18 +358,18 @@ const submit = () => {
               />
             </div>
           </div>
-
-          
-        </form>
-      </div>
-      </div>
-           
-          <button
+ <button
             type="submit"
             class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3"
           >
             Create student
           </button>
+          
+        </form>
+      </div>
+      </div>
+           
+         
      
   </AdminLayout>
 </template>
