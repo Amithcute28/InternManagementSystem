@@ -9,9 +9,19 @@ const props = defineProps({
     default: () => {},
   },
 
+  user_id: {
+    type: Number,
+    required: true,
+  },
+
   errors: Object,
   files: {
     type: Object,
+  },
+
+  addresses: {
+    type: Array,
+    default: () => {},
   },
 });
 
@@ -35,45 +45,37 @@ const applicationForms = ref(props.application_forms);
 async function storeApplication() {
   isFormLoading.value = true;
 
-  const formData = new FormData();
-  if (form.eslip) {
-    formData.append("eslip", form.eslip);
-  }
-  if (form.psa) {
-    formData.append("psa", form.psa);
-  }
-  if (form.pros) {
-    formData.append("pros", form.pros);
-  }
-  if (form.applicationF) {
-    formData.append("applicationF", form.applicationF);
-  }
-  if (form.medical) {
-    formData.append("medical", medical);
-  }
-  if (form.parent) {
-    formData.append("parent", form.parent);
-  }
-  if (form.twobytwo) {
-    formData.append("twobytwo", form.twobytwo);
-  }
-  await form.post("/application", {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  await form.post("/application", {});
   _method: "put";
   isFormLoading.value = false;
 }
 
-const removeImage = () => {
-  form.eslip = null;
-  form.psa = null;
-  form.pros = null;
-  form.applicationF = null;
-  form.medical = null;
-  form.parent = null;
-  form.twobytwo = null;
+// const submit = () => {
+//   router.post(route("application.update", props.offCampus?.id), {
+//     _method: "put",
+//     studentId: form.studentId,
+//     studentName: form.studentName,
+//     program: form.program,
+//     evalForm: form.evalForm,
+//   });
+// };
+
+// const removeImage = () => {
+//   form.eslip = null;
+//   form.psa = null;
+//   form.pros = null;
+//   form.applicationF = null;
+//   form.medical = null;
+//   form.parent = null;
+//   form.twobytwo = null;
+// };
+
+const removeImage = (field) => {
+  // Clear the file input value
+  document.getElementById(field).value = "";
+
+  // Reset the form data for the field
+  form[field] = null;
 };
 
 const buttonText = computed(() => {
@@ -83,6 +85,10 @@ const buttonText = computed(() => {
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   form.eslip = file;
+};
+
+const getFileUrl = (fileName) => {
+  return "/storage/student/" + fileName;
 };
 </script>
 
@@ -103,7 +109,7 @@ const handleFileChange = (event) => {
       >
         <div class="space-y-12">
           <div class="rounded pb-12 bg-white px-14 py-10">
-            <div class=" grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
               <div class="sm:col-span-2 sm:col-start-1 pb-3">
                 <label
                   for="country"
@@ -178,7 +184,7 @@ const handleFileChange = (event) => {
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="removeImage(form.eslip)"
+                      @click="removeImage('eslip')"
                     >
                       <svg
                         width="10"
@@ -209,11 +215,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].eslip"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].eslip)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].eslip }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -315,7 +322,7 @@ const handleFileChange = (event) => {
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage(form.psa)"
+                      @click="() => removeImage('psa')"
                     >
                       <svg
                         width="10"
@@ -346,11 +353,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].psa"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].psa)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].psa }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -483,11 +491,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].pros"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].pros)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].pros }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -634,11 +643,14 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].applicationF"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="
+                        getFileUrl(props.application_forms[0].applicationF)
+                      "
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].applicationF }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -713,7 +725,7 @@ const handleFileChange = (event) => {
                     class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
                   >
                     <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
-                    Upload File</label
+                    Change File</label
                   >
                   <label>
                     <input
@@ -776,11 +788,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].medical"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].medical)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].medical }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -852,7 +865,7 @@ const handleFileChange = (event) => {
                     class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
                   >
                     <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
-                    Upload File</label
+                    Change File</label
                   >
                   <label>
                     <input
@@ -912,11 +925,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].parent"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].parent)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].parent }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
@@ -1060,11 +1074,12 @@ const handleFileChange = (event) => {
                   v-else-if="props.application_forms[0].twobytwo"
                 >
                   <div class="flex items-center justify-between">
-                    <span
+                    <a
+                      :href="getFileUrl(props.application_forms[0].twobytwo)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
                       {{ props.application_forms[0].twobytwo }}
-                    </span>
+                    </a>
                     <button
                       type="button"
                       class="text-[#07074D]"

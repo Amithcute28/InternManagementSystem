@@ -15,17 +15,14 @@ class ApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->id,
-            'full_name'     => $this->full_name ?? null,
-            'program'       => $this->program ?? null,
-            'profile'       => $this->profile ?? null,
-            'eslip'         => asset('storage/' . $this->applicationForms?->eslip),
-            'psa'           => asset('storage/' . $this->applicationForms?->psa),
-            'pros'          => asset('storage/' . $this->applicationForms?->pros),
-            'applicationF'  => asset('storage/' . $this->applicationForms?->applicationF),
-            'medical'       => asset('storage/' . $this->applicationForms?->medical),
-            'parent'        => asset('storage/' . $this->applicationForms?->parent),
-            'twobytwo'      => asset('storage/' . $this->applicationForms?->twobytwo),
+
+            'eslip'         => $this->eslip ?? null,
+            'psa'           => $this->psa ?? null,
+            'pros'          => $this->pros ?? null,
+            'applicationF'  => $this->applicationF ?? null,
+            'medical'       => $this->medical ?? null,
+            'parent'        => $this->parent ?? null,
+            'twobytwo'      => $this->twobytwo ?? null,
         ];
     }
 }

@@ -186,55 +186,156 @@ class ApplicationController extends Controller
 
     {
 
+
         $userId = Auth::id();
         $eslip = '';
+        $origEslip = '';
         $psa = '';
+        $origPsa = '';
         $pros = '';
+        $origPros = '';
         $applicationF = '';
+        $origApplicationF = '';
         $medical = '';
+        $origMedical = '';
         $parent = '';
+        $origParent = '';
         $twobytwo = '';
+        $origTwobytwo = '';
 
-        // Check if eslip file exists and store it
+
+        // if ($request->hasFile('eslip')) {
+        //     $eslip = $request->file('eslip')->store('student', 'public');
+        // }
+
         if ($request->hasFile('eslip')) {
-            $eslip = $request->file('eslip')->store('student', 'public');
-        }
+            $eslip = $request->file('eslip');
+            $originalFileName = $eslip->getClientOriginalName();
 
-        // Check if other files exist and store them
+            $count = 1;
+            $origEslip = $originalFileName;
+            while (Storage::exists('public/student/' . $origEslip)) {
+                // Append a counter to the file name to make it unique
+                $origEslip = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $eslip->getClientOriginalExtension();
+                $count++;
+            }
+            $eslip->storeAs('public/student', $origEslip);
+        }
+        // if ($request->hasFile('psa')) {
+        //     $psa = $request->file('psa')->store('student', 'public');
+        // }
+
         if ($request->hasFile('psa')) {
-            $psa = $request->file('psa')->store('student', 'public');
+            $psa = $request->file('psa');
+            $originalFileName = $psa->getClientOriginalName();
+            $origPsa = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origPsa)) {
+                // Append a counter to the file name to make it unique
+                $origPsa = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $psa->getClientOriginalExtension();
+                $count++;
+            }
+            $psa->storeAs('public/student', $origPsa);
         }
+        // if ($request->hasFile('pros')) {
+        //     $pros = $request->file('pros')->store('student', 'public');
+        // }
+
         if ($request->hasFile('pros')) {
-            $pros = $request->file('pros')->store('student', 'public');
+            $pros = $request->file('pros');
+            $originalFileName = $pros->getClientOriginalName();
+            $origPros = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origPros)) {
+                // Append a counter to the file name to make it unique
+                $origPros = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $pros->getClientOriginalExtension();
+                $count++;
+            }
+            $pros->storeAs('public/student', $origPros);
         }
+        // if ($request->hasFile('applicationF')) {
+        //     $applicationF = $request->file('applicationF')->store('student', 'public');
+        // }
+
         if ($request->hasFile('applicationF')) {
-            $applicationF = $request->file('applicationF')->store('student', 'public');
+            $applicationF = $request->file('applicationF');
+            $originalFileName = $applicationF->getClientOriginalName();
+            $origApplicationF = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origApplicationF)) {
+                // Append a counter to the file name to make it unique
+                $origApplicationF = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $applicationF->getClientOriginalExtension();
+                $count++;
+            }
+            $applicationF->storeAs('public/student', $origApplicationF);
         }
+        // if ($request->hasFile('medical')) {
+        //     $medical = $request->file('medical')->store('student', 'public');
+        // }
+
         if ($request->hasFile('medical')) {
-            $medical = $request->file('medical')->store('student', 'public');
+            $medical = $request->file('medical');
+            $originalFileName = $medical->getClientOriginalName();
+            $origMedical = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origMedical)) {
+                // Append a counter to the file name to make it unique
+                $origMedical = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $medical->getClientOriginalExtension();
+                $count++;
+            }
+            $medical->storeAs('public/student', $origMedical);
         }
+        // if ($request->hasFile('parent')) {
+        //     $parent = $request->file('parent')->store('student', 'public');
+        // }
+
         if ($request->hasFile('parent')) {
-            $parent = $request->file('parent')->store('student', 'public');
+            $parent = $request->file('parent');
+            $originalFileName = $parent->getClientOriginalName();
+            $origParent = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origParent)) {
+                // Append a counter to the file name to make it unique
+                $origParent = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $parent->getClientOriginalExtension();
+                $count++;
+            }
+            $parent->storeAs('public/student', $origParent);
         }
+        // if ($request->hasFile('twobytwo')) {
+        //     $twobytwo = $request->file('twobytwo')->store('student', 'public');
+        // }
+
         if ($request->hasFile('twobytwo')) {
-            $twobytwo = $request->file('twobytwo')->store('student', 'public');
+            $twobytwo = $request->file('twobytwo');
+            $originalFileName = $twobytwo->getClientOriginalName();
+            $origTwobytwo = $originalFileName;
+
+            $count = 1;
+            while (Storage::exists('public/student/' . $origTwobytwo)) {
+                // Append a counter to the file name to make it unique
+                $origTwobytwo = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $twobytwo->getClientOriginalExtension();
+                $count++;
+            }
+            $twobytwo->storeAs('public/student', $origTwobytwo);
         }
 
-        // Create new application form record in the database
         ApplicationForm::create([
             'user_id' => $userId,
-            'eslip' => $eslip,
-            'psa' => $psa,
-            'pros' => $pros,
-            'applicationF' => $applicationF,
-            'medical' => $medical,
-            'parent' => $parent,
-            'twobytwo' => $twobytwo,
+            'eslip' => $origEslip,
+            'psa' => $origPsa,
+            'pros' => $origPros,
+            'applicationF' => $origApplicationF,
+            'medical' => $origMedical,
+            'parent' => $origParent,
+            'twobytwo' => $origTwobytwo,
             'approved' => 1,
             'is_admin' => 0,
         ]);
-
-
 
         return Redirect::route('application.index');
     }
