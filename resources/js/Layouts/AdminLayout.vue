@@ -7,45 +7,46 @@ import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import SidebarLink from "@/Components/SidebarLink.vue";
-import { initFlowbite } from 'flowbite'
+import { initFlowbite } from "flowbite";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
-    initFlowbite();
-})
+  initFlowbite();
+});
 
 const showingNavigationDropdown = ref(false);
 let currentRoute = ref("");
 
 const routeTitle = (route) => {
-    if (route === 'admindash') {
-    return 'Dashboard'
-  } else if (route === 'students/create') {
-    return 'Student Create'
-  }else if (route === 'newstudents') {
-    return 'New Students'
-  } else if (route === 'schools/create') {
-    return 'Schools Create'
-  }else if (route === 'coordinators/create') {
-    return 'Coordinators Create'
-  }else if (route.match(/^schools\/\d+/)) {
-  const userId = route.match(/^schools\/(\d+)/)[1];
-  return `Schools Info`;
-}else if (route.match(/^offcampus\/\d+/)) {
-  const userId = route.match(/^offcampus\/(\d+)/)[1];
-  return `View Recommendation`;
-}else if (route.match(/^students\/\d+\/edit$/)) {
-    const userId = route.match(/^students\/(\d+)\/edit$/)[1]
-    return `Edit Profile`
-  }else if (route.match(/^coordinators\/\d+\/edit$/)) {
-    const userId = route.match(/^coordinators\/(\d+)\/edit$/)[1]
-    return `Edit Profile`
-  }else if (route.match(/^newstudents\/\d+\/edit$/)) {
-    const userId = route.match(/^newstudents\/(\d+)\/edit$/)[1]
-    return `Approval`
-  }else {
-    const routeLabel = route?.toString().charAt(0).toUpperCase() + route.substring(1)
-    return routeLabel 
+  if (route === "admindash") {
+    return "Dashboard";
+  } else if (route === "students/create") {
+    return "Student Create";
+  } else if (route === "newstudents") {
+    return "New Students";
+  } else if (route === "schools/create") {
+    return "Schools Create";
+  } else if (route === "coordinators/create") {
+    return "Coordinators Create";
+  } else if (route.match(/^schools\/\d+/)) {
+    const userId = route.match(/^schools\/(\d+)/)[1];
+    return `Schools Info`;
+  } else if (route.match(/^offcampus\/\d+/)) {
+    const userId = route.match(/^offcampus\/(\d+)/)[1];
+    return `View Recommendation`;
+  } else if (route.match(/^students\/\d+\/edit$/)) {
+    const userId = route.match(/^students\/(\d+)\/edit$/)[1];
+    return `Edit Profile`;
+  } else if (route.match(/^coordinators\/\d+\/edit$/)) {
+    const userId = route.match(/^coordinators\/(\d+)\/edit$/)[1];
+    return `Edit Profile`;
+  } else if (route.match(/^newstudents\/\d+\/edit$/)) {
+    const userId = route.match(/^newstudents\/(\d+)\/edit$/)[1];
+    return `Approval`;
+  } else {
+    const routeLabel =
+      route?.toString().charAt(0).toUpperCase() + route.substring(1);
+    return routeLabel;
   }
 };
 
@@ -65,21 +66,29 @@ const toggleApplicationsDropdown = () => {
 </script>
 
 <template>
-<!-- <aside
+  <!-- <aside
       class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen bg-blue transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
     > -->
 
-
-    <div class="w-full h-full bg-darkWhite h-screen">
-    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]" aria-label="Sidebar">
-   <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
-      <a class="flex items-center pl-2.5 mt-2 ml-5">
-         <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" /> -->
-         <span class="self-center text-3xl font-semibold whitespace-nowrap text-white">PracTEACH</span>
-      </a>
-        
-
-        
+  <div class="w-full h-full bg-darkWhite h-screen">
+    <aside
+      id="logo-sidebar"
+      class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
+      aria-label="Sidebar"
+    >
+      <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
+        <a class="flex items-center pl-2.5 mt-2 ml-5">
+          <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" /> -->
+          <div>
+            <a
+              href="#home"
+              class="block text-white text-lg font-extrabold flex items-center py-3 px-2"
+            >
+              <img src="@/Assets/logo.png" class="w-12 h-12 mr-3" />
+              <span>Prac<span class="text-yellow-400">Teach.</span></span>
+            </a>
+          </div>
+        </a>
 
         <ul class="space-y-2 tracking-wide mt-10">
           <li>
@@ -87,15 +96,21 @@ const toggleApplicationsDropdown = () => {
               :href="route('admindash.index')"
               :active="route().current('admindash.index')"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
-              <span
-                class="ml-4"
-                >Dashboard</span
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              <span class="ml-4">Dashboard</span>
             </SidebarLink>
           </li>
 
@@ -128,17 +143,29 @@ const toggleApplicationsDropdown = () => {
           </li>
 
           <li>
-                 <SidebarLink 
-                 :href="route('offcampus.index')" 
-                :active="route().current('offcampus.index')">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path class="group-hover:text-blue-600" stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                </svg>
+            <SidebarLink
+              :href="route('offcampus.index')"
+              :active="route().current('offcampus.index')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  class="group-hover:text-blue-600"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                />
+              </svg>
 
-
-                    <span class="ml-4">Off-Campus</span>
-                </SidebarLink>
-            </li>
+              <span class="ml-4">Off-Campus</span>
+            </SidebarLink>
+          </li>
           <li>
             <SidebarLink
               :href="route('schools.index')"
@@ -170,7 +197,7 @@ const toggleApplicationsDropdown = () => {
           <li>
             <a
               @click.prevent="toggleApplicationsDropdown"
-              class="flex ml-4 space-x-4 w-full py-2 font-semibold text-white hover:text-yellow-200 text-sm focus:outline-none "
+              class="flex ml-4 space-x-4 w-full py-2 font-semibold text-white hover:text-yellow-200 text-sm focus:outline-none"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -187,10 +214,7 @@ const toggleApplicationsDropdown = () => {
                 />
               </svg>
 
-              <span
-                class="text-white"
-                >Applications</span
-              >
+              <span class="text-white">Applications</span>
               <svg
                 v-if="isApplicationDropdownOpen"
                 class="w-5 h-5 ml-2 -mr-1 transform -rotate-180"
@@ -237,9 +261,8 @@ const toggleApplicationsDropdown = () => {
                   >
                     In-campus Application
                   </SidebarLink>
-                    </li>
+                </li>
 
-             
                 <li>
                   <SidebarLink
                     @click="preventDropdownClose"
@@ -339,10 +362,7 @@ const toggleApplicationsDropdown = () => {
             </SidebarLink>
           </li>
         </ul>
-        
       </div>
-
-      
     </aside>
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
       <div
@@ -351,18 +371,32 @@ const toggleApplicationsDropdown = () => {
         <div
           class="pr-6 flex items-center justify-between space-x-4 2xl:container"
         >
-         <div hidden class="md:block">
-              
-            </div>
-          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-   <span class="sr-only">Open sidebar</span>
-   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-   </svg>
-</button>
+          <div hidden class="md:block"></div>
+          <button
+            data-drawer-target="logo-sidebar"
+            data-drawer-toggle="logo-sidebar"
+            aria-controls="logo-sidebar"
+            type="button"
+            class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          >
+            <span class="sr-only">Open sidebar</span>
+            <svg
+              class="w-6 h-6"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+              ></path>
+            </svg>
+          </button>
           <div class="flex space-x-4">
             <!--search bar -->
-            
+
             <!--/search bar -->
             <button
               aria-label="search"
@@ -400,30 +434,67 @@ const toggleApplicationsDropdown = () => {
               </svg>
             </button>
 
-           
+            <span class="hidden text-right lg:block flex items-center mt-1">
+              <span
+                class="block text-sm font-medium text-white dark:text-white"
+                >{{ $page.props.auth.user.full_name }}</span
+              >
+              <span class="block text-xs font-medium text-gold"
+                >BEED, Internship Coordinator</span
+              >
+            </span>
+            <button
+              id="dropdownAvatarNameButton"
+              data-dropdown-toggle="dropdownAvatarName"
+              class="flex items-center text-sm font-medium text-white rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:outline-none transition duration-200 ease-in-out"
+              type="button"
+            >
+              <span class="sr-only">Open user menu</span>
+              <img
+                class="w-10 h-10 m-auto border-2 border-gold rounded-full object-cover lg:w-12 lg:h-12"
+                src="@/Assets/maamAriaso.jpg"
+                alt="user photo"
+              />
+              <svg
+                class="w-5 h-5 mx-1.5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
 
-           <span class="hidden text-right lg:block flex items-center mt-1">
-            <span class="block text-sm font-medium text-white dark:text-white">{{ $page.props.auth.user.full_name }}</span>
-            <span class="block text-xs font-medium text-gold">BEED, Internship Coordinator</span>
-            
-          </span>
-           <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName" class="flex items-center text-sm font-medium text-white rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:outline-none transition duration-200 ease-in-out" type="button">
-    <span class="sr-only">Open user menu</span>
-     <img class="w-10 h-10 m-auto border-2 border-gold rounded-full object-cover lg:w-12 lg:h-12" src="@/Assets/maamAriaso.jpg" alt="user photo">
-    <svg class="w-5 h-5 mx-1.5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-</button>
-
-<!-- Dropdown menu -->
-<div id="dropdownAvatarName" class=" z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
-      <li>
-        <a href="#" class="block px-4 py-2 hover:text-gold">Profile</a>
-      </li>
-      <li>
-        <Link :href="route('logout')" method="post" as="button" class="block px-4 py-2  hover:text-gold focus:outline-none">Log out</Link>
-      </li>
-    </ul>
-</div>
+            <!-- Dropdown menu -->
+            <div
+              id="dropdownAvatarName"
+              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+            >
+              <ul
+                class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton"
+              >
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:text-gold"
+                    >Profile</a
+                  >
+                </li>
+                <li>
+                  <Link
+                    :href="route('logout')"
+                    method="post"
+                    as="button"
+                    class="block px-4 py-2 hover:text-gold focus:outline-none"
+                    >Log out</Link
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

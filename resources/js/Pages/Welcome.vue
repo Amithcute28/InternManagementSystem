@@ -232,10 +232,6 @@ defineProps({
         <div class="w-1/6 mx-auto mb-12">
           <hr class="border-t-4 border-gold mb-8" />
         </div>
-        <p class="text-base text-gray-700 md:text-lg">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium.
-        </p>
       </div>
       <div class="px-6 pt-6 2xl:container">
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
@@ -420,10 +416,6 @@ defineProps({
         <div class="w-1/6 mx-auto mb-12">
           <hr class="border-t-4 border-gold mb-8" />
         </div>
-        <p class="text-base text-gray-700 md:text-lg">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium.
-        </p>
       </div>
       <div
         class="grid gap-10 mx-auto sm:grid-cols-2 lg:grid-cols-4 lg:max-w-screen-lg"
@@ -434,7 +426,7 @@ defineProps({
           >
             <img
               class="absolute object-cover w-full h-full rounded"
-              src="@/assets/fels.jpg"
+              src="@/assets/feli.png"
               alt="Person"
             />
           </div>
@@ -545,7 +537,7 @@ defineProps({
           >
             <img
               class="absolute object-cover w-full h-full rounded"
-              src="@/assets/heria.png"
+              src="@/assets/heriaa.jpg"
               alt="Person"
             />
           </div>

@@ -29,74 +29,74 @@ class ApplicationController extends Controller
     }
 
     public function inCampusApplication()
-{
-    // in-campus logic goes here
+    {
+        // in-campus logic goes here
 
-    $qualifiedUsers = User::where('approved', 1)
-    ->where('is_admin', 0)
-    ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-    ->where(function ($query) {
-        $query->where('in_campus', 0)
-            ->orWhere(function ($query) {
-                $query->where('in_campus', 1)->doesntHave('applicationForms');
+        $qualifiedUsers = User::where('approved', 1)
+            ->where('is_admin', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->where(function ($query) {
+                $query->where('in_campus', 0)
+                    ->orWhere(function ($query) {
+                        $query->where('in_campus', 1)->doesntHave('applicationForms');
+                    });
+            })
+            ->with(['applicationForms' => function ($query) {
+                $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo', 'created_at');
+            }])
+            ->get()
+            ->map(function ($user) {
+                $applicationForm = $user->applicationForms->first(); // Get the first application form
+
+                return [
+                    'id' => $user->id,
+                    'student_id' => $user->student_id,
+                    'profile' => $user->profile,
+                    'email' => $user->email,
+                    'full_name' => $user->full_name,
+                    'program' => $user->program,
+                    'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/student/' . $applicationForm->eval_form) : null) : null,
+                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/student/' . $applicationForm->eslip) : null) : null,
+                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/student/' . $applicationForm->psa) : null) : null,
+                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/student/' . $applicationForm->pros) : null) : null,
+                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/student/' . $applicationForm->applicationF) : null) : null,
+                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/student/' . $applicationForm->medical) : null) : null,
+                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/student/' . $applicationForm->parent) : null) : null,
+                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/student/' . $applicationForm->twobytwo) : null) : null,
+                    'created_at' => $applicationForm ? $applicationForm->created_at->format('d-m-y H:i:s') : null,
+                ];
             });
-    })
-    ->with(['applicationForms' => function ($query) {
-        $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo', 'created_at');
-    }])
-    ->get()
-    ->map(function ($user) {
-        $applicationForm = $user->applicationForms->first(); // Get the first application form
-
-        return [
-            'id' => $user->id,
-            'student_id' => $user->student_id,
-            'profile' => $user->profile,
-            'email' => $user->email,
-            'full_name' => $user->full_name,
-            'program' => $user->program,
-            'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
-            'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
-            'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
-            'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
-            'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
-            'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
-            'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
-            'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
-            'created_at' => $applicationForm ? $applicationForm->created_at->format('d-m-y H:i:s') : null,
-        ];
-    });
 
 
 
 
-    $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
-        $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-        $extension = pathinfo($value, PATHINFO_EXTENSION);
-        return in_array(strtolower($extension), $allowed_extensions);
-    })->values();
+        $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+            $extension = pathinfo($value, PATHINFO_EXTENSION);
+            return in_array(strtolower($extension), $allowed_extensions);
+        })->values();
 
-    $interns = User::where('approved', 1)->where('is_admin', 0)->where('in_campus', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
-    $totalInterns = $interns->count();
+        $interns = User::where('approved', 1)->where('is_admin', 0)->where('in_campus', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+        $totalInterns = $interns->count();
 
-    return Inertia::render('Admin/Pages/InCampusApplication', [
-        'files' => $filtered_files,
-        'approved' => $qualifiedUsers,
-        'interns' => $interns,
-        'totalInterns' => $totalInterns,
-    ]);
-}
+        return Inertia::render('Admin/Pages/InCampusApplication', [
+            'files' => $filtered_files,
+            'approved' => $qualifiedUsers,
+            'interns' => $interns,
+            'totalInterns' => $totalInterns,
+        ]);
+    }
 
     public function offCampusApplication()
     {
         // in-campus logic goes herea
 
         $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
-        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-        ->where('in_campus', 1)
-        ->where('is_off_campus', 0)
-        ->with(['applicationForms' => function ($query) {
-                $query->select('user_id', 'eval_form','eslip','psa','pros','applicationF','medical','parent','twobytwo', 'created_at');
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->where('in_campus', 1)
+            ->where('is_off_campus', 0)
+            ->with(['applicationForms' => function ($query) {
+                $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo', 'created_at');
             }])
             ->get()
             ->map(function ($user) {
@@ -110,14 +110,14 @@ class ApplicationController extends Controller
                     'full_name' => $user->full_name,
                     'program' => $user->program,
                     'in_campus' => $user->in_campus,
-                    'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
-                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null) : null,
-                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null) : null,
-                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null) : null,
-                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/' . $applicationForm->applicationF) : null) : null,
-                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/' . $applicationForm->medical) : null) : null,
-                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/' . $applicationForm->parent) : null) : null,
-                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/' . $applicationForm->twobytwo) : null) : null,
+                    'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/student/' . $applicationForm->eval_form) : null) : null,
+                    'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/student/' . $applicationForm->eslip) : null) : null,
+                    'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/student/' . $applicationForm->psa) : null) : null,
+                    'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/student/' . $applicationForm->pros) : null) : null,
+                    'applicationF' => $applicationForm ? ($applicationForm->applicationF ? asset('storage/student/' . $applicationForm->applicationF) : null) : null,
+                    'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/student/' . $applicationForm->medical) : null) : null,
+                    'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/student/' . $applicationForm->parent) : null) : null,
+                    'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/student/' . $applicationForm->twobytwo) : null) : null,
                     'created_at' => $applicationForm ? $applicationForm->created_at->format('d-m-y H:i:s') : null,
                 ];
             });
@@ -151,7 +151,7 @@ class ApplicationController extends Controller
         return back()->with('success', 'Status updated successfully.');
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -364,31 +364,31 @@ class ApplicationController extends Controller
             'offCampus' => new UserResource($offCampus)
         ]);
     }
-    
+
     public function updateIncampus($id)
     {
         $student = User::find($id);
-        
-            $student->in_campus = 1;
-            $student->save();
-        
-        
+
+        $student->in_campus = 1;
+        $student->save();
+
+
         // Add any additional logic or response handling as needed
-        
+
         return redirect()->route('applications.inCampusApplication');
     }
 
     public function updateOffcampus($id)
     {
         $student = User::find($id);
-        
-      
-            $student->is_off_campus = 1;
-            $student->save();
-        
-        
+
+
+        $student->is_off_campus = 1;
+        $student->save();
+
+
         // Add any additional logic or response handling as needed
-        
+
         return redirect()->route('applications.offCampusApplication');
     }
 

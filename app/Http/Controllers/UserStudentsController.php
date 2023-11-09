@@ -38,32 +38,29 @@ class UserStudentsController extends Controller
                 'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
             ]);
         }
-
-   
-    }   
+    }
 
     public function showProfile($id)
-{
-    $user = User::findOrFail($id);
-    return Inertia::render('Student/Main', [
-        'users' => new UserResource($user),
-    ]);
-}
+    {
+        $user = User::findOrFail($id);
+        return Inertia::render('Student/Main', [
+            'users' => new UserResource($user),
+        ]);
+    }
 
     public function show($id)
-{
-    $user = User::findOrFail($id);
-    return Inertia::render('Student/Main', [
-        'users' => new UserResource($user),
-    ]);
-}
+    {
+        $user = User::findOrFail($id);
+        return Inertia::render('Student/Main', [
+            'users' => new UserResource($user),
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(): Response
     {
-
     }
 
     /**
@@ -73,7 +70,7 @@ class UserStudentsController extends Controller
     {
 
         // $twobytwo = '';
-        
+
         // if ($request->hasFile('eslip')) {
         //     $eslip = $request->file('eslip')->store('student', 'public');
         // }
@@ -92,8 +89,8 @@ class UserStudentsController extends Controller
         // ]);
     }
 
-    
-   
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -107,7 +104,7 @@ class UserStudentsController extends Controller
     public function updateNewIntern(Request $request, User $user): RedirectResponse
     {
         $request->validate([
-            
+
             'skills' => 'required|string|max:255',
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
@@ -118,7 +115,7 @@ class UserStudentsController extends Controller
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
             'profile' => 'nullable|file',
-            
+
         ]);
 
         $user = Auth::user();
@@ -140,12 +137,12 @@ class UserStudentsController extends Controller
             'guardian_contact' => $request->input('guardian_contact'),
             'new_intern' => 1,
             'profile' => $profile,
-            
-           
+
+
         ]);
 
-        
-        
+
+
 
         return to_route('user.index');
     }
@@ -157,11 +154,11 @@ class UserStudentsController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $request->validate([
-            'student_id' => 'required|string|max:255|'.Rule::unique('users', 'student_id')->ignore($user),
+            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($user),
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|'.Rule::unique('users', 'email')->ignore($user),
+            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($user),
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',
@@ -171,11 +168,11 @@ class UserStudentsController extends Controller
             'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
-            
-            
+
+
         ]);
 
-              
+
 
         $user->update([
             'student_id' => $request->student_id,
@@ -194,12 +191,12 @@ class UserStudentsController extends Controller
             'guardian_contact' => $request->guardian_contact,
         ]);
 
-       
-
-        
 
 
-       
+
+
+
+
 
         return to_route('user.index');
     }
