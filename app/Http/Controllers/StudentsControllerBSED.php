@@ -378,7 +378,7 @@ class StudentsControllerBSED extends Controller
             'guardian_contact' => $request->guardian_contact,
         ]);
 
-        return to_route('students.index');
+        return to_route('studentsbsed.index');
     }
 
     /**

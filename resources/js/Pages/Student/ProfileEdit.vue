@@ -47,7 +47,7 @@ const form = useForm({
         home_address: props.user?.home_address,
         zip_code: props.user?.zip_code,
         guardian_name: props.user?.guardian_name,
-        guardian_contact: props.user?.guardian_name,
+        guardian_contact: props.user?.guardian_contact,
 })
 
 const submit = () => {
