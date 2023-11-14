@@ -406,20 +406,20 @@ const submit = () => {
             </template></TableDataCell
           >
 
-          <TableDataCell class="space-x-4">
-            <Link
-              :href="route('students.edit', form.id)"
-              class="text-green-400 hover:text-green-600"
-              >Edit</Link
-            >
-            <Link
-              :href="route('students.destroy', form.id)"
-              method="DELETE"
-              as="button"
-              class="text-red-400 hover:text-red-600"
-              >Delete</Link
-            >
-          </TableDataCell>
+            <TableDataCell class="space-x-4">
+                <Link
+                  :href="route('studentsbsed.edit', form.id)"
+                  class="text-green-400 hover:text-green-600"
+                  >Edit</Link
+                >
+                <Link
+                  :href="route('studentsbsed.destroy', form.id)"
+                  method="DELETE"
+                  as="button"
+                  class="text-red-400 hover:text-red-600"
+                  >Delete</Link
+                >
+              </TableDataCell>
 
           <!-- <TableDataCell
               ><div class="flex item-center">
