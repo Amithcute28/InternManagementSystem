@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Models\Student;
 use App\Providers\RouteServiceProvider;
@@ -30,45 +31,33 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'student_id' => 'required|string|max:255',
-            'program' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-           
-            
-            
-            
-            
-        ]);
 
         $user = User::create([
-        'student_id' => $request->student_id,
-        'program'=> $request->program,
-        'full_name' => $request->full_name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'approved' => 0,
-        'recommended' => 0,
+            'student_id' => $request->student_id,
+            'program' => $request->program,
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'approved' => 0,
+            'recommended' => 0,
 
 
         ])->assignRole('user');
-       
 
-    
+
+
 
         event(new Registered($user));
 
-Auth::login($user);
+        Auth::login($user);
 
-if(Auth::check() && Auth::user()->is_admin && $user->approved){
-    return redirect()->intended(RouteServiceProvider::HOME);
-}
+        if (Auth::check() && Auth::user()->is_admin && $user->approved) {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
 
-Auth::logout();
-return redirect('/login');
+        Auth::logout();
+        return redirect('/login');
     }
 }

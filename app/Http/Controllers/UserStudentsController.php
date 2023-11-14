@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewInternRequest;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use App\Http\Resources\StudentsResource;
@@ -101,22 +102,8 @@ class UserStudentsController extends Controller
         ]);
     }
 
-    public function updateNewIntern(Request $request, User $user): RedirectResponse
+    public function updateNewIntern(NewInternRequest $request, User $user): RedirectResponse
     {
-        $request->validate([
-
-            'skills' => 'required|string|max:255',
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'home_address' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
-            'profile' => 'nullable|file',
-
-        ]);
 
         $user = Auth::user();
         $profile = '';
@@ -126,15 +113,15 @@ class UserStudentsController extends Controller
         }
 
         $user->update([
-            'skills' => $request->input('skills'),
-            'birthday' => $request->input('birthday'),
-            'gender' => $request->input('gender'),
-            'relationship' => $request->input('relationship'),
-            'nationality' => $request->input('nationality'),
-            'contact_number' => $request->input('contact_number'),
-            'home_address' => $request->input('home_address'),
-            'guardian_name' => $request->input('guardian_name'),
-            'guardian_contact' => $request->input('guardian_contact'),
+            'skills' => $request->skills,
+            'birthday' => $request->birthday,
+            'gender' => $request->gender,
+            'relationship' => $request->relationaship,
+            'nationality' => $request->nationality,
+            'contact_number' => $request->contact_number,
+            'home_address' => $request->home_address,
+            'guardian_name' => $request->guardian_name,
+            'guardian_contact' => $request->guardina_contact,
             'new_intern' => 1,
             'profile' => $profile,
 

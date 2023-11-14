@@ -3,16 +3,26 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Datepicker from "flowbite-datepicker/Datepicker";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-
+import { onMounted } from "vue";
+import flatpickr from "flatpickr";
 import { ref } from "vue";
+import "flatpickr/dist/themes/light.css";
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+  flatpickr(".flatpickr", {});
+});
 
 const props = defineProps({
   user: {
     type: Object,
     required: true,
   },
+
+  errors: Object,
 });
 
 const form = useForm({
@@ -114,6 +124,27 @@ const removeImage = (field) => {
         <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
           <div class="grid md:grid-cols-3 md:gap-6 p-2">
             <div class="relative z-0 w-full mb-6 group">
+              <select
+                id="province"
+                v-model="form.skills"
+                :class="{ 'border-red-500': errors.skills }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="" disabled hidden>Skills</option>
+                <option>Communication and Interpersonal Skills</option>
+                <option>Subject Knowledge Skills</option>
+                <option>Adaptability Skills</option>
+                <option>Technological Profiency Skills</option>
+                <option>Classroom Management Skills</option>
+                <option>Collaboration and Teamwork Skills</option>
+                <option>Emotional Support Skills</option>
+              </select>
+              <div v-if="errors.skills" class="text-red-500 text-sm mt-5">
+                {{ errors.skills }}
+              </div>
+            </div>
+
+            <!-- <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="skills"
@@ -130,27 +161,54 @@ const removeImage = (field) => {
                 >Skills</label
               >
               <InputError class="mt-2" :message="form.errors.skills" />
+            </div> -->
+
+            <div class="relative z-0 w-full mb-6 group">
+              <div class="relative max-w-sm">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="date"
+                  v-model="form.birthday"
+                  :class="{ 'border-red-500': errors.birthday }"
+                  class="flatpickr bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Birthday"
+                />
+              </div>
+              <div v-if="errors.birthday" class="text-red-500 text-sm mt-5">
+                {{ errors.birthday }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="birthday"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.birthday"
-                required
-                autofocus
-                autocomplete="birthday"
-              />
-              <label
-                for="birthday"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Birthday</label
+              <select
+                id="gender"
+                v-model="form.gender"
+                :class="{ 'border-red-500': errors.gender }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-              <InputError class="mt-2" :message="form.errors.birthday" />
+                <option value="" disabled hidden>Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+              <div v-if="errors.gender" class="text-red-500 text-sm mt-5">
+                {{ errors.gender }}
+              </div>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
+            <!-- <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="gender"
@@ -167,35 +225,32 @@ const removeImage = (field) => {
                 >Gender</label
               >
               <InputError class="mt-2" :message="form.errors.gender" />
+            </div> -->
+
+            <div class="relative z-0 w-full mb-6 group">
+              <select
+                id="gender"
+                v-model="form.relationship"
+                :class="{ 'border-red-500': errors.relationship }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="" disabled hidden>Relationship Status</option>
+                <option>Married</option>
+                <option>Single</option>
+              </select>
+              <div v-if="errors.relationship" class="text-red-500 text-sm mt-5">
+                {{ errors.relationship }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
-                id="relationship"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.relationship"
-                required
-                autofocus
-                autocomplete="relationship"
-              />
-              <label
-                for="relationship"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Relationship status</label
-              >
-              <InputError class="mt-2" :message="form.errors.relationship" />
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
                 id="nationality"
+                :class="{ 'border-red-500': errors.nationality }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.nationality"
-                required
-                autofocus
                 autocomplete="nationality"
               />
               <label
@@ -203,18 +258,19 @@ const removeImage = (field) => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Nationality</label
               >
-              <InputError class="mt-2" :message="form.errors.nationality" />
+              <div v-if="errors.nationality" class="text-red-500 text-sm mt-5">
+                {{ errors.nationality }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="contact_number"
+                :class="{ 'border-red-500': errors.contact_number }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.contact_number"
-                required
-                autofocus
                 autocomplete="contact_number"
               />
               <label
@@ -222,18 +278,22 @@ const removeImage = (field) => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Contact Number</label
               >
-              <InputError class="mt-2" :message="form.errors.contact_number" />
+              <div
+                v-if="errors.contact_number"
+                class="text-red-500 text-sm mt-5"
+              >
+                {{ errors.contact_number }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="home_address"
+                :class="{ 'border-red-500': errors.home_address }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.home_address"
-                required
-                autofocus
                 autocomplete="home_address"
               />
               <label
@@ -241,18 +301,19 @@ const removeImage = (field) => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Home Address</label
               >
-              <InputError class="mt-2" :message="form.errors.home_address" />
+              <div v-if="errors.home_address" class="text-red-500 text-sm mt-5">
+                {{ errors.home_address }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="guardian_name"
+                :class="{ 'border-red-500': errors.guardian_name }"
                 class="block px-5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.guardian_name"
-                required
-                autofocus
                 autocomplete="guardian_name"
               />
               <label
@@ -260,18 +321,22 @@ const removeImage = (field) => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Guardian Name</label
               >
-              <InputError class="mt-2" :message="form.errors.guardian_name" />
+              <div
+                v-if="errors.guardian_name"
+                class="text-red-500 text-sm mt-5"
+              >
+                {{ errors.guardian_name }}
+              </div>
             </div>
 
             <div class="relative z-0 w-full mb-7 group">
               <input
                 type="text"
                 id="guardian_contact"
+                :class="{ 'border-red-500': errors.guardian_contact }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.guardian_contact"
-                required
-                autofocus
                 autocomplete="guardian_contact"
               />
               <label
@@ -279,10 +344,12 @@ const removeImage = (field) => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Guardian Contact No.</label
               >
-              <InputError
-                class="mt-2"
-                :message="form.errors.guardian_contact"
-              />
+              <div
+                v-if="errors.guardian_contact"
+                class="text-red-500 text-sm mt-5"
+              >
+                {{ errors.guardian_contact }}
+              </div>
             </div>
             <div class="sm:col-span-2">
               <label
@@ -322,6 +389,9 @@ const removeImage = (field) => {
                 <br />
               </div>
               <div
+                :class="{
+                  'bg-red-500': errors.profile,
+                }"
                 class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
                 v-if="form.profile"
               >
@@ -358,6 +428,9 @@ const removeImage = (field) => {
                     </svg>
                   </button>
                 </div>
+              </div>
+              <div v-if="errors.profile" class="text-red-500 text-sm mt-5">
+                {{ errors.profile }}
               </div>
             </div>
           </div>

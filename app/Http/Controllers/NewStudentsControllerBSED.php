@@ -28,23 +28,20 @@ class NewStudentsControllerBSED extends Controller
     {
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
-            
+
         $newstudentsbsed = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
         $totalNewStudents = $newstudentsbsed->count();
 
-            $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->paginate(8);
-           
-                
-            
+        $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->paginate(8);
 
-            return Inertia::render('Admin/PagesBSED/NewStudents',[
-                'newstudents' => UserResource::collection($newstudents),
-                'newstudentsbeed' => UserResource::collection($newstudentsbsed),
-                'totalNewStudents' => $totalNewStudents,
-            ]);
 
-          
-        
+
+
+        return Inertia::render('Admin/PagesBSED/NewStudents', [
+            'newstudents' => UserResource::collection($newstudents),
+            'newstudentsbsed' => UserResource::collection($newstudentsbsed),
+            'totalNewStudents' => $totalNewStudents,
+        ]);
     }
 
     // public function edit($newstudentbsed): Response
@@ -61,23 +58,23 @@ class NewStudentsControllerBSED extends Controller
         return Inertia::render('Admin/PagesBSED/NewStudentsApproval', [
             'newstudentbsed' => $newstudentbsed,
         ]);
-    }   
+    }
 
     public function updateNewStudent($id)
     {
         $student = User::find($id);
-        
-      
-            $student->approved = 1;
-            $student->save();
-        
-        
+
+
+        $student->approved = 1;
+        $student->save();
+
+
         // Add any additional logic or response handling as needed
-        
+
         return redirect()->route('newstudentsbsed.index');
     }
 
-   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -97,7 +94,7 @@ class NewStudentsControllerBSED extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-   
+
 
     /**
      * Update the specified resource in storage.
@@ -109,7 +106,7 @@ class NewStudentsControllerBSED extends Controller
             'program' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($newstudent),
-           
+
 
 
         ]);
@@ -129,14 +126,14 @@ class NewStudentsControllerBSED extends Controller
     public function updateApproved($id)
     {
         $newstudent = User::find($id);
-        
-      
-            $newstudent->approved = 1;
-            $newstudent->save();
-        
-        
+
+
+        $newstudent->approved = 1;
+        $newstudent->save();
+
+
         // Add any additional logic or response handling as needed
-        
+
         return redirect()->route('newstudentsbsed.index');
     }
 

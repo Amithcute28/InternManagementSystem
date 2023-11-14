@@ -18,7 +18,7 @@ onMounted(() => {
 console.log(newstudents);
 
 const { newstudents, newstudentsbsed } = defineProps({
-  newstudents: Array,
+  newstudents: Object,
   newstudentsbsed: Array,
 });
 
@@ -221,12 +221,13 @@ const totalNewStudents = newstudentsbsed.length;
               <TableDataCell>{{ newstudent.created_at }}</TableDataCell>
               <TableDataCell class="space-x-4">
                 <Link
-                  :href="route('newstudentsbsed.edit', newstudentbsed.id)"
+                  :href="route('newstudentsbsed.edit', newstudent.id)"
                   class="text-green-400 hover:text-green-600"
                   >Check</Link
                 >
+                <!-- Delete is not working -->
                 <Link
-                  :href="route('newstudentsbsed.destroy', newstudentbsed.id)"
+                  :href="route('newstudentsbsed.destroy', newstudent.id)"
                   method="DELETE"
                   as="button"
                   class="text-red-400 hover:text-red-600"
@@ -234,7 +235,7 @@ const totalNewStudents = newstudentsbsed.length;
                 >
                 <Link
                   :href="
-                    route('newstudentsbsed.updateNewStudent', newstudentbsed.id)
+                    route('newstudentsbsed.updateNewStudent', newstudent.id)
                   "
                   method="PUT"
                   as="button"

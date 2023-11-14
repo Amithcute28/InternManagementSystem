@@ -8,6 +8,10 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 
 import { ref } from "vue";
 
+const props = defineProps({
+  errors: Object,
+});
+
 const step = ref(1);
 const firstName = ref("");
 const lastName = ref("");
@@ -76,8 +80,8 @@ const submit = () => {
               <label
                 for="student_id"
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Student ID </label
-              >
+                >Student ID
+              </label>
               <InputError class="mt-2" :message="form.errors.student_id" />
             </div>
             <div class="relative z-0 w-full mb-6 group">
@@ -152,7 +156,7 @@ const submit = () => {
               class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
               >Password</label
             >
-            <InputError class="mt-2" :message="form.errors.password" />
+            <InputError class="mt-2" :message="errors.password" />
           </div>
 
           <div class="relative z-0 w-full mb-6 group">
@@ -170,10 +174,7 @@ const submit = () => {
               class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
               >Confirm Password</label
             >
-            <InputError
-              class="mt-2"
-              :message="form.errors.password_confirmation"
-            />
+            <InputError class="mt-2" :message="errors.password_confirmation" />
           </div>
 
           <div class="flex justify-center">
@@ -183,17 +184,16 @@ const submit = () => {
             >
               Register
             </button>
-            </div>
-            <p
-              class="inline-block align-bottom mt-8 flex justify-center text-gray-700"
+          </div>
+          <p
+            class="inline-block align-bottom mt-8 flex justify-center text-gray-700"
+          >
+            Already registered?&nbsp;<a
+              :href="route('login')"
+              class="text-blue-500 hover:text-blue-700 font-semibold"
+              >Login</a
             >
-              Already registered?&nbsp;<a
-                :href="route('login')"
-                class="text-blue-500 hover:text-blue-700 font-semibold"
-                >Login</a
-              >
-            </p>
-          
+          </p>
         </form>
       </div>
     </div>

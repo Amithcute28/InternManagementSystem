@@ -18,8 +18,9 @@
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
-        "flowbite": "^1.6.5",
-        "flowbite-datepicker": "^1.2.2",
+        "flatpickr": "^4.6.13",
+        "flowbite": "^1.8.1",
+        "flowbite-datepicker": "^1.2.4",
         "primevue": "^3.27.0",
         "quasar": "^2.11.10",
         "sweetalert2": "^11.4.8",
