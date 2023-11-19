@@ -116,12 +116,12 @@ class UserStudentsController extends Controller
             'skills' => $request->skills,
             'birthday' => $request->birthday,
             'gender' => $request->gender,
-            'relationship' => $request->relationaship,
+            'relationship' => $request->relationship,
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
             'home_address' => $request->home_address,
             'guardian_name' => $request->guardian_name,
-            'guardian_contact' => $request->guardina_contact,
+            'guardian_contact' => $request->guardian_contact,
             'new_intern' => 1,
             'profile' => $profile,
 
@@ -178,13 +178,6 @@ class UserStudentsController extends Controller
             'guardian_contact' => $request->guardian_contact,
         ]);
 
-
-
-
-
-
-
-
         return to_route('user.index');
     }
 
@@ -193,7 +186,7 @@ class UserStudentsController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        $student->delete();
+        $user->delete();
         return to_route('students.index');
     }
 }

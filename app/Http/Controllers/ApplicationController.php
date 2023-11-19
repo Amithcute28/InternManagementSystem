@@ -358,8 +358,6 @@ class ApplicationController extends Controller
 
         $offCampus = User::findOrFail($application);
 
-
-
         return Inertia::render('Admin/Pages/OffCampusEdit', [
 
             'offCampus' => new UserResource($offCampus)

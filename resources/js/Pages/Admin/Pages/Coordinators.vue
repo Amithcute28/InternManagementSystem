@@ -223,6 +223,7 @@ const submit = () => {
           <div class="flex justify-center">
             <button
               type="submit"
+              onclick="document.getElementById('myModal').close();"
               class="w-80 py-2.5 block bg-gold hover:bg-gold/80 focus:bg-gold/90 text-white font-semibold rounded-lg px-4 py-3 mt-3"
             >
               Register

@@ -72,6 +72,7 @@ function openModal(school) {
                             <p class="font-semibold text-base">{{ school.namebsed }}</p>
                             <p class="font-semibold text-sm text-gray-400 mb-5">{{ school.address }}</p>
                            <button @click="openModal(school)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">More info</button>
+                           
                            <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
                         </div> 
 
