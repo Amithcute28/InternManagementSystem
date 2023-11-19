@@ -48,9 +48,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 Route::put('/applicationsUpdatebsed/{id}', [ApplicationControllerBSED::class, 'updateIncampus'])->name('applicationsbsed.updateIncampus');
 Route::get('in-campus-application-editbsed', [ApplicationControllerBSED::class, 'edit'])->name('applicationsbsed.edit');
-    Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
-    Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
-    Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
+Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
+Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
+Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,6 +93,10 @@ Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name(
 Route::put('/newstudentsupdateApprove/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
 Route::put('/applications/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applications.updateOffcampus');
 Route::put('/applicationsUpdate/{id}', [ApplicationController::class, 'updateIncampus'])->name('applications.updateIncampus');
+Route::put('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
+Route::delete('/schools/{id}', [SchoolsController::class, 'schoolsDestroy'])->name('schools.schoolsDestroy');
+Route::put('/schools/{id}', [SchoolsController::class, 'update'])->name('schools.update');
+Route::get('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
 
 
 Route::get('/reports/{id}', function ($id) {
@@ -109,7 +113,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -128,9 +131,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
-    
+
     Route::post('/user', [UserStudentsController::class, 'showProfile'])->name('user.showProfile');
-   
 });
 
 Route::post('/user', [UserStudentsController::class, 'updateNewIntern'])->name('user.updateNewIntern');

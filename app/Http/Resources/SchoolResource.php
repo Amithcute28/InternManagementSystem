@@ -14,21 +14,20 @@ class SchoolResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        
+
         return [
-        'id' => $this->id,
-        'school_name' => $this->school_name,
-        'school_address' => $this->school_address,
-        'school_logo' => $this->school_logo,
-        'required_programs' => $this->required_programs,
-        'skills' => $this->skills,   
-       
-                   
-                    
-                    
-                    
-            
+            'id' => $this->id,
+            'school_name' => $this->name,
+            'school_address' => $this->address,
+            'school_logo' => $this->school_logo,
+            'required_programs' => $this->required_programs,
+            'skills' => $this->skills,
+
+
+
+
+
+
         ];
-        
     }
 }

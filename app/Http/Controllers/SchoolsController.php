@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SchoolResource;
 use Illuminate\Http\Request;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\School;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class SchoolsController extends Controller
 {
@@ -34,10 +34,14 @@ class SchoolsController extends Controller
         ]);
     }
 
-    public function show(School $school)
+    public function show($id)
     {
-        return Inertia::render('Admin/Pages/SchoolsInfo', [
-            'school' => new SchoolResource($school),
+        $school = School::findOrFail($id);
+
+
+        return Inertia::render('Admin/Pages/Schools', [
+            'schoolToEdit' => new SchoolResource($school),
+
         ]);
     }
 
@@ -91,33 +95,57 @@ class SchoolsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(School $school)
+    public function edit($id): Response
     {
-        return Inertia::render('Admin/Pages/SchoolsInfo', [
-            'school' => new SchoolResource($school),
+        $school = School::findOrFail($id);
+
+
+        return Inertia::render('Admin/Pages/Schools', [
+            'schoolToEdit' => new SchoolResource($school),
             'image' => asset('storage/' . $school->school_logo)
+
         ]);
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+    
     public function update(Request $request, $id)
     {
-        $student = User::find($id);
-
-        if ($student) {
-            $student->choosen_institution = $id; // Update the choosen_institution field with the institution ID
-            $student->save();
+        try {
+            $school = School::find($id);
+            $request->validate([
+                'schoolName' => 'required|string|max:255',
+                'schoolAddress' => 'required|string|max:255',
+                'required_programs' => 'required|string|max:255',
+                'skills' => 'required|string|max:255',
+            ]);
+    
+            if ($request->hasFile('schoolLogo')) {
+                if ($school->school_logo) {
+                    Storage::delete('public/' . $school->school_logo);
+                }
+                $schoolLogo = $request->file('schoolLogo')->store('SchoolLogo', 'public');
+            } else {
+                $schoolLogo = $school->school_logo;
+            }
+            $school->update([
+                'name' => $request->schoolName,
+                'address' => $request->schoolAddress,
+                'school_logo' => $schoolLogo,
+                'required_programs' => $request->required_programs,
+                'skills' => $request->skills,
+            ]);
+    
+            return redirect()->route('schools.index');
+        } catch (\Exception $e) {
+            
+            return redirect()->back()->with('error', 'Error updating school: ' . $e->getMessage());
         }
-
-        return redirect()->route('recommender.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+    
     public function destroy(string $id)
     {
         //
