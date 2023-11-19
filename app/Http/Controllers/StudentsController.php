@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Requests\RegisterRequest;
 
 // use App\Http\Resources\PermissionResource;
 // use App\Http\Resources\RoleResource;
@@ -240,45 +241,20 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'student_id' => 'required|string|max:255',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'program' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:' . User::class,
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'home_address' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
-
-            
-        ]);
 
         $user = User::create([
             'student_id' => $request->student_id,
-            'password' => Hash::make($request->password),
             'program' => $request->program,
             'full_name' => $request->full_name,
             'email' => $request->email,
-            'birthday' => $request->birthday,
-            'gender' => $request->gender,
-            'relationship' => $request->relationship,
-            'nationality' => $request->nationality,
-            'contact_number' => $request->contact_number,
-            'home_address' => $request->home_address,
-            'guardian_name' => $request->guardian_name,
-            'guardian_contact' => $request->guardian_contact,
-            'approved' => 1,
-            'is_admin' => 0,
-            'new_intern' => 1,
-        ])->assignRole('user');
+            'password' => Hash::make($request->password),
+            'approved' => 0,
+            'recommended' => 0,
 
+
+        ])->assignRole('user');
 
 
         // $userId = $user->id;
@@ -332,7 +308,7 @@ class StudentsController extends Controller
 
 
 
-        return to_route('students.index');
+        return to_route('newstudents.index');
     }
 
 
@@ -344,8 +320,9 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $student): RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
+        
         $request->validate([
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
             'program' => 'required|string|max:255',

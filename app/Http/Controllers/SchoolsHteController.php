@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Resources\SchoolResource;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -11,14 +10,13 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\School;
 
 
-
-class SchoolsController extends Controller
+class SchoolsHteController extends Controller
 {
+    protected $allowedMethods = ['index', 'create', 'store', 'edit', 'update', 'destroy', 'schoolsDestroy'];
     /**
      * Display a listing of the resource.
      */
-
-    public function index(): Response
+    public function index()
     {
         return Inertia::render('Admin/Pages/Schools', [
             'schools' => School::all()->map(function ($school) {
@@ -35,24 +33,20 @@ class SchoolsController extends Controller
         ]);
     }
 
-    
-    public function show($id)
+    /**
+     * Show the form for creating a new resource.
+     */
+
+     public function show($id): RedirectResponse
     {
         $school = School::find($id);
         $school->delete();
         return to_route('schools.index');
     }
 
-    public function showSchoolsInfo(): Response
-    {
-        return Inertia::render('Admin/Pages/SchoolsInfo');
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return Inertia::render('Admin/Pages/SchoolsInfo');
+        //
     }
 
     /**
@@ -88,58 +82,43 @@ class SchoolsController extends Controller
     /**
      * Display the specified resource.
      */
+    
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): RedirectResponse
     {
-        /*
-        return Inertia::render('Admin/Pages/SchoolsInfo', [
-            'school' => new SchoolResource($school),
-            'image' => asset('storage/' . $school->school_logo)
-        ]);
-        */
-
         $schools = School::find($id);
         return Inertia::render('Admin/Pages/SchoolsEdit', [
             'school' => new SchoolResource($schools)
         ]);
-
-
     }
-
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        $student = User::find($id);
-
-        if ($student) {
-            $student->choosen_institution = $id; // Update the choosen_institution field with the institution ID
-            $student->save();
-        }
-
-        return redirect()->route('recommender.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
+   
 
-     public function schoolsDestroy($id): RedirectResponse
+    public function destroy($id): RedirectResponse
+    {
+        $school = School::find($id);
+        $school->delete();
+        return to_route('schools.index');
+    }
+
+    public function schoolsDestroy($id): RedirectResponse
      {
         $school = School::find($id);
          $school->delete();
          return redirect()->route('schools.index');
-     }
-     
-     public function destroy($id): RedirectResponse
-     {
-         $school = School::find($id);
-         $school->delete();
-         return to_route('schools.index');
      }
 }

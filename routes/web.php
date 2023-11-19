@@ -10,8 +10,10 @@ use App\Http\Controllers\RecommenderController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\NewStudentsController;
 use App\Http\Controllers\SchoolsController;
+use App\Http\Controllers\SchoolsDeleteController;
 use App\Http\Controllers\CoordinatorsController;
 use App\Http\Controllers\OffCampusController;
+use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +53,9 @@ Route::get('in-campus-application-editbsed', [ApplicationControllerBSED::class, 
     Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
     Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
     Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
+    Route::delete('/studentsbsed/{id}', [StudentsControllerBSED::class, 'destroy'])->name('studentsbsed.destroy');
+    Route::delete('/newstudentsbsed/{id}', [NewStudentsControllerBSED::class, 'destroy'])->name('newstudentsbsed.destroy');
+    Route::put('/studentsbsed/{id}', [studentsControllerBSED::class, 'update'])->name('adminProfile.update');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -80,13 +85,19 @@ Route::put('/status/update/{studentId}/{institutionId}', [StatusController::clas
 //admin dashboard BEED
 Route::resource('/admindash', AdminDashboardController::class);
 Route::resource('/recommender', RecommenderController::class);
-Route::resource('/schools', SchoolsController::class);
+
 Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
 Route::resource('/coordinators', CoordinatorsController::class);
 Route::resource('/offcampus', OffCampusController::class);
 Route::resource('/offcampus', OffCampusController::class);
-
+Route::resource('schools', SchoolsController::class);
+Route::resource('adminProfile', AdminProfileController::class);
+Route::put('/adminProfile/{id}', [AdminProfileController::class, 'update'])->name('adminProfile.update');
+Route::delete('/schools/{id}', [SchoolsController::class, 'destroy'])->name('schools.destroy');
+Route::delete('/schools/{id}', [SchoolsController::class, 'show'])->name('schools.show');
+Route::delete('/coordinators/{id}', [CoordinatorsController::class, 'destroy'])->name('coordinators.destroy');
+Route::get('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
 Route::resource('/role', RoleController::class);
 
 Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name('recommender.update');
@@ -122,6 +133,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('off-campus-application/{id}', [ApplicationController::class, 'updateStatus'])->name('applications.updateStatus');
     Route::get('in-campus-application-edit', [ApplicationController::class, 'edit'])->name('applications.edit');
     Route::DELETE('in-campus-application-destroy', [ApplicationController::class, 'destroy'])->name('applications.destroy');
+    Route::delete('in-campus-application/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 });
 
 

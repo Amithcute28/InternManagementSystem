@@ -236,6 +236,7 @@ function openModalRecommend(student) {
                 >MISSING</a
               ></TableDataCell>
                             <TableDataCell>
+                              <TableDataCell> <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
                              <!-- <div class="flex items-center">
                                 <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Deployed
                              </div> -->

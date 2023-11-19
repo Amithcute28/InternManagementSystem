@@ -11,18 +11,16 @@
     <UserLayout>
         
         
-  <div class="relative bg-white px-6 pt-10 pb-9 shadow-md mx-auto w-full max-w-lg rounded-2xl h-80 mt-40 flex items-center overflow-hidden">
-    <div class="mx-auto flex w-full max-w-md flex-col space-y-16">
-      <div class="flex flex-col items-center justify-center text-center space-y-2">
-        <div class="font-semibold text-3xl">
-          <p>Waiting for Recommendation!</p>
-        </div>
-        
-     
+ 
 
+<div class="w-full h-screen flex flex-col lg:flex-row items-center justify-center space-y-16 lg:space-y-0 space-x-8 2xl:space-x-0">
+    <div class="w-full lg:w-1/2 flex flex-col items-center justify-center lg:px-2 xl:px-0 text-center">
+        <p class="text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider text-black-300">Waiting</p>
+        <p class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-black-300 mt-2">for Recommendation</p>
+      
       
     </div>
-  </div>
+   
 </div>
        
     </UserLayout>

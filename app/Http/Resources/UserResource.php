@@ -36,7 +36,7 @@ class UserResource extends JsonResource
             'approved'=> $this->approved,
             'new_intern'=> $this->new_intern,
             'choosen_institution' => $this->choosen_institution,
-            'created_at' => $this->created_at->format('d-m-y H:i:s'),
+            'created_at' => $this->created_at ? $this->created_at->format('d-m-y H:i:s') : null,
         ];
     }
 }

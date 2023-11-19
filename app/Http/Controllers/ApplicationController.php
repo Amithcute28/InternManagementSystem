@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use App\Models\ApplicationForm;
 use App\Http\Requests\ApplicationRequest;
@@ -427,8 +428,9 @@ class ApplicationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $application)
+    public function destroy($id): RedirectResponse
     {
+        $application = User::find($id);
         $application->delete();
         return to_route('applications.inCampusApplication');
     }

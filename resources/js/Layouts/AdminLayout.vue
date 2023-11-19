@@ -480,7 +480,9 @@ const toggleApplicationsDropdown = () => {
                 aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton"
               >
                 <li>
-                  <a href="#" class="block px-4 py-2 hover:text-gold"
+                  <a :href="route('adminProfile.index')"
+              :active="route().current('adminProfile.index')" 
+              class="block px-4 py-2 hover:text-gold"
                     >Profile</a
                   >
                 </li>

@@ -140,8 +140,9 @@ class NewStudentsControllerBSED extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $newstudent): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
+        $newstudent = User::find($id);
         $newstudent->delete();
         return to_route('newstudentsbsed.index');
     }

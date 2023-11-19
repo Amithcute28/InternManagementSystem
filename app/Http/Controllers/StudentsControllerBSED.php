@@ -344,13 +344,15 @@ class StudentsControllerBSED extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $student): RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
+
+        $studentbsed = User::find($id);
         $request->validate([
-            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
+            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($studentbsed),
             'program' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($student),
+            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($studentbsed),
             'birthday' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',
@@ -362,8 +364,7 @@ class StudentsControllerBSED extends Controller
 
 
         ]);
-        $Student = Auth::user();
-        $student->update([
+        $studentbsed->update([
             'student_id' => $request->student_id,
             'program' => $request->program,
             'full_name' => $request->full_name,
@@ -384,8 +385,13 @@ class StudentsControllerBSED extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $student): RedirectResponse
+    
+    public function destroy($id): RedirectResponse
     {
-       
+        $student = User::find($id);
+        $student->delete();
+        return to_route('studentsbsed.index');
     }
+
+    
 }

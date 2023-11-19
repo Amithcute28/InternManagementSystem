@@ -46,7 +46,7 @@ const form = useForm({
         home_address: props.student?.home_address,
        
         guardian_name: props.student?.guardian_name,
-        guardian_contact: props.student?.guardian_name,
+        guardian_contact: props.student?.guardian_contact,
         approved: props.student?.approved,
 })
 
