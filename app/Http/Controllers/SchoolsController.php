@@ -36,13 +36,9 @@ class SchoolsController extends Controller
 
     public function show($id)
     {
-        $school = School::findOrFail($id);
-
-
-        return Inertia::render('Admin/Pages/Schools', [
-            'schoolToEdit' => new SchoolResource($school),
-
-        ]);
+        $school = School::find($id);
+        $school->delete();
+        return to_route('schools.index');
     }
 
     public function showSchoolsInfo(): Response
