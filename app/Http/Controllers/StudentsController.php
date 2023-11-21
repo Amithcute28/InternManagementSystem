@@ -15,7 +15,7 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Requests\RegisterRequest;
-
+use Illuminate\Support\Facades\DB;
 // use App\Http\Resources\PermissionResource;
 // use App\Http\Resources\RoleResource;
 // use App\Http\Resources\StudentsResource;
@@ -41,7 +41,7 @@ class StudentsController extends Controller
      */
     public function index()
 {
-    $applicationForms = ApplicationForm::with('user')->paginate(8)->map(function ($application_form) {
+    $applicationForms = ApplicationForm::with('user')->get()->map(function ($application_form) {
         $user = $application_form->user;
         $student_name = $user ? $user->full_name : null;
         return [
@@ -97,23 +97,48 @@ class StudentsController extends Controller
         return in_array(strtolower($extension), $allowed_extensions);
     })->values();
 
-    $filteredData = $combinedData->filter(function ($item, $key) {
-        $allowedPrograms = ['BEED', 'BECEd', 'BSNEd', 'BPEd'];
-        return in_array($item['program'], $allowedPrograms);
-    });
+    $perPage = request()->input('perPage') ?: 5;
 
+$filteredData = $combinedData->when(request()->input('search'), function ($collection, $search) {
+    return $collection->filter(function ($item) use ($search) {
+        return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+    });
+});
+
+$paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+    $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+    $filteredData->count(),
+    $perPage,
+    null,
+    ['path' => request()->url(), 'query' => request()->query()]
+);
+
+$paginateData = $paginatedData->appends(request()->query());
     
-    $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();;
+    $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
     $totalInterns = $interns->count();
     
+    // $paginateInterns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
+   
+
     return Inertia::render('Admin/Pages/Students', [
         'files' => $filtered_files,
-        'approved' => $filteredData,
+        // 'approved' => User::query('users')
+        // ->when(request()->input('search'), function($query, $search) {
+        //     $query->where('student_id', 'like', "%{$search}%");
+        // })->where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        // ->paginate($perPage)
+        // ->withQueryString(),
+
+        'approved' => $paginateData,
+
+        'filters' => request()->only(['search', 'perPage']),
         'interns' => $interns,
         'totalInterns' => $totalInterns,
         // Add the offCampus route
     ]);
 }
+
 
     public function edit($student): Response
     {

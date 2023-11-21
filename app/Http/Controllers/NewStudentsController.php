@@ -19,6 +19,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\ProfileUpdateRequest;
 
+
 class NewStudentsController extends Controller
 {
     /**
@@ -32,13 +33,45 @@ class NewStudentsController extends Controller
         $newstudentsbeed = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalNewStudents = $newstudentsbeed->count();
 
-            $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
+            // $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
            
+            $perPage = request()->input('perPage') ?: 5;
+            $newstudents = User::query()
+            ->when(request()->input('search'), function($query, $search) {
+                $query->where(function($subquery) use ($search) {
+                    $subquery->where('student_id', 'like', "%{$search}%")
+                            ->orWhere('full_name', 'like', "%{$search}%");
+                });
+            })
+            ->where('approved', '=', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->paginate($perPage)
+            ->withQueryString();
             
             
-
+            
             return Inertia::render('Admin/Pages/NewStudents',[
-                'newstudents' => UserResource::collection($newstudents),
+                // 'newstudents' => User::query()
+                // ->when(request()->input('search'), function($query, $search) {
+                //     $query->where('student_id', 'like', "%{$search}%");
+                // })->where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+                // ->paginate($perPage)
+                // ->withQueryString(),
+        //             'newstudents' => User::query()
+        // ->when(request()->input('search'), function($query, $search) {
+        //     $query->where(function($subquery) use ($search) {
+        //         $subquery->where('student_id', 'like', "%{$search}%")
+        //                 ->orWhere('full_name', 'like', "%{$search}%");
+        //     });
+        // })
+        // ->where('approved', '=', 0)
+        // ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        // ->paginate($perPage)
+        // ->withQueryString(),
+
+        'newstudents' => $newstudents,
+                'filters' => request()->only(['search', 'perPage']),
+                'newstudents' => $newstudents,
                 'newstudentsbeed' => UserResource::collection($newstudentsbeed),
                 'totalNewStudents' => $totalNewStudents,
             ]);
