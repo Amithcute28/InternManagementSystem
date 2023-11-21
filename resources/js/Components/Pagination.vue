@@ -1,38 +1,17 @@
 <template>
-  <div v-if="links.length > 3">
-    <div class="flex flex-wrap -mb-1 mt-4 justify-end" :class="{ 'justify-end': right }">
-      <template v-for="(link, key) in links">
-        <div
-          v-if="link.url === null"
-          :key="key"
-          class="mb-1 px-4 py-3 text-gray-400 text-sm leading-4 border bg-white"
-          v-html="link.label"
-        />
-        <Link
-          v-else
-          :key="`link-${key}`"
-          class="mb-1 px-4 py-3 bg-white focus:text-indigo-500 text-sm leading-4 hover:bg-white border focus:border-indigo-500"
-          :class="{ 'border-2 border-blue-500': link.active }"
-          :href="link.url"
-          v-html="link.label"
-        />
-      </template>
-    </div>
-  </div>
+  <div class="flex">
+            <template v-for="(link, key) in links" :key="key">
+              <div v-if="link.url === null" v-html="link.label" class="mb-1 mr-1 px-4 py-3 text-gray-400 text-sm leading-4 border rounded"/>
+              <Link v-else :href="link.url" v-html="link.label" class="mb-1 mr-1 px-4 py-3 text-sm leading-4 border rounded focus:text-indigo-500 focus:border-indigo-500 hover:bg-white" :class="{ 'bg-indigo-200': link.active }"/>
+            </template>
+          </div>
 </template>
 
-<script>
+<script setup>
 import { Link } from "@inertiajs/vue3";
-export default {
-  components: {
-    Link,
-  },
-  props: {
-    links: Array,
-    right: {
-      type: Boolean,
-      value: false,
-    },
-  },
-};
+
+const { links } = defineProps({
+  links: Array,
+ 
+});
 </script>

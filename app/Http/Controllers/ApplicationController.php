@@ -68,6 +68,23 @@ class ApplicationController extends Controller
                 ];
             });
 
+            $perPage = request()->input('perPage') ?: 5;
+            $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
+                return $collection->filter(function ($item) use ($search) {
+                    return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+                });
+            });
+            
+            $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+                $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+                $filteredData->count(),
+                $perPage,
+                null,
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
+            
+            $paginateData = $paginatedData->appends(request()->query());
+
 
 
 
@@ -82,7 +99,8 @@ class ApplicationController extends Controller
 
         return Inertia::render('Admin/Pages/InCampusApplication', [
             'files' => $filtered_files,
-            'approved' => $qualifiedUsers,
+            'approved' => $paginateData,
+            'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
         ]);
@@ -123,6 +141,23 @@ class ApplicationController extends Controller
                 ];
             });
 
+            $perPage = request()->input('perPage') ?: 5;
+            $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
+                return $collection->filter(function ($item) use ($search) {
+                    return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+                });
+            });
+            
+            $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+                $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+                $filteredData->count(),
+                $perPage,
+                null,
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
+            
+            $paginateData = $paginatedData->appends(request()->query());
+
         $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
             $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
             $extension = pathinfo($value, PATHINFO_EXTENSION);
@@ -134,7 +169,8 @@ class ApplicationController extends Controller
 
         return Inertia::render('Admin/Pages/OffCampusApplication', [
             'files' => $filtered_files,
-            'offCampus' => $qualifiedUsers,
+            'offCampus' => $paginateData,
+            'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
         ]);

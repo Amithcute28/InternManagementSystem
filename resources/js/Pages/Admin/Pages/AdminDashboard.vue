@@ -34,20 +34,7 @@ const schools = [
       >
         <div class="p-5">
           <div class="flex justify-between">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7 text-blue-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
+            
            
           </div>
           <div class="ml-2 w-full flex-1">
@@ -67,20 +54,7 @@ const schools = [
       >
         <div class="p-5">
           <div class="flex justify-between">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7 text-yellow-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
+          
            
           </div>
           <div class="ml-2 w-full flex-1">
@@ -100,26 +74,7 @@ const schools = [
       >
         <div class="p-5">
           <div class="flex justify-between">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7 text-pink-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
-              />
-            </svg>
+            
            
           </div>
           <div class="ml-2 w-full flex-1">
@@ -137,12 +92,7 @@ const schools = [
                                         href="#">
                                         <div class="p-5">
                                             <div class="flex justify-between">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-400"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                                                </svg>
+                                               
                                               
                                             </div>
                                             <div class="ml-2 w-full flex-1">
@@ -190,9 +140,9 @@ const schools = [
                         </defs>
                     </svg>
                     <div>
-                        <h5 class="text-xl text-gray-600 text-center">Global Activities</h5>
+                        <h5 class="text-xl text-gray-600 text-center">Programs</h5>
                         <div class="mt-2 flex justify-center gap-4">
-                            <h3 class="text-3xl font-bold text-gray-700">$23,988</h3>
+                            <h3 class="text-3xl font-bold text-gray-700">BEED</h3>
                             <div class="flex items-end gap-1 text-green-500">
                                 <svg class="w-3" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6.00001 0L12 8H-3.05176e-05L6.00001 0Z" fill="currentColor"/>
@@ -200,13 +150,13 @@ const schools = [
                                 <span>2%</span>
                             </div>
                         </div>
-                        <span class="block text-center text-gray-500">Compared to last week $13,988</span>
+                        <span class="block text-center text-gray-500">Compared to last year</span>
                     </div>
                     <table class="w-full text-gray-600">
                         <tbody>
                             <tr>
-                                <td class="py-2">Tailored ui</td>
-                                <td class="text-gray-500">896</td>
+                                <td class="py-2">BEED</td>
+                                <td class="text-gray-500">70</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -224,8 +174,8 @@ const schools = [
                                 </td>   
                             </tr>
                             <tr>
-                                <td class="py-2">Customize</td>
-                                <td class="text-gray-500">1200</td>
+                                <td class="py-2">BSED</td>
+                                <td class="text-gray-500">60</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -267,10 +217,10 @@ const schools = [
             </div>
             <div>
                 <div class="h-full py-6 px-6 rounded-xl border border-gray-200 bg-white">
-                    <h5 class="text-xl text-gray-700">Downloads</h5>
+                    <h5 class="text-xl text-gray-700">Interns</h5>
                     <div class="my-8">
                         <h1 class="text-5xl font-bold text-gray-800">64,5%</h1>
-                        <span class="text-gray-500">Compared to last week $13,988</span>
+                        <span class="text-gray-500">Compared to last year</span>
                     </div>
                     <svg class="w-full" viewBox="0 0 218 69" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 67.5C27.8998 67.5 24.6002 15 52.5 15C80.3998 15 77.1002 29 105 29C132.9 29 128.6 52 156.5 52C184.4 52 189.127 63.8158 217.027 63.8158" stroke="url(#paint0_linear_622:13664)" stroke-width="3" stroke-linecap="round"/>
@@ -289,8 +239,8 @@ const schools = [
                     <table class="mt-6 -mb-2 w-full text-gray-600">
                         <tbody>
                             <tr>
-                                <td class="py-2">From new users</td>
-                                <td class="text-gray-500">896</td>
+                                <td class="py-2">From new interns</td>
+                                <td class="text-gray-500">132</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -308,8 +258,8 @@ const schools = [
                                 </td>   
                             </tr>
                             <tr>
-                                <td class="py-2">From old users</td>
-                                <td class="text-gray-500">1200</td>
+                                <td class="py-2">From old interns</td>
+                                <td class="text-gray-500">80</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -346,9 +296,9 @@ const schools = [
                         </defs>
                     </svg>
                     <div class="mt-6">
-                        <h5 class="text-xl text-gray-700 text-center">Ask to customize</h5>
+                        <h5 class="text-xl text-gray-700 text-center">HTE</h5>
                         <div class="mt-2 flex justify-center gap-4">
-                            <h3 class="text-3xl font-bold text-gray-700">28</h3>
+                            <h3 class="text-3xl font-bold text-gray-700">15</h3>
                             <div class="flex items-end gap-1 text-green-500">
                                 <svg class="w-3" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6.00001 0L12 8H-3.05176e-05L6.00001 0Z" fill="currentColor"/>
@@ -356,13 +306,13 @@ const schools = [
                                 <span>2%</span>
                             </div>
                         </div>
-                        <span class="block text-center text-gray-500">Compared to last week 13</span>
+                        <span class="block text-center text-gray-500">Compared to last year</span>
                     </div>
                     <table class="mt-6 -mb-2 w-full text-gray-600">
                         <tbody>
                             <tr>
-                                <td class="py-2">Tailored ui</td>
-                                <td class="text-gray-500">896</td>
+                                <td class="py-2">High School</td>
+                                <td class="text-gray-500">10</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -380,8 +330,8 @@ const schools = [
                                 </td>   
                             </tr>
                             <tr>
-                                <td class="py-2">Customize</td>
-                                <td class="text-gray-500">1200</td>
+                                <td class="py-2">Elementary</td>
+                                <td class="text-gray-500">5</td>
                                 <td>
                                     <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
@@ -398,25 +348,7 @@ const schools = [
                                     </svg>
                                 </td>   
                             </tr>
-                            <tr>
-                                <td class="py-2">Other</td>
-                                <td class="text-gray-500">12</td>
-                                <td>
-                                    <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.4" width="17" height="21" rx="1" fill="#e4e4f2"/>
-                                        <rect opacity="0.4" x="19" width="14" height="21" rx="1" fill="#e4e4f2"/>
-                                        <rect opacity="0.4" x="35" width="14" height="21" rx="1" fill="#e4e4f2"/>
-                                        <rect opacity="0.4" x="51" width="17" height="21" rx="1" fill="#e4e4f2"/>
-                                        <path d="M0 6C8.62687 6 6.85075 12.75 17 12.75C27.1493 12.75 25.3731 9 34 9C42.6269 9 42.262 13.875 49 13.875C55.5398 13.875 58.3731 6 67 6" stroke="url(#paint0_linear_622:13649)" stroke-width="2" stroke-linejoin="round"/>
-                                        <defs>
-                                        <linearGradient id="paint0_linear_622:13649" x1="67" y1="7.96873" x2="1.67368" y2="8.44377" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#FFD422"/>
-                                        <stop offset="1" stop-color="#FF7D05"/>
-                                        </linearGradient>
-                                        </defs>
-                                    </svg>
-                                </td>   
-                            </tr>
+                          
                         </tbody>
                     </table>   
                 </div>

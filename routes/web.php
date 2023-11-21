@@ -92,7 +92,6 @@ Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
 Route::resource('/coordinators', CoordinatorsController::class);
 Route::resource('/offcampus', OffCampusController::class);
-Route::resource('/offcampus', OffCampusController::class);
 Route::resource('schools', SchoolsController::class);
 Route::resource('adminProfile', AdminProfileController::class);
 Route::put('/adminProfile/{id}', [AdminProfileController::class, 'update'])->name('adminProfile.update');

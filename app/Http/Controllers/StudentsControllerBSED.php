@@ -14,6 +14,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\DB;
 
 // use App\Http\Resources\PermissionResource;
 // use App\Http\Resources\RoleResource;
@@ -64,7 +66,6 @@ class StudentsControllerBSED extends Controller
     
         $approvedUsers = User::where('approved', 1)
             ->where('is_admin', 0)
-            ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
             ->whereDoesntHave('applicationForms')
             ->get()
             ->map(function ($user) {
@@ -96,11 +97,23 @@ class StudentsControllerBSED extends Controller
             return in_array(strtolower($extension), $allowed_extensions);
         })->values();
     
-        $filteredData = $combinedData->filter(function ($item, $key) {
-            $allowedPrograms = ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'];
-            return in_array($item['program'], $allowedPrograms);
+        $perPage = request()->input('perPage') ?: 5;
+
+        $filteredData = $combinedData->when(request()->input('search'), function ($collection, $search) {
+            return $collection->filter(function ($item) use ($search) {
+                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+            });
         });
-    
+        
+        $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+            $filteredData->count(),
+            $perPage,
+            null,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        
+        $paginateData = $paginatedData->appends(request()->query());
     
         
         $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();;
@@ -108,7 +121,8 @@ class StudentsControllerBSED extends Controller
         
         return Inertia::render('Admin/PagesBSED/Students', [
             'files' => $filtered_files,
-            'approved' => $filteredData,
+            'approved' => $paginateData,
+            'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
             // Add the offCampus route
@@ -232,53 +246,20 @@ class StudentsControllerBSED extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        return Inertia::render('Admin/PagesBSED/StudentCreate');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'student_id' => 'required|string|max:255',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'program' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:' . User::class,
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'home_address' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
-
-            
-        ]);
 
         $user = User::create([
             'student_id' => $request->student_id,
-            'password' => Hash::make($request->password),
             'program' => $request->program,
             'full_name' => $request->full_name,
             'email' => $request->email,
-            'birthday' => $request->birthday,
-            'gender' => $request->gender,
-            'relationship' => $request->relationship,
-            'nationality' => $request->nationality,
-            'contact_number' => $request->contact_number,
-            'home_address' => $request->home_address,
-            'guardian_name' => $request->guardian_name,
-            'guardian_contact' => $request->guardian_contact,
-            'approved' => 1,
-            'is_admin' => 0,
-            'new_intern' => 1,
-        ])->assignRole('user');
+            'password' => Hash::make($request->password),
+            'approved' => 0,
+            'recommended' => 0,
 
+
+        ])->assignRole('user');
 
 
         // $userId = $user->id;
@@ -332,7 +313,7 @@ class StudentsControllerBSED extends Controller
 
 
 
-        return to_route('studentsbsed.index');
+        return to_route('newstudentsbsed.index');
     }
 
 
