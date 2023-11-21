@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-
+use App\Rules\HasVerifiedEmail;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -27,7 +27,11 @@ class RegisterRequest extends FormRequest
             'student_id' => 'required|string|min:7',
             'program' => 'required|string|in:BEED,BECEd,BSNEd,BPEd,BSED English,BSED Filipino,BSED Mathematics,BSED Science,BSED Social Studies',
             'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email', // Include the HasVerifiedEmail rule
+            ],
             'password' => ['required', 'confirmed', Password::min(8)
                 ->letters()
                 ->mixedCase()

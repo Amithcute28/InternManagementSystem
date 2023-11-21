@@ -40,80 +40,80 @@ class StudentsController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $applicationForms = ApplicationForm::with('user')->paginate(8)->map(function ($application_form) {
-        $user = $application_form->user;
-        $student_name = $user ? $user->full_name : null;
-        return [
-            'id' => $user->id,
-            'student_id' => $user->student_id,
-            'profile' => $user->profile,
-            'is_off_campus' => $user->is_off_campus,
-            'in_campus' => $user->in_campus,
-            'full_name' => $student_name,
-            'program' => $user->program ?? null,
-            'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
-            'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
-            'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
-            'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
-            'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
-            'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
-            'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
-            'eval_form' => $application_form->eval_form ? asset('storage/' . $application_form->eval_form) : null,
-        ];
-    });
-
-    $approvedUsers = User::where('approved', 1)
-        ->where('is_admin', 0)
-        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-        ->whereDoesntHave('applicationForms')
-        ->get()
-        ->map(function ($user) {
+    {
+        $applicationForms = ApplicationForm::with('user')->paginate(8)->map(function ($application_form) {
+            $user = $application_form->user;
+            $student_name = $user ? $user->full_name : null;
             return [
                 'id' => $user->id,
                 'student_id' => $user->student_id,
                 'profile' => $user->profile,
-                'email' => $user->email,
                 'is_off_campus' => $user->is_off_campus,
                 'in_campus' => $user->in_campus,
-                'full_name' => $user->full_name,
-                'program' => $user->program,
-                'eslip' => null, // Or any other default value for missing files
-                'psa' => null,
-                'pros' => null,
-                'applicationF' => null,
-                'medical' => null,
-                'parent' => null,
-                'twobytwo' => null,
-                'eval_form' => null,
+                'full_name' => $student_name,
+                'program' => $user->program ?? null,
+                'eslip' => $application_form->eslip ? asset('storage/' . $application_form->eslip) : null,
+                'psa' => $application_form->psa ? asset('storage/' . $application_form->psa) : null,
+                'pros' => $application_form->pros ? asset('storage/' . $application_form->pros) : null,
+                'applicationF' => $application_form->applicationF ? asset('storage/' . $application_form->applicationF) : null,
+                'medical' => $application_form->medical ? asset('storage/' . $application_form->medical) : null,
+                'parent' => $application_form->parent ? asset('storage/' . $application_form->parent) : null,
+                'twobytwo' => $application_form->twobytwo ? asset('storage/' . $application_form->twobytwo) : null,
+                'eval_form' => $application_form->eval_form ? asset('storage/' . $application_form->eval_form) : null,
             ];
         });
 
-    $combinedData = $applicationForms->concat($approvedUsers);
+        $approvedUsers = User::where('approved', 1)
+            ->where('is_admin', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->whereDoesntHave('applicationForms')
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'student_id' => $user->student_id,
+                    'profile' => $user->profile,
+                    'email' => $user->email,
+                    'is_off_campus' => $user->is_off_campus,
+                    'in_campus' => $user->in_campus,
+                    'full_name' => $user->full_name,
+                    'program' => $user->program,
+                    'eslip' => null, // Or any other default value for missing files
+                    'psa' => null,
+                    'pros' => null,
+                    'applicationF' => null,
+                    'medical' => null,
+                    'parent' => null,
+                    'twobytwo' => null,
+                    'eval_form' => null,
+                ];
+            });
 
-    $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
-        $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-        $extension = pathinfo($value, PATHINFO_EXTENSION);
-        return in_array(strtolower($extension), $allowed_extensions);
-    })->values();
+        $combinedData = $applicationForms->concat($approvedUsers);
 
-    $filteredData = $combinedData->filter(function ($item, $key) {
-        $allowedPrograms = ['BEED', 'BECEd', 'BSNEd', 'BPEd'];
-        return in_array($item['program'], $allowedPrograms);
-    });
+        $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
+            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+            $extension = pathinfo($value, PATHINFO_EXTENSION);
+            return in_array(strtolower($extension), $allowed_extensions);
+        })->values();
 
-    
-    $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();;
-    $totalInterns = $interns->count();
-    
-    return Inertia::render('Admin/Pages/Students', [
-        'files' => $filtered_files,
-        'approved' => $filteredData,
-        'interns' => $interns,
-        'totalInterns' => $totalInterns,
-        // Add the offCampus route
-    ]);
-}
+        $filteredData = $combinedData->filter(function ($item, $key) {
+            $allowedPrograms = ['BEED', 'BECEd', 'BSNEd', 'BPEd'];
+            return in_array($item['program'], $allowedPrograms);
+        });
+
+
+        $interns = User::where('approved', 1)->where('is_admin', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();;
+        $totalInterns = $interns->count();
+
+        return Inertia::render('Admin/Pages/Students', [
+            'files' => $filtered_files,
+            'approved' => $filteredData,
+            'interns' => $interns,
+            'totalInterns' => $totalInterns,
+            // Add the offCampus route
+        ]);
+    }
 
     public function edit($student): Response
     {
@@ -129,8 +129,8 @@ class StudentsController extends Controller
         // in-campus logic goes here
 
         $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('status', 'completed')->with(['applicationForms' => function ($query) {
-                $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
-            }])
+            $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+        }])
             ->get()
             ->map(function ($user) {
                 $applicationForm = $user->applicationForms->first(); // Get the first application form
@@ -166,8 +166,8 @@ class StudentsController extends Controller
         // in-campus logic goes here
 
         $qualifiedUsers = User::where('approved', 1)->where('program', 'BEED')->where('is_admin', 0)->where('is_off_campus', true)->with(['applicationForms' => function ($query) {
-                $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
-            }])
+            $query->select('user_id', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
+        }])
             ->get()
             ->map(function ($user) {
                 $applicationForm = $user->applicationForms->first(); // Get the first application form
@@ -316,13 +316,13 @@ class StudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-   
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        
+
         $request->validate([
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($student),
             'program' => 'required|string|max:255',
@@ -366,7 +366,4 @@ class StudentsController extends Controller
         $student->delete();
         return to_route('students.index');
     }
-
-    
-
 }

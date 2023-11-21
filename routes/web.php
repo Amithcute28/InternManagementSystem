@@ -27,7 +27,7 @@ use App\Http\Controllers\NewStudentsControllerBSED;
 use App\Http\Controllers\SchoolsControllerBSED;
 use App\Http\Controllers\OffCampusControllerBSED;
 use App\Http\Controllers\CoordinatorsControllerBSED;
-
+use Illuminate\Support\Facades\Auth;
 
 //admin dashboard BSED
 Route::resource('/admindashbsed', AdminDashboardControllerBSED::class);
@@ -50,12 +50,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 Route::put('/applicationsUpdatebsed/{id}', [ApplicationControllerBSED::class, 'updateIncampus'])->name('applicationsbsed.updateIncampus');
 Route::get('in-campus-application-editbsed', [ApplicationControllerBSED::class, 'edit'])->name('applicationsbsed.edit');
-    Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
-    Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
-    Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
-    Route::delete('/studentsbsed/{id}', [StudentsControllerBSED::class, 'destroy'])->name('studentsbsed.destroy');
-    Route::delete('/newstudentsbsed/{id}', [NewStudentsControllerBSED::class, 'destroy'])->name('newstudentsbsed.destroy');
-    Route::put('/studentsbsed/{id}', [studentsControllerBSED::class, 'update'])->name('adminProfile.update');
+Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
+Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
+Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
+Route::delete('/studentsbsed/{id}', [StudentsControllerBSED::class, 'destroy'])->name('studentsbsed.destroy');
+Route::delete('/newstudentsbsed/{id}', [NewStudentsControllerBSED::class, 'destroy'])->name('newstudentsbsed.destroy');
+Route::put('/studentsbsed/{id}', [studentsControllerBSED::class, 'update'])->name('adminProfile.update');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +75,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+
 
 //student dashboard
 Route::resource('/application', ApplicationController::class);
@@ -140,7 +142,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
 

@@ -28,23 +28,20 @@ class NewStudentsController extends Controller
     {
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
-            
-        $newstudentsbeed = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+
+        $newstudentsbeed = User::whereNotNull('email_verified_at')->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalNewStudents = $newstudentsbeed->count();
 
-            $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
-           
-            
-            
+        $newstudents = User::whereNotNull('email_verified_at')->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
 
-            return Inertia::render('Admin/Pages/NewStudents',[
-                'newstudents' => UserResource::collection($newstudents),
-                'newstudentsbeed' => UserResource::collection($newstudentsbeed),
-                'totalNewStudents' => $totalNewStudents,
-            ]);
 
-          
-        
+
+
+        return Inertia::render('Admin/Pages/NewStudents', [
+            'newstudents' => UserResource::collection($newstudents),
+            'newstudentsbeed' => UserResource::collection($newstudentsbeed),
+            'totalNewStudents' => $totalNewStudents,
+        ]);
     }
 
     public function edit(User $newstudent): Response
@@ -52,7 +49,7 @@ class NewStudentsController extends Controller
         return Inertia::render('Admin/Pages/NewStudentsApproval', [
             'newstudent' => $newstudent,
         ]);
-    }   
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -72,7 +69,7 @@ class NewStudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-   
+
 
     /**
      * Update the specified resource in storage.
@@ -84,7 +81,7 @@ class NewStudentsController extends Controller
             'program' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($newstudent),
-           
+
 
 
         ]);
@@ -103,14 +100,14 @@ class NewStudentsController extends Controller
     public function updateApproved($id)
     {
         $student = User::find($id);
-        
-      
-            $student->approved = 1;
-            $student->save();
-        
-        
+
+
+        $student->approved = 1;
+        $student->save();
+
+
         // Add any additional logic or response handling as needed
-        
+
         return redirect()->route('newstudents.index');
     }
 
