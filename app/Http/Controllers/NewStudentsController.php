@@ -30,7 +30,7 @@ class NewStudentsController extends Controller
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
 
-        $newstudentsbeed = User::whereNotNull('email_verified_at')->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+        $newstudentsbeed = User::whereNotNull('email_verified_at')->where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalNewStudents = $newstudentsbeed->count();
 
         // $newstudents = User::whereNotNull('email_verified_at')->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
@@ -43,6 +43,7 @@ class NewStudentsController extends Controller
                         ->orWhere('full_name', 'like', "%{$search}%");
                 });
             })
+            ->whereNotNull('email_verified_at')
             ->where('approved', '=', 0)
             ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
             ->paginate($perPage)

@@ -71,7 +71,7 @@ const removeImage = (field) => {
           </div>
 
           <!-- primary nav -->
-          <div class="hidden md:flex flex items-center space-x-4">
+          <div class="hidden md:flex flex items-center space-x-2">
             <h1 class="font-bold text-white uppercase">
               New intern, Please fill up the required information to continue!
             </h1>
@@ -79,24 +79,14 @@ const removeImage = (field) => {
 
           <!-- login button for big screen -->
           <div class="flex items-center space-x-1">
-            <div v-if="canLogin">
-              <a
-                :href="route('dashboard')"
-                v-if="$page.props.auth.user"
-                class="text-gray-100 py-2 px-3"
-                >Dashboard</a
+            <div>
+              <Link
+                :href="route('logout')"
+                method="post"
+                as="button"
+                class="font-bold py-2 px-3 bg-gold hover:bg-yellow-400 text-yellow-100 hover:text-yellow-800 rounded transition duration-300 ease-in-out"
+                >Log out</Link
               >
-              <template v-else>
-                <a :href="route('login')" class="text-gray-100 py-2 px-3"
-                  >Login</a
-                >
-                <a
-                  v-if="canRegister"
-                  :href="route('register')"
-                  class="font-bold py-2 px-3 bg-gold hover:bg-yellow-400 text-yellow-100 hover:text-yellow-800 rounded transition duration-300 ease-in-out"
-                  >Register</a
-                >
-              </template>
             </div>
 
             <button class="p-4 focus:outline-none focus:bg-blue-200 md:hidden">

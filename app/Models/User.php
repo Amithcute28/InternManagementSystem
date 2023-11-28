@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +14,7 @@ use App\Models\School;
 use App\Models\Schoolbsed;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -74,15 +74,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function scopeApproved(Builder $query)
     {
         $query->where('approved', 1)
-        ->where('is_admin', 0)
-        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-        ->whereDoesntHave('applicationForms');
+            ->where('is_admin', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->whereDoesntHave('applicationForms');
     }
 
-    
 
-   
-    
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -27,6 +27,7 @@ use App\Http\Controllers\NewStudentsControllerBSED;
 use App\Http\Controllers\SchoolsControllerBSED;
 use App\Http\Controllers\OffCampusControllerBSED;
 use App\Http\Controllers\CoordinatorsControllerBSED;
+use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 
 //admin dashboard BSED
@@ -141,14 +142,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
-
+    Route::get('/application/{id}', [ApplicationController::class, 'editInternApplication'])->name('applications.editInternApplication');
+    Route::patch('/application/{id}', [ApplicationController::class, 'updateInternApplication'])->name('application.updateInternApplication');
     Route::post('/user', [UserStudentsController::class, 'showProfile'])->name('user.showProfile');
 });
 
 Route::post('/user', [UserStudentsController::class, 'updateNewIntern'])->name('user.updateNewIntern');
+
+Route::get('/register/verify/{token}', [RegisteredUserController::class, 'verify'])->name('verification.verify');
 
 
 require __DIR__ . '/auth.php';
