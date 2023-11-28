@@ -86,11 +86,29 @@ class OffCampusControllerBSED extends Controller
             $student['recommended_institutions'] = $recommendedInstitutions;
         });
 
+        $perPage = request()->input('perPage') ?: 5;
+        $filteredData = $students->when(request()->input('search'), function ($collection, $search) {
+            return $collection->filter(function ($item) use ($search) {
+                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+            });
+        });
+        
+        $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+            $filteredData->count(),
+            $perPage,
+            null,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        
+        $paginateData = $paginatedData->appends(request()->query());
+
         $interns = User::where('approved', 1)->where('is_admin', 0)->where('is_off_campus', 1)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
         $totalInterns = $interns->count();
 
         return Inertia::render('Admin/PagesBSED/OffCampus', [
-            'students' => $students,
+            'students' => $paginateData,
+            'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
         ]);

@@ -36,7 +36,7 @@ function getTags() {
     preserveState: true,
     replace: true,
   })
-}
+};
 
 const isImage = (url) => {
   return /\.(jpeg|jpg|png|gif)$/i.test(url);

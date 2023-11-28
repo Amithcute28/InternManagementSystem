@@ -34,7 +34,7 @@ function getTags() {
     preserveState: true,
     replace: true,
   })
-}
+};
 
 const totalInterns = props.interns.length;
 

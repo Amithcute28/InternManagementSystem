@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  router.post(route("application.update", props.offCampus?.id), {
+  router.post(route("applicationbsed.update", props.offCampus?.id), {
     _method: "put",
     studentId: form.studentId,
     studentName: form.studentName,

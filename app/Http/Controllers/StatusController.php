@@ -43,6 +43,7 @@ class StatusController extends Controller
                         'required_programs' => $institution->required_programs,
                         'required_academic_performance' => $institution->required_academic_performance,
                         'skills' => $institution->skills,
+                        'slots' => $institution->slots,
                     ];
                 });
             } else {
@@ -62,6 +63,7 @@ class StatusController extends Controller
                             'required_programs' => $institution->required_programs,
                             'required_academic_performance' => $institution->required_academic_performance,
                             'skills' => $institution->skills,
+                            'slots' => $institution->slots,
                         ];
                     });
             }
@@ -79,6 +81,7 @@ $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student-
         'required_programs' => $institution->required_programs,
         'required_academic_performance' => $institution->required_academic_performance,
         'skills' => $institution->skills,
+        'slots' => $institution->slots,
     ];
 });
 
@@ -94,6 +97,7 @@ $requiredProgramsMatchbsed = Schoolbsed::where('required_programs', 'LIKE', "%{$
         'required_programs' => $institution->required_programs,
         'required_academic_performance' => $institution->required_academic_performance,
         'skills' => $institution->skills,
+        'slots' => $institution->slots,
     ];
 });
 

@@ -31,6 +31,7 @@ const form = useForm({
   schoolLogo: null,
   required_programs: "",
   skills: "",
+  slots: "",
 });
 
 const submit = () => {
@@ -40,6 +41,7 @@ const submit = () => {
   formData.append("schoolLogo", form.schoolLogo);
   formData.append("required_programs", form.required_programs);
   formData.append("skills", form.skills);
+  formData.append("slots", form.slots);
 
   form.post(route("schools.store"), formData, {
     onFinish: () =>
@@ -48,7 +50,8 @@ const submit = () => {
         "schoolAddress",
         "schoolLogo",
         "required_programs",
-        "skills"
+        "skills",
+        "slots"
       ),
   });
 
@@ -71,6 +74,7 @@ function openModalEdit(school) {
   editForm.schoolLogo = null;
   editForm.required_programs = school.required_programs;
   editForm.skills = school.skills;
+  editForm.slots = school.slots;
 
   console.log("Button clicked!", school);
   schoolEdit.value = school;
@@ -86,6 +90,7 @@ const editForm = useForm({
   schoolLogo: null,
   required_programs: props.schoolToEdit?.required_programs,
   skills: props.schoolToEdit?.skills,
+  slots: props.schoolToEdit?.slots,
 });
 
 const submitEdit = () => {
@@ -101,6 +106,7 @@ const submitEdit = () => {
       schoolLogo: editForm.schoolLogo,
       required_programs: editForm.required_programs,
       skills: editForm.skills,
+      slots: editForm.slots,
     },
 
     console.log("hello")
@@ -131,8 +137,11 @@ const submitEdit = () => {
               <img :src="school.school_logo" class="w-auto h-24 rounded-lg" />
               <div>
                 <p class="font-semibold text-base">{{ school.name }}</p>
-                <p class="font-semibold text-sm text-gray-400 mb-5">
+                <p class="font-semibold text-sm text-gray-400 mb-2">
                   {{ school.address }}
+                </p>
+                <p class="font-semibold text-md mb-5">
+                  Slots: {{ school.slots }}
                 </p>
                 <button
                   @click="openModal(school)"
@@ -230,6 +239,22 @@ const submitEdit = () => {
                       name="schoolAddress"
                       id="skills"
                       placeholder="Skills"
+                      class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                  </div>
+                  <div class="col-span-1 mb-5">
+                    <label
+                      for="schoolName"
+                      class="mb-3 block text-base font-medium text-[#07074D]"
+                    >
+                      Slots:
+                    </label>
+                    <input
+                      type="text"
+                      v-model="form.slots"
+                      name="slots"
+                      id="slots"
+                      placeholder="Slots"
                       class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                     />
                   </div>

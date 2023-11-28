@@ -129,20 +129,13 @@ const submit = () => {
             </div>
             <div class="relative z-0 w-full mb-6 group">
               <select
-                id="province"
+                id="program"
                 v-model="form.program"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="" disabled hidden>Program</option>
                 <option>BEED</option>
-                <option>BECEd</option>
-                <option>BSNEd</option>
-                <option>BPEd</option>
-                <option>BSED English</option>
-                <option>BSED Filipino</option>
-                <option>BSED Mathematics</option>
-                <option>BSED Science</option>
-                <option>BSED Social Studies</option>
+                <option>BSED</option>
               </select>
               <InputError class="mt-2" :message="form.errors.program" />
             </div>
@@ -243,3 +236,27 @@ const submit = () => {
 </dialog>
     </AdminLayout>
   </template>
+
+<style>
+  dialog[open] {
+  animation: appear .15s cubic-bezier(0, 1.8, 1, 1.8);
+}
+
+  dialog::backdrop {
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.5), rgba(54, 54, 54, 0.5));
+    backdrop-filter: blur(3px);
+  }
+  
+ 
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+} 
+</style>

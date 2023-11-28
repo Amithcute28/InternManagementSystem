@@ -33,20 +33,32 @@ class RegisteredUserController extends Controller
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
+
         $user = User::create([
             'student_id' => $request->student_id,
             'program' => $request->program,
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'approved' => 0, // Set 'approved' to 0 by default
+            'approved' => 0,
             'recommended' => 0,
+
+
         ])->assignRole('user');
 
-        $user->sendEmailVerificationNotification();
+
+
+
+        event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->route('verification.notice');
+        if (Auth::check() && Auth::user()->is_admin && $user->approved) {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        Auth::logout();
+        return redirect('/login');
     }
 }
+

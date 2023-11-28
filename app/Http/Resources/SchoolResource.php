@@ -22,6 +22,7 @@ class SchoolResource extends JsonResource
             'school_logo' => $this->school_logo,
             'required_programs' => $this->required_programs,
             'skills' => $this->skills,
+            'slots' => $this->skills,
 
 
 

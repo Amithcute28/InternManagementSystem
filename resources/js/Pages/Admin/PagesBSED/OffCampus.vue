@@ -8,17 +8,37 @@
     import TableRow from '@/Components/TableRow.vue';
     import TableHeaderCell from '@/Components/TableHeaderCell.vue';
     import TableDataCell from '@/Components/TableDataCell.vue';
+     import Pagination from "@/Components/Pagination.vue";
+    import { watch} from "vue";
+    import { router } from '@inertiajs/vue3'
 
 
-const { students, institution, interns } = defineProps({
+const props = defineProps({
         students: Array,
         institution: Array,
         interns: Array,
-        
-
+        filters:Array,
     });
 
-const totalInterns = interns.length;
+const search = ref(props.filters.search);
+const perPage = ref(5);
+
+watch(search, (value) => {
+  router.get('offcampusbsed', { search: value }, {
+    preserveState: true,
+    replace: true
+  });
+});
+
+function getTags() {
+  router.get('offcampusbsed', { perPage: perPage.value }, {
+    preserveState: true,
+    replace: true,
+  })
+};
+
+
+const totalInterns = props.interns.length;
 
     
 
@@ -119,34 +139,20 @@ function openModalRecommend(student) {
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
           </div>
-          <input type="text" id="table-search-users" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-72 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for interns">
+          <input v-model="search" type="text" id="table-search-users" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-72 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for interns">
       </div>
 
       <div>
-          <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-              <span class="sr-only">Action button</span>
-              Filter
-              <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <!-- Dropdown menu -->
-          <div id="dropdownAction" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-              <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
-                  <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">BEED</a>
-                  </li>
-                  <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">BECEd</a>
-                  </li>
-                   <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">BSNEd</a>
-                  </li>
-                  <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">BPEd</a>
-                  </li>
-                 
-              </ul>
-           
-          </div>
+          <select
+                v-model="perPage"
+                @change="getTags"
+                class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:ring-0 text-sm">
+                <option value="5">5 Per Page</option> 
+                <option value="10">10 Per Page</option> 
+                <option value="15">15 Per Page</option> 
+
+
+              </select>
       </div>
                   <!-- <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                       <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -184,7 +190,7 @@ function openModalRecommend(student) {
 
                     <template #default>
                         
-                       <TableRow class="overflow-auto" v-for="student in students" :key="student.id">
+                       <TableRow class="overflow-auto" v-for="student in students.data" :key="student.id">
                             <td class="w-4 p-4 bg-white">
                             <div class="flex items-center">
                             <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -247,6 +253,9 @@ function openModalRecommend(student) {
                         </TableRow>
                     </template>
                 </Table>
+                <div class="m-2 p-2">
+          <Pagination :links="students.links"/>
+        </div>
         </div>
         </div>
 

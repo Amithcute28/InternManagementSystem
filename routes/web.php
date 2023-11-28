@@ -52,7 +52,7 @@ Route::put('/applicationsUpdatebsed/{id}', [ApplicationControllerBSED::class, 'u
 Route::get('in-campus-application-editbsed', [ApplicationControllerBSED::class, 'edit'])->name('applicationsbsed.edit');
 Route::DELETE('in-campus-application-destroybsed', [ApplicationControllerBSED::class, 'destroy'])->name('applicationsbsed.destroy');
 Route::put('/updatenewstudent/{id}', [NewStudentsControllerBSED::class, 'updateNewStudent'])->name('newstudentsbsed.updateNewStudent');
-Route::put('/applicationsbsed/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
+Route::put('/applicationsbsed/{id}', [ApplicationControllerBSED::class, 'updateOffcampus'])->name('applicationsbsed.updateOffcampus');
 Route::delete('/studentsbsed/{id}', [StudentsControllerBSED::class, 'destroy'])->name('studentsbsed.destroy');
 Route::delete('/newstudentsbsed/{id}', [NewStudentsControllerBSED::class, 'destroy'])->name('newstudentsbsed.destroy');
 Route::put('/studentsbsed/{id}', [studentsControllerBSED::class, 'update'])->name('adminProfile.update');
@@ -141,7 +141,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
     Route::resource('/application', ApplicationController::class);
 
