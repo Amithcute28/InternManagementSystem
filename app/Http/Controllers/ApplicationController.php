@@ -68,22 +68,22 @@ class ApplicationController extends Controller
                 ];
             });
 
-            $perPage = request()->input('perPage') ?: 5;
-            $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
-                return $collection->filter(function ($item) use ($search) {
-                    return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
-                });
+        $perPage = request()->input('perPage') ?: 5;
+        $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
+            return $collection->filter(function ($item) use ($search) {
+                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
             });
-            
-            $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
-                $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
-                $filteredData->count(),
-                $perPage,
-                null,
-                ['path' => request()->url(), 'query' => request()->query()]
-            );
-            
-            $paginateData = $paginatedData->appends(request()->query());
+        });
+
+        $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+            $filteredData->count(),
+            $perPage,
+            null,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $paginateData = $paginatedData->appends(request()->query());
 
 
 
@@ -141,22 +141,22 @@ class ApplicationController extends Controller
                 ];
             });
 
-            $perPage = request()->input('perPage') ?: 5;
-            $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
-                return $collection->filter(function ($item) use ($search) {
-                    return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
-                });
+        $perPage = request()->input('perPage') ?: 5;
+        $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
+            return $collection->filter(function ($item) use ($search) {
+                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
             });
-            
-            $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
-                $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
-                $filteredData->count(),
-                $perPage,
-                null,
-                ['path' => request()->url(), 'query' => request()->query()]
-            );
-            
-            $paginateData = $paginatedData->appends(request()->query());
+        });
+
+        $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
+            $filteredData->count(),
+            $perPage,
+            null,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $paginateData = $paginatedData->appends(request()->query());
 
         $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
             $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
@@ -379,9 +379,15 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
+        $internApplicationToEdit = ApplicationForm::findOrFail($id);
+
+        return Inertia::render('Student/ApplicationIndex', [
+
+            'internApplicationToEdit' => new ApplicationResource($internApplicationToEdit)
+        ]);
     }
 
     /**
@@ -399,6 +405,67 @@ class ApplicationController extends Controller
             'offCampus' => new UserResource($offCampus)
         ]);
     }
+
+    public function editInternApplication($id)
+    {
+
+        $internApplicationToEdit = ApplicationForm::findOrFail($id);
+
+        return Inertia::render('Student/ApplicationIndex', [
+
+            'internApplicationToEdit' => new ApplicationResource($internApplicationToEdit)
+        ]);
+    }
+
+    public function updateInternApplication(ApplicationRequest $request, $id)
+{
+    $applicationForm = ApplicationForm::findOrFail($id);
+
+    // Define an associative array where the keys are the form input names
+    // and the values are the corresponding database columns.
+    $fileFields = [
+        'eslip' => 'eslip',
+        'psa' => 'psa',
+        'pros' => 'pros',
+        'applicationF' => 'applicationF',
+        'medical' => 'medical',
+        'parent' => 'parent',
+        'twobytwo' => 'twobytwo',
+    ];
+
+    foreach ($fileFields as $inputName => $dbColumn) {
+        if ($request->hasFile($inputName)) {
+            // Handle the uploaded file
+            $file = $request->file($inputName);
+            $originalFileName = $file->getClientOriginalName();
+
+            // Check if a file with the same name already exists
+            $count = 1;
+            $newFileName = $originalFileName;
+            while (Storage::exists('public/student/' . $newFileName)) {
+                $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $file->getClientOriginalExtension();
+                $count++;
+            }
+
+            // Store the new file
+            $file->storeAs('public/student', $newFileName);
+
+            // If a file already exists for this field, delete it
+            if (!empty($applicationForm->$dbColumn)) {
+                Storage::delete('public/student/' . $applicationForm->$dbColumn);
+            }
+
+            // Update the database column with the new file name
+            $applicationForm->$dbColumn = $newFileName;
+        }
+    }
+
+    // Save the updated model
+    $applicationForm->save();
+
+    return Redirect::route('application.index');
+}
+
 
     public function updateIncampus($id)
     {

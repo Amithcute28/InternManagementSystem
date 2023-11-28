@@ -15,7 +15,7 @@ class ApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-
+            'user_id' => $this->user_id,
             'eslip'         => $this->eslip ?? null,
             'psa'           => $this->psa ?? null,
             'pros'          => $this->pros ?? null,

@@ -30,14 +30,27 @@ class NewStudentsController extends Controller
         // return Inertia::render('Admin/Pages/NewStudents',[
         //     'newstudents' => UserResource::collection(User::where('approved', '=', 0)->get()),
 
-        $newstudentsbeed = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+        $newstudentsbeed = User::whereNotNull('email_verified_at')->where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalNewStudents = $newstudentsbeed->count();
 
         // $newstudents = User::whereNotNull('email_verified_at')->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->paginate(8);
 
-      
+        $perPage = request()->input('perPage') ?: 5;
+        $newstudents = User::query()
+            ->when(request()->input('search'), function ($query, $search) {
+                $query->where(function ($subquery) use ($search) {
+                    $subquery->where('student_id', 'like', "%{$search}%")
+                        ->orWhere('full_name', 'like', "%{$search}%");
+                });
+            })
+            ->whereNotNull('email_verified_at')
+            ->where('approved', '=', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->paginate($perPage)
+            ->withQueryString();
 
-            $perPage = request()->input('perPage') ?: 5;
+
+
         return Inertia::render('Admin/Pages/NewStudents', [
             // 'newstudents' => User::query()
             // ->when(request()->input('search'), function($query, $search) {

@@ -9,6 +9,8 @@ const props = defineProps({
     default: () => {},
   },
 
+  internApplicationToEdit: Object,
+
   user_id: {
     type: Number,
     required: true,
@@ -26,6 +28,8 @@ const props = defineProps({
 });
 
 console.log(props.application_forms);
+
+console.log("Student", props.internApplicationToEdit);
 
 const form = useForm({
   eslip: "",

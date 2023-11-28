@@ -74,15 +74,15 @@ class User extends Authenticatable
     public function scopeApproved(Builder $query)
     {
         $query->where('approved', 1)
-        ->where('is_admin', 0)
-        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-        ->whereDoesntHave('applicationForms');
+            ->where('is_admin', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->whereDoesntHave('applicationForms');
     }
 
-    
 
-   
-    
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
