@@ -72,17 +72,36 @@ class UserStudentsController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->new_intern == 0) {
-            return Inertia::render('Student/NewIntern', [
-                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
-            ]);
+        $commonServices = new CommonServices();
+        $isTodayOff = $commonServices->isTodayOff();
+
+        $attendanceChecker = auth()->user()->attendances()->where('date', Carbon::today()->toDateString())->first();
+
+        if (is_null($attendanceChecker)) {
+            $attendanceStatus = 0;
+        } else if ($attendanceChecker->sign_off_time == null) {
+            $attendanceStatus = 1;
         } else {
             $attendanceStatus = 2;
         }
 
          if ($user->new_intern == 0) {
+            $provinces = Zipcode::select('major_area')
+                ->distinct()
+                ->orderBy('major_area')
+                ->pluck('major_area')
+                ->toArray();
+
+            $zipcodes = Zipcode::select('zip_code')
+                ->distinct()
+                ->orderBy('zip_code')
+                ->pluck('zip_code')
+                ->toArray();
+
         return Inertia::render('Student/NewIntern', [
             'users' => UserResource::collection(User::where('id', '=', auth()->user()->id)->get()),
+            'provinces' => $provinces,
+            'zipcodes' => $zipcodes,
         ]);
     }
    
@@ -242,8 +261,10 @@ class UserStudentsController extends Controller
             $profile = $request->file('profile')->store('student', 'public');
         }
 
+        $skillsToArray = implode(',', $request->skills);
+
         $user->update([
-            'skills' => $request->skills,
+            'skills' => $skillsToArray,
             'birthday' => $request->birthday,
             'gender' => $request->gender,
             'relationship' => $request->relationship,
