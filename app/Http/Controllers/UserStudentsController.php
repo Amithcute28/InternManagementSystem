@@ -19,7 +19,9 @@ use Inertia\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Zipcode;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Globals;
 use App\Services\CommonServices;
 use App\Services\AttendanceServices;
@@ -64,21 +66,16 @@ class UserStudentsController extends Controller
     }
 
 
+
+
     public function index(): Response
-{
-    $user = Auth::user();
-    
-   
+    {
+        $user = Auth::user();
 
-    $commonServices = new CommonServices();
-        $isTodayOff = $commonServices->isTodayOff();
-
-        $attendanceChecker = auth()->user()->attendances()->where('date', Carbon::today()->toDateString())->first();
-
-        if (is_null($attendanceChecker)) {
-            $attendanceStatus = 0;
-        } else if ($attendanceChecker->sign_off_time == null) {
-            $attendanceStatus = 1;
+        if ($user->new_intern == 0) {
+            return Inertia::render('Student/NewIntern', [
+                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
+            ]);
         } else {
             $attendanceStatus = 2;
         }
@@ -98,6 +95,80 @@ class UserStudentsController extends Controller
         "is_today_off" => $isTodayOff,
     ]);
 }
+
+
+    public function getCities($province)
+    {
+
+        $cities = Zipcode::where('major_area', $province)
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city')
+            ->toArray();
+        return Inertia::render('Student/NewIntern', [
+
+            'cities' =>  $cities,
+
+        ]);
+    }
+
+    public function getZipcode($province, $city)
+    {
+        $zipcode = Zipcode::where('major_area', $province)
+            ->where('city', $city)
+            ->distinct()
+            ->orderBy('zip_code')
+            ->pluck('zip_code')
+            ->toArray();
+        return Inertia::render('Student/NewIntern', [
+            'zipcode' =>  $zipcode,
+
+        ]);
+    }
+
+
+
+    public function getProvinceAndCity($zipCode)
+    {
+        $data = Zipcode::where('zip_code', $zipCode)->first();
+
+        if ($data) {
+            $province = $data->major_area;
+            $city = $data->city;
+
+            $provinces = Zipcode::select('major_area')
+                ->distinct()
+                ->orderBy('major_area')
+                ->pluck('major_area')
+                ->toArray();
+
+            $cities = Zipcode::where('major_area', $province)
+                ->distinct()
+                ->orderBy('city')
+                ->pluck('city')
+                ->toArray();
+
+
+
+            $zipcodeData = Zipcode::where('major_area', $province)
+                ->where('city', $city)
+                ->distinct()
+                ->orderBy('zip_code')
+                ->pluck('zip_code')
+                ->toArray();
+
+
+
+            return Inertia::render('Student/NewIntern', [
+                'provinces' => $provinces,
+                'cities' => $cities,
+                'zipcode_zip' => $zipcodeData,
+                'province_zip' => $province,
+                'city_zip' => $city,
+            ]);
+        }
+    }
+
 
 
     public function showProfile($id)
@@ -178,17 +249,16 @@ class UserStudentsController extends Controller
             'relationship' => $request->relationship,
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
-            'home_address' => $request->home_address,
+            'province' => $request->province,
+            'city' => $request->city,
+            'zip_code' => $request->zip_code,
+            'barangay' => $request->barangay,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
             'new_intern' => 1,
             'profile' => $profile,
 
-
         ]);
-
-
-
 
         return to_route('user.index');
     }
@@ -200,7 +270,9 @@ class UserStudentsController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $request->validate([
+
             'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($user),
+            'profile' => 'nullable||max:10240',
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
@@ -220,6 +292,21 @@ class UserStudentsController extends Controller
 
 
         ]);
+
+        $profile = '';
+
+        if ($request->hasFile('profile')) {
+            // Delete the old image if it exists
+            if ($user->profile) {
+                Storage::delete('public/' . $user->profile);
+            }
+
+            // Store the new image and get the path
+            $profilePath = $request->file('profile')->store('student', 'public');
+        } else {
+            // If no new image is uploaded, keep the current profile image path
+            $profilePath = $user->profile;
+        }
 
 
 
@@ -241,6 +328,7 @@ class UserStudentsController extends Controller
             'student_school_name' => $request->student_school_name,
             'student_school_code' => $request->student_school_code,
             'student_shift' => $request->student_shift,
+            'profile' => $profilePath
         ]);
 
         return to_route('user.index');

@@ -1,22 +1,17 @@
 <script setup>
 import UserLayout from "@/Layouts/UserLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { Head, useForm, router, usePage } from "@inertiajs/vue3";
+import { ref, onMounted, computed, watch, reactive } from "vue";
+import Swal from "sweetalert2";
 
 const props = defineProps({
   application_forms: {
-    type: Array,
-    default: () => {},
+    type: Object,
+  },
+  errors: {
+    type: Object,
   },
 
-  internApplicationToEdit: Object,
-
-  user_id: {
-    type: Number,
-    required: true,
-  },
-
-  errors: Object,
   files: {
     type: Object,
   },
@@ -27,68 +22,364 @@ const props = defineProps({
   },
 });
 
-console.log(props.application_forms);
-
-console.log("Student", props.internApplicationToEdit);
-
 const form = useForm({
-  eslip: "",
-  psa: "",
-  pros: "",
-  applicationF: "",
-  medical: "",
-  parent: "",
-  twobytwo: "",
-  preserveState: true,
+  // Set the initial value to the existing data if editing, otherwise default to null or ''.
+  id: props.application_forms?.id,
+  eslip: props.application_forms?.eslip || "",
+  psa: props.application_forms?.psa || null,
+  pros: props.application_forms?.pros || null,
+  applicationF: props.application_forms?.applicationF || null,
+  medical: props.application_forms?.medical || null,
+  parent: props.application_forms?.parent || null,
+  twobytwo: props.application_forms?.twobytwo || null,
+  // You can add other fields here as necessary.
+
+  // preserveState tells Inertia to keep the form's state after a page visit.
 });
+
+const isLarge = ref(false); // Initially, the button size is normal
+
+const toggleSize = () => {
+  isLarge.value = !isLarge.value;
+};
+
+const localErrors = reactive({
+  eslip: null,
+  applicationF: null,
+  psa: null,
+  pros: null,
+  medical: null,
+  parent: null,
+  twobytwo: null,
+  // ... other fields initialized to null ...
+});
+
+const isFilePath = (value) => typeof value === "string" && value.length > 0;
+
+const validateAllFields = () => {
+  // Validate field as a file path or a File object
+  const validateField = (field, file, isFileFn) => {
+    if (isFilePath(file)) {
+      // Assume file paths to be valid if they are non-empty strings
+      localErrors[field] = null;
+    } else if (file instanceof File) {
+      // Validate the file object
+      localErrors[field] = isFileFn(file) ? null : errorMessages[field];
+    } else {
+      // No file or file path provided
+      localErrors[field] = errorMessages.required;
+    }
+  };
+
+  // Perform validation checks
+  validateField("eslip", form.eslip, isPdfFile);
+  validateField("applicationF", form.applicationF, isPdfFile);
+  validateField("psa", form.psa, isPdfFile);
+  validateField("pros", form.pros, isPdfFile);
+  validateField("medical", form.medical, isPdfFile);
+  validateField("parent", form.parent, isPdfFile);
+  validateField("twobytwo", form.twobytwo, isImageFile);
+
+  // ... repeat for other fields ...
+};
+
+onMounted(() => {
+  validateAllFields();
+});
+
+const errorMessages = {
+  eslip: "The entrance slip must be a PDF.",
+  applicationF: "The application form must be a PDF.",
+  psa: "The PSA Livebirth must be a PDF file",
+  pros: "The prospectus must be a PDF file",
+  medical: "The medical must be a PDF file",
+  parent: "The Parent's permit must be a PDF file",
+  twobytwo: "The 2x2 ID  must be an image (JPEG, PNG, JPG).",
+  required: "This field is required.",
+
+  // Add other fields and their error messages as needed
+};
+
+const checkFileRequired = (file, field) => {
+  // Check if the file is not provided
+  if (!file) {
+    localErrors[field] = errorMessages.required;
+  }
+};
+
+const isPdfFile = (file) =>
+  file instanceof File && file.type === "application/pdf";
+
+const isImageFile = (file) =>
+  file instanceof File &&
+  ["image/jpeg", "image/png", "image/jpg"].includes(file.type);
+
+const setOrClearError = (field, file) => {
+  checkFileRequired(file, field);
+  if (file) {
+    localErrors[field] = isPdfFile(file) ? null : errorMessages[field];
+  }
+};
+
+const setOrClearImage = (field, file) => {
+  checkFileRequired(file, field);
+  if (file) {
+    localErrors[field] = isImageFile(file) ? null : errorMessages[field];
+  }
+};
+
+watch(
+  () => form.eslip,
+  (file) => setOrClearError("eslip", file)
+);
+watch(
+  () => form.applicationF,
+  (file) => setOrClearError("applicationF", file)
+);
+watch(
+  () => form.psa,
+  (file) => setOrClearError("psa", file)
+);
+watch(
+  () => form.pros,
+  (file) => setOrClearError("pros", file)
+);
+watch(
+  () => form.medical,
+  (file) => setOrClearError("medical", file)
+);
+
+watch(
+  () => form.parent,
+  (file) => setOrClearError("parent", file)
+);
+watch(
+  () => form.twobytwo,
+  (file) => setOrClearImage("twobytwo", file)
+);
 
 const isFormLoading = ref(false);
 
 const applicationForms = ref(props.application_forms);
 
-async function storeApplication() {
-  isFormLoading.value = true;
+console.log(props.application_forms);
 
-  await form.post("/application", {});
-  _method: "put";
-  isFormLoading.value = false;
-}
+const submit = async () => {
+  if (form.id) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You're about to update the application!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it!",
+    });
 
-// const submit = () => {
-//   router.post(route("application.update", props.offCampus?.id), {
-//     _method: "put",
-//     studentId: form.studentId,
-//     studentName: form.studentName,
-//     program: form.program,
-//     evalForm: form.evalForm,
-//   });
-// };
+    if (result.isConfirmed) {
+      const formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("id", form.id);
 
-// const removeImage = () => {
-//   form.eslip = null;
-//   form.psa = null;
-//   form.pros = null;
-//   form.applicationF = null;
-//   form.medical = null;
-//   form.parent = null;
-//   form.twobytwo = null;
-// };
+      if (form.eslip instanceof File) {
+        formData.append("eslip", form.eslip);
+      }
 
-const removeImage = (field) => {
-  // Clear the file input value
-  document.getElementById(field).value = "";
+      if (form.psa instanceof File) {
+        formData.append("psa", form.psa);
+      }
 
-  // Reset the form data for the field
-  form[field] = null;
+      if (form.pros instanceof File) {
+        formData.append("pros", form.pros);
+      }
+
+      if (form.applicationF instanceof File) {
+        formData.append("applicationF", form.applicationF);
+      }
+
+      if (form.medical instanceof File) {
+        formData.append("medical", form.medical);
+      }
+
+      if (form.parent instanceof File) {
+        formData.append("parent", form.parent);
+      }
+
+      if (form.twobytwo instanceof File) {
+        formData.append("twobytwo", form.twobytwo);
+      }
+      // Append other fields to formData...
+
+      try {
+        await router.post(
+          route(
+            form.id
+              ? "applications.updateInternApplication"
+              : "application.store"
+          ),
+          formData,
+          {
+            forceFormData: true,
+            onSuccess: () => {
+              if (Object.keys(props.errors).length === 0) {
+                // No validation errors, proceed with success message
+                Swal.fire(
+                  "Success!",
+                  "Your application has been processed.",
+                  "success"
+                );
+              }
+            },
+            onError: (errors) => {
+              isFormLoading.value = false;
+              // Update local errors with server validation errors
+              localErrors.value = errors;
+              const errorMessage = Object.values(errors)
+                .map((e) => (Array.isArray(e) ? e.join(", ") : e))
+                .join("\n");
+              Swal.fire("Validation Error", errorMessage, "error");
+            },
+          }
+        );
+      } catch (e) {
+        // Network error or other non-validation related error
+        console.error("Request error:", e);
+        await Swal.fire(
+          "Error",
+          "There was an error processing your application.",
+          "error"
+        );
+      }
+    }
+  } else {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You're about to submit a new application!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, submit it!",
+    });
+
+    if (result.isConfirmed) {
+      form.post(route("application.store"), {
+        onSuccess: () => {
+          if (!Object.keys(props.errors).length) {
+            Swal.fire(
+              "Success!",
+              "Your new application has been submitted.",
+              "success"
+            ).then(() => {
+              // Reload the whole page after showing the success message
+              location.reload();
+            });
+
+            // Also clear any server-side errors
+            // Reset preserveState to false after successful submission
+          }
+        },
+        onError: (errors) => {
+          // Update local errors with server validation errors
+          localErrors.value = errors;
+          const errorMessage = Object.values(errors)
+            .map((e) => (Array.isArray(e) ? e.join(", ") : e))
+            .join("\n");
+          Swal.fire("Validation Error", errorMessage, "error");
+        },
+      });
+    }
+  }
+};
+
+const deleteIntern = async (fieldName) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton:
+        "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 ml-5 rounded",
+      cancelButton:
+        "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded",
+    },
+    buttonsStyling: false,
+  });
+
+  const result = await swalWithBootstrapButtons.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, cancel!",
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    await router.delete(
+      route("applications.deleteInternApplication", {
+        id: props.application_forms.id,
+        field: fieldName,
+      }),
+      {
+        onSuccess: () => {
+          // Update the form object to reflect the deletion
+          form[fieldName] = null;
+
+          // If you maintain any additional state related to the file, update it here
+          // For example, if you store the file URL, clear it as well
+          if (fieldName === "eslip") {
+            props.application_forms.eslip = null;
+          }
+          // ... handle other fields similarly ...
+
+          // Show the success message
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        },
+      }
+    );
+  } else if (result.dismiss === Swal.DismissReason.cancel) {
+    swalWithBootstrapButtons.fire({
+      title: "Cancelled",
+      text: "Your file is safe :)",
+      icon: "error",
+    });
+  }
+};
+const removeImage = (fieldName) => {
+  form[fieldName] = null;
+
+  const fileInput = document.getElementById(fieldName);
+  if (fileInput) {
+    fileInput.value = "";
+  }
 };
 
 const buttonText = computed(() => {
-  return applicationForms.value.length > 0 ? "Update" : "Submit";
+  return applicationForms.value && applicationForms.value.id
+    ? "Update"
+    : "Submit";
 });
 
-const handleFileChange = (event) => {
+const handleFileChange = (event, fieldName) => {
   const file = event.target.files[0];
-  form.eslip = file;
+  if (file) {
+    form[fieldName] = file;
+  } else {
+    form[fieldName] = null;
+  }
+};
+
+const getDisplayFileName = (fieldName) => {
+  if (form[fieldName] && form[fieldName] instanceof File) {
+    return form[fieldName].name;
+  } else if (typeof props.application_forms[fieldName] === "string") {
+    return props.application_forms[fieldName];
+  }
+
+  return "No file selected";
 };
 
 const getFileUrl = (fileName) => {
@@ -104,10 +395,9 @@ const getFileUrl = (fileName) => {
   <UserLayout>
     
     <div class="py-4 mt-16">
-      <!-- <h1> Student Profile,  {{ $page.props.auth.user.name }}</h1> -->
       <form
         v-if="!isFormLoading"
-        @submit.prevent="storeApplication"
+        @submit.prevent="submit"
         method="POST"
         action="/upload"
         enctype="multipart/form-data"
@@ -126,14 +416,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].eslip
+                    !props.application_forms.eslip
                   "
                 >
                   <label
                     for="eslip"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
 
@@ -142,22 +435,29 @@ const getFileUrl = (fileName) => {
                       id="eslip"
                       name="eslip"
                       type="file"
+                      accept=".pdf"
                       @input="(event) => (form.eslip = event.target.files[0])"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
                   <br />
-                  <div v-if="errors.eslip" class="text-red-500 text-sm mt-5">
-                    {{ errors.eslip }}
+                  <div
+                    v-if="localErrors.eslip"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.eslip }}
                   </div>
                 </div>
 
-                <div class="mt-4" v-else-if="props.application_forms[0].eslip">
+                <div class="mt-4" v-else-if="props.application_forms.eslip">
                   <label
                     for="eslip"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
 
@@ -166,10 +466,18 @@ const getFileUrl = (fileName) => {
                       id="eslip"
                       name="eslip"
                       type="file"
-                      @change="handleFileChange"
+                      accept=".pdf"
+                      @change="(event) => handleFileChange(event, 'eslip')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div
+                    v-if="localErrors.eslip"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.eslip }}
+                  </div>
                 </div>
 
                 <div
@@ -177,20 +485,24 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].eslip
+                    !props.application_forms.eslip
                   "
                 >
                   <div class="flex items-center justify-between">
                     <span
+                      v-if="form.eslip"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ form.eslip ? form.eslip.name : "No file selected" }}
+                      {{ form.eslip.name }}
                     </span>
-                    <button
-                      type="button"
-                      class="text-[#07074D]"
-                      @click="removeImage('eslip')"
+
+                    <span
+                      v-else
+                      class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
+                      No file selected
+                    </span>
+                    <button type="button" class="text-[#07074D]">
                       <svg
                         width="10"
                         height="10"
@@ -217,19 +529,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].eslip"
+                  v-else-if="props.application_forms.eslip"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].eslip)"
+                      :href="getFileUrl(props.application_forms.eslip)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].eslip }}
+                      {{ getDisplayFileName("eslip") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('eslip')"
+                      @click="deleteIntern('eslip')"
                     >
                       <svg
                         width="10"
@@ -253,6 +565,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.eslip && !getDisplayFileName('eslip')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
 
@@ -267,14 +585,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].psa
+                    !props.application_forms.psa
                   "
                 >
                   <label
                     for="psa"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -282,22 +603,26 @@ const getFileUrl = (fileName) => {
                       id="psa"
                       name="psa"
                       type="file"
+                      accept=".pdf"
                       @input="(event) => (form.psa = event.target.files[0])"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
                   <br />
-                  <div v-if="errors.psa" class="text-red-500 text-sm mt-5">
-                    {{ errors.psa }}
+                  <div v-if="localErrors.psa" class="text-red-500 text-sm mt-5">
+                    {{ localErrors.psa }}
                   </div>
                 </div>
 
-                <div class="mt-4" v-else-if="props.application_forms[0].psa">
+                <div class="mt-4" v-else-if="props.application_forms.psa">
                   <label
                     for="psa"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
                   <label>
@@ -305,24 +630,37 @@ const getFileUrl = (fileName) => {
                       id="psa"
                       name="psa"
                       type="file"
-                      @input="(event) => (form.psa = event.target.files[0])"
+                      accept=".pdf"
+                      @change="(event) => handleFileChange(event, 'psa')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div v-if="localErrors.psa" class="text-red-500 text-sm mt-5">
+                    {{ localErrors.psa }}
+                  </div>
                 </div>
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].psa
+                    !props.application_forms.psa
                   "
                 >
                   <div class="flex items-center justify-between">
                     <span
+                      v-if="form.psa"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ form.psa ? form.psa.name : "No file selected" }}
+                      {{ form.psa.name }}
+                    </span>
+
+                    <span
+                      v-else
+                      class="truncate pr-3 text-base font-medium text-[#07074D]"
+                    >
+                      No file selected
                     </span>
                     <button
                       type="button"
@@ -355,19 +693,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].psa"
+                  v-else-if="props.application_forms.psa"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].psa)"
+                      :href="getFileUrl(props.application_forms.psa)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].psa }}
+                      {{ getDisplayFileName("psa") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('psa')"
+                      @click="deleteIntern('psa')"
                     >
                       <svg
                         width="10"
@@ -391,6 +729,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.psa && !getDisplayFileName('psa')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
 
@@ -405,14 +749,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].pros
+                    !props.application_forms.pros
                   "
                 >
                   <label
                     for="pros"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -420,22 +767,29 @@ const getFileUrl = (fileName) => {
                       id="pros"
                       name="pros"
                       type="file"
+                      accept=".pdf"
                       @input="(event) => (form.pros = event.target.files[0])"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
                   <br />
-                  <div v-if="errors.pros" class="text-red-500 text-sm mt-5">
-                    {{ errors.pros }}
+                  <div
+                    v-if="localErrors.pros"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.pros }}
                   </div>
                 </div>
 
-                <div class="mt-4" v-else-if="props.application_forms[0].pros">
+                <div class="mt-4" v-else-if="props.application_forms.pros">
                   <label
                     for="pros"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
                   <label>
@@ -443,17 +797,25 @@ const getFileUrl = (fileName) => {
                       id="pros"
                       name="pros"
                       type="file"
-                      @input="(event) => (form.pros = event.target.files[0])"
+                      accept=".pdf"
+                      @change="(event) => handleFileChange(event, 'pros')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div
+                    v-if="localErrors.pros"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.pros }}
+                  </div>
                 </div>
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].pros
+                    !props.application_forms.pros
                   "
                 >
                   <div class="flex items-center justify-between">
@@ -493,19 +855,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].pros"
+                  v-else-if="props.application_forms.pros"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].pros)"
+                      :href="getFileUrl(props.application_forms.pros)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].pros }}
+                      {{ getDisplayFileName("pros") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('pros')"
+                      @click="deleteIntern('pros')"
                     >
                       <svg
                         width="10"
@@ -529,6 +891,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.pros && !getDisplayFileName('pros')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
 
@@ -543,14 +911,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].applicationF
+                    !props.application_forms.applicationF
                   "
                 >
                   <label
                     for="applicationF"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -558,6 +929,7 @@ const getFileUrl = (fileName) => {
                       id="applicationF"
                       name="applicationF"
                       type="file"
+                      accept=".pdf"
                       @input="
                         (event) => (form.applicationF = event.target.files[0])
                       "
@@ -566,22 +938,25 @@ const getFileUrl = (fileName) => {
                   </label>
                   <br />
                   <div
-                    v-if="errors.applicationF"
+                    v-if="localErrors.applicationF"
                     class="text-red-500 text-sm mt-5"
                   >
-                    {{ errors.applicationF }}
+                    {{ localErrors.applicationF }}
                   </div>
                 </div>
 
                 <div
                   class="mt-4"
-                  v-else-if="props.application_forms[0].applicationF"
+                  v-else-if="props.application_forms.applicationF"
                 >
                   <label
                     for="applicationF"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
                   <label>
@@ -589,19 +964,27 @@ const getFileUrl = (fileName) => {
                       id="applicationF"
                       name="applicationF"
                       type="file"
-                      @input="
-                        (event) => (form.applicationF = event.target.files[0])
+                      accept=".pdf"
+                      @change="
+                        (event) => handleFileChange(event, 'applicationF')
                       "
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div
+                    v-if="localErrors.applicationF"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.applicationF }}
+                  </div>
                 </div>
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].applicationF
+                    !props.application_forms.applicationF
                   "
                 >
                   <div class="flex items-center justify-between">
@@ -645,21 +1028,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].applicationF"
+                  v-else-if="props.application_forms.applicationF"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="
-                        getFileUrl(props.application_forms[0].applicationF)
-                      "
+                      :href="getFileUrl(props.application_forms.applicationF)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].applicationF }}
+                      {{ getDisplayFileName("applicationF") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('applicationF')"
+                      @click="deleteIntern('applicationF')"
                     >
                       <svg
                         width="10"
@@ -683,6 +1064,14 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="
+                      !form.applicationF && !getDisplayFileName('applicationF')
+                    "
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
               <div class="sm:col-span-2 pb-3">
@@ -696,14 +1085,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].medical
+                    !props.application_forms.medical
                   "
                 >
                   <label
                     for="medical"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -711,25 +1103,29 @@ const getFileUrl = (fileName) => {
                       id="medical"
                       name="medical"
                       type="file"
+                      accept=".pdf"
                       @input="(event) => (form.medical = event.target.files[0])"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
                   <br />
-                  <div v-if="errors.medical" class="text-red-500 text-sm mt-5">
-                    {{ errors.medical }}
+                  <div
+                    v-if="localErrors.medical"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.medical }}
                   </div>
                 </div>
 
-                <div
-                  class="mt-4"
-                  v-else-if="props.application_forms[0].medical"
-                >
+                <div class="mt-4" v-else-if="props.application_forms.medical">
                   <label
                     for="medical"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
                   <label>
@@ -737,10 +1133,18 @@ const getFileUrl = (fileName) => {
                       id="medical"
                       name="medical"
                       type="file"
-                      @input="(event) => (form.medical = event.target.files[0])"
+                      accept=".pdf"
+                      @change="(event) => handleFileChange(event, 'medical')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div
+                    v-if="localErrors.medical"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.medical }}
+                  </div>
                 </div>
 
                 <div
@@ -748,7 +1152,7 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].medical
+                    !props.application_forms.medical
                   "
                 >
                   <div class="flex items-center justify-between">
@@ -790,19 +1194,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].medical"
+                  v-else-if="props.application_forms.medical"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].medical)"
+                      :href="getFileUrl(props.application_forms.medical)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].medical }}
+                      {{ getDisplayFileName("medical") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('medical')"
+                      @click="deleteIntern('medical')"
                     >
                       <svg
                         width="10"
@@ -826,6 +1230,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.medical && !getDisplayFileName('medical')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
               <div class="sm:col-span-2">
@@ -839,14 +1249,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].parent
+                    !props.application_forms.parent
                   "
                 >
                   <label
                     for="parent"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -854,22 +1267,30 @@ const getFileUrl = (fileName) => {
                       id="parent"
                       name="parent"
                       type="file"
+                      accept=".pdf"
                       @input="(event) => (form.parent = event.target.files[0])"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+
                   <br />
-                  <div v-if="errors.parent" class="text-red-500 text-sm mt-5">
-                    {{ errors.parent }}
+                  <div
+                    v-if="localErrors.parent"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.parent }}
                   </div>
                 </div>
 
-                <div class="mt-4" v-else-if="props.application_forms[0].parent">
+                <div class="mt-4" v-else-if="props.application_forms.parent">
                   <label
                     for="parent"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
                   <label>
@@ -877,17 +1298,25 @@ const getFileUrl = (fileName) => {
                       id="parent"
                       name="parent"
                       type="file"
-                      @input="(event) => (form.parent = event.target.files[0])"
+                      accept=".pdf"
+                      @change="(event) => handleFileChange(event, 'parent')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <br />
+                  <div
+                    v-if="localErrors.parent"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.parent }}
+                  </div>
                 </div>
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].parent
+                    !props.application_forms.parent
                   "
                 >
                   <div class="flex items-center justify-between">
@@ -927,19 +1356,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].parent"
+                  v-else-if="props.application_forms.parent"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].parent)"
+                      :href="getFileUrl(props.application_forms.parent)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].parent }}
+                      {{ getDisplayFileName("parent") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('parent')"
+                      @click="deleteIntern('parent')"
                     >
                       <svg
                         width="10"
@@ -963,6 +1392,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.parent && !getDisplayFileName('parent')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
 
@@ -977,14 +1412,17 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].twobytwo
+                    !props.application_forms.twobytwo
                   "
                 >
                   <label
                     for="twobytwo"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white mb-5"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Upload File</label
                   >
                   <label>
@@ -992,6 +1430,7 @@ const getFileUrl = (fileName) => {
                       id="twobytwo"
                       name="twobytwo"
                       type="file"
+                      accept=".jpg,.jpeg,.png"
                       @input="
                         (event) => (form.twobytwo = event.target.files[0])
                       "
@@ -999,20 +1438,23 @@ const getFileUrl = (fileName) => {
                     />
                   </label>
                   <br />
-                  <div v-if="errors.twobytwo" class="text-red-500 text-sm mt-5">
-                    {{ errors.twobytwo }}
+                  <div
+                    v-if="localErrors.twobytwo"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.twobytwo }}
                   </div>
                 </div>
 
-                <div
-                  class="mt-4"
-                  v-else-if="props.application_forms[0].twobytwo"
-                >
+                <div class="mt-4" v-else-if="props.application_forms.twobytwo">
                   <label
                     for="twobytwo"
-                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white"
+                    class="py-3 px-7 rounded-full border-0 bg-blue text-md text-white transition-all duration-300 ease-in-out transform hover:bg-yellow-400 cursor-pointer"
                   >
-                    <fa :icon="['fas', 'file-upload']" class="px-2 fa-lg" />
+                    <font-awesome-icon
+                      :icon="['fas', 'file-upload']"
+                      class="px-2 fa-lg"
+                    />
                     Change File</label
                   >
 
@@ -1021,12 +1463,17 @@ const getFileUrl = (fileName) => {
                       id="twobytwo"
                       name="twobytwo"
                       type="file"
-                      @input="
-                        (event) => (form.twobytwo = event.target.files[0])
-                      "
+                      accept=".jpg,.jpeg,.png"
+                      @change="(event) => handleFileChange(event, 'twobytwo')"
                       class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                     />
                   </label>
+                  <div
+                    v-if="localErrors.twobytwo"
+                    class="text-red-500 text-sm mt-5"
+                  >
+                    {{ localErrors.twobytwo }}
+                  </div>
                 </div>
 
                 <div
@@ -1034,7 +1481,7 @@ const getFileUrl = (fileName) => {
                   v-if="
                     !props.application_forms ||
                     props.application_forms.length === 0 ||
-                    !props.application_forms[0].twobytwo
+                    !props.application_forms.twobytwo
                   "
                 >
                   <div class="flex items-center justify-between">
@@ -1076,19 +1523,19 @@ const getFileUrl = (fileName) => {
 
                 <div
                   class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                  v-else-if="props.application_forms[0].twobytwo"
+                  v-else-if="props.application_forms.twobytwo"
                 >
                   <div class="flex items-center justify-between">
                     <a
-                      :href="getFileUrl(props.application_forms[0].twobytwo)"
+                      :href="getFileUrl(props.application_forms.twobytwo)"
                       class="truncate pr-3 text-base font-medium text-[#07074D]"
                     >
-                      {{ props.application_forms[0].twobytwo }}
+                      {{ getDisplayFileName("twobytwo") }}
                     </a>
                     <button
                       type="button"
                       class="text-[#07074D]"
-                      @click="() => removeImage('twobytwo')"
+                      @click="deleteIntern('twobytwo')"
                     >
                       <svg
                         width="10"
@@ -1112,6 +1559,12 @@ const getFileUrl = (fileName) => {
                       </svg>
                     </button>
                   </div>
+                  <span
+                    v-if="!form.twobytwo && !getDisplayFileName('twobytwo')"
+                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                  >
+                    No file selected
+                  </span>
                 </div>
               </div>
             </div>

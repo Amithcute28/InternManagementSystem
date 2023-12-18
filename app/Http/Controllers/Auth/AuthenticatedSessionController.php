@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
 
         if ($user->is_admin && $user->approved && $user->program == 'BEED') {
             return redirect()->intended(RouteServiceProvider::HOME);
-        }elseif ($user->is_admin && $user->approved && $user->program == 'BSED') {
+        } elseif ($user->is_admin && $user->approved && $user->program == 'BSED') {
             return redirect('/admindashbsed');
         }elseif ($user->approved && $user->is_ste) {
             return redirect('/ste-dashboard');
@@ -65,6 +65,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

@@ -15,9 +15,9 @@ class AdminSeeder2 extends Seeder
     public function run()
     {
         User::create([
-            'student_id' => '2',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-            'full_name' => 'Arvin G. Felicen',
+            'student_id'  => '2',
+            'password'  => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'full_name'  => 'Arvin G. Felicen',
             'academic_performance' => 90,
             'program' => 'BSED',
             'skills' => 'Java, Python, MySQL, MongoDB',

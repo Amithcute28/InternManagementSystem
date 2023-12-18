@@ -14,6 +14,7 @@ use App\Http\Resources\ApplicationResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
 {
@@ -23,11 +24,13 @@ class ApplicationController extends Controller
     public function index(): Response
     {
         $user = Auth::user();
+        $applicationForm = ApplicationForm::where('user_id', $user->id)->first();
 
         return Inertia::render('Student/ApplicationIndex', [
-            'application_forms' => ApplicationResource::collection(ApplicationForm::where('user_id', $user->id)->get() ?? []),
+            'application_forms' => $applicationForm ? new ApplicationResource($applicationForm) : null,
         ]);
     }
+
 
     public function inCampusApplication()
     {
@@ -189,6 +192,33 @@ class ApplicationController extends Controller
         return back()->with('success', 'Status updated successfully.');
     }
 
+    public function updateIncampus($id)
+    {
+        $student = User::find($id);
+
+        $student->in_campus = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('applications.inCampusApplication');
+    }
+
+    public function updateOffcampus($id)
+    {
+        $student = User::find($id);
+
+
+        $student->is_off_campus = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('applications.offCampusApplication');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -226,20 +256,20 @@ class ApplicationController extends Controller
 
 
         $userId = Auth::id();
-        $eslip = '';
-        $origEslip = '';
-        $psa = '';
-        $origPsa = '';
-        $pros = '';
-        $origPros = '';
-        $applicationF = '';
-        $origApplicationF = '';
-        $medical = '';
-        $origMedical = '';
-        $parent = '';
-        $origParent = '';
-        $twobytwo = '';
-        $origTwobytwo = '';
+        $eslip = null;
+        $origEslip = null;
+        $psa = null;
+        $origPsa = null;
+        $pros = null;
+        $origPros = null;
+        $applicationF = null;
+        $origApplicationF = null;
+        $medical = null;
+        $origMedical = null;
+        $parent = null;
+        $origParent = null;
+        $twobytwo = null;
+        $origTwobytwo = null;
 
 
         // if ($request->hasFile('eslip')) {
@@ -375,6 +405,8 @@ class ApplicationController extends Controller
             'is_admin' => 0,
         ]);
 
+
+
         return Redirect::route('application.index');
     }
     /**
@@ -418,57 +450,101 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function updateInternApplication(ApplicationRequest $request, $id)
-{
-    $applicationForm = ApplicationForm::findOrFail($id);
+    public function updateInternApplication(Request $request)
+    {
+        $applicationForm = ApplicationForm::findOrFail($request->input('id'));
 
-    // Define an associative array where the keys are the form input names
-    // and the values are the corresponding database columns.
-    $fileFields = [
-        'eslip' => 'eslip',
-        'psa' => 'psa',
-        'pros' => 'pros',
-        'applicationF' => 'applicationF',
-        'medical' => 'medical',
-        'parent' => 'parent',
-        'twobytwo' => 'twobytwo',
-    ];
+        $fileRules = [];
 
-    foreach ($fileFields as $inputName => $dbColumn) {
-        if ($request->hasFile($inputName)) {
-            // Handle the uploaded file
-            $file = $request->file($inputName);
+        // Add validation rule for 'eslip' only if it's present in the request
+        if ($request->hasFile('eslip')) {
+            $fileRules['eslip'] = 'pdf_file|max:10240';
+        }
+
+        // Add validation rule for 'psa' only if it's present in the request
+        if ($request->hasFile('psa')) {
+            $fileRules['psa'] = 'pdf_file|max:10240';
+        }
+
+        if ($request->hasFile('pros')) {
+            $fileRules['pros'] = 'pdf_file|max:10240';
+        }
+
+        if ($request->hasFile('applicationF')) {
+            $fileRules['applicationF'] = 'pdf_file|max:10240';
+        }
+
+        if ($request->hasFile('medical')) {
+            $fileRules['medical'] = 'pdf_file|max:10240';
+        }
+
+        if ($request->hasFile('parent')) {
+            $fileRules['parent'] = 'pdf_file|max:10240';
+        }
+
+        if ($request->hasFile('twobytwo')) {
+            $fileRules['twobytwo'] = 'image_file|max:10240';
+        }
+
+        // ... similarly for other file inputs ...
+
+        $validator = Validator::make($request->all(), $fileRules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->messages())->withInput();
+        }
+
+        foreach ($fileRules as $fieldName => $rule) {
+            if ($request->hasFile($fieldName)) {
+                $file = $this->processFile($request, $fieldName, 'public/student', $applicationForm->$fieldName);
+                if ($file !== null) {
+                    $applicationForm->$fieldName = $file;
+                }
+            }
+        }
+
+        $applicationForm->save();
+
+        return redirect()->route('application.index')->with(['success' => true]);
+    }
+
+    private function processFile($request, $fieldName, $storagePath, $existingFilePath)
+    {
+        if ($request->hasFile($fieldName)) {
+            // Delete the existing file if present
+            if ($existingFilePath) {
+                Storage::delete('public/' . $storagePath . '/' . $existingFilePath);
+            }
+
+            // Retrieve the uploaded file
+            $file = $request->file($fieldName);
             $originalFileName = $file->getClientOriginalName();
+            $fileBaseName = pathinfo($originalFileName, PATHINFO_FILENAME);
+            $fileExtension = $file->getClientOriginalExtension();
 
-            // Check if a file with the same name already exists
+            // Generate a unique file name
             $count = 1;
-            $newFileName = $originalFileName;
-            while (Storage::exists('public/student/' . $newFileName)) {
-                $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '-' . $count . '.' . $file->getClientOriginalExtension();
+            $newFileName = $originalFileName; // Start with the original file name
+            while (Storage::disk('public')->exists($storagePath . '/' . $newFileName)) {
+                // If file exists, append a counter to the file name
+                $newFileName = $fileBaseName . '-' . $count . '.' . $fileExtension;
                 $count++;
             }
 
-            // Store the new file
-            $file->storeAs('public/student', $newFileName);
+            // Store the file with the unique name
+            $storedFilePath = $file->storeAs($storagePath, $newFileName, 'public');
 
-            // If a file already exists for this field, delete it
-            if (!empty($applicationForm->$dbColumn)) {
-                Storage::delete('public/student/' . $applicationForm->$dbColumn);
-            }
+            // Remove the 'public/' prefix from the stored file path
+            $relativeFilePath = str_replace('public/student/', '', $storedFilePath);
 
-            // Update the database column with the new file name
-            $applicationForm->$dbColumn = $newFileName;
+            // Return the relative file path
+            return $relativeFilePath;
         }
+        return null; // Return null if no new file is uploaded
     }
 
-    // Save the updated model
-    $applicationForm->save();
 
-    return Redirect::route('application.index');
-}
-
-
-    public function updateIncampus($id)
+    public function deleteInternApplication(Request $request, $id)
     {
         $student = User::find($id);
 
@@ -484,34 +560,25 @@ class ApplicationController extends Controller
 
     public function updateIncampusDone($id)
     {
-        $student = User::find($id);
+        // Fetch the field name directly from the request
+        $fieldName = $request->input('field');
 
-        $student->in_campus = 1;
-        $student->choosen_institution = 0;
-        $student->student_shift = 'Second';
-        $student->save();
+        // Ensure the field name is not null before proceeding
+        if ($fieldName) {
+            $applicationForm = ApplicationForm::findOrFail($id);
+            $filePath = $applicationForm->$fieldName;
 
+            if ($filePath) {
+                Storage::disk('public')->delete('student/' . $filePath);
+                $applicationForm->$fieldName = null;
+                $applicationForm->save();
 
-        // Add any additional logic or response handling as needed
-
-        return redirect()->route('applications.inCampusApplication');
+                return redirect()->route('application.index');
+            }
+        }
+        // Handle situations where the field name is null or not found
+        // You might want to return an error response or handle it differently based on your requirements.
     }
-
-    public function updateOffcampus($id)
-    {
-        $student = User::find($id);
-
-
-        $student->is_off_campus = 1;
-        $student->save();
-
-
-        // Add any additional logic or response handling as needed
-
-        return redirect()->route('applications.offCampusApplication');
-    }
-
-
     /**
      * Update the specified resource in storage.
      */
@@ -519,6 +586,7 @@ class ApplicationController extends Controller
     {
         // Retrieve the user record from the database
         $user = User::findOrFail($id);
+
 
         // Retrieve the associated application record
         $application = ApplicationForm::where('user_id', $id)->first();

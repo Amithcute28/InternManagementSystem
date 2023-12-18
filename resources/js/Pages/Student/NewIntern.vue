@@ -5,11 +5,12 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Datepicker from "flowbite-datepicker/Datepicker";
 import TextInput from "@/Components/TextInput.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm, router, useRemember } from "@inertiajs/vue3";
 import { onMounted } from "vue";
 import flatpickr from "flatpickr";
-import { ref } from "vue";
+import { ref, watch, reactive, computed } from "vue";
 import "flatpickr/dist/themes/light.css";
+import Multiselect from "@vueform/multiselect";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -22,17 +23,37 @@ const props = defineProps({
     required: true,
   },
 
+  provinces: Array,
+
+  cities: Array,
+
+  zipcode: Object,
+
+  zipcodes: Array,
+
   errors: Object,
+
+  province_zip: Object,
+
+  city_zip: Object,
+
+  provinces_zip: Array,
+
+  cities_zip: Array,
+
+  zipcode_zip: Array,
 });
 
-const form = useForm({
-  skills: "",
+const formFields = useForm({
+  skills: [],
   birthday: "",
   gender: "",
   relationship: "",
   nationality: "",
   contact_number: "",
-  home_address: "",
+  province: "",
+  city: "",
+  barangay: "",
   zip_code: "",
   guardian_name: "",
   guardian_contact: "",
@@ -40,11 +61,126 @@ const form = useForm({
   terms: false,
 });
 
+console.log(props.cities);
 const submit = () => {
-  form.post(route("user.updateNewIntern", props.user?.id), {
-    _method: "put",
+  formFields.post(route("user.updateNewIntern", props.user?.id), {
+    preserveState: true,
+    preserveScroll: true,
+    only: ["errors"],
   });
 };
+
+const fetchCities = (province) => {
+  router.get(
+    `/cities/${province}`,
+    {},
+    {
+      preserveState: true,
+      preserveScroll: true,
+      only: ["cities"],
+      onSuccess: (page) => {
+        formFields.city = page.props.cities || [];
+      },
+    }
+  );
+};
+
+const fetchZipCode = (province, city) => {
+  router.get(
+    `/zipcodes/${province}/${city}`,
+    {},
+    {
+      preserveState: true,
+      preserveScroll: true,
+      only: ["zipcode"],
+      onSuccess: (page) => {
+        formFields.zip_code = Array.isArray(page.props.zipcode)
+          ? page.props.zipcode.join(",")
+          : "";
+
+        console.log(props.zipcode);
+      },
+
+      onError: () => {
+        formFields.zip_code = Array.isArray(props.zipcode)
+          ? props.zipcode.join(",")
+          : "";
+
+        console.log(props.zipcode);
+      },
+    }
+  );
+};
+
+const showInvalidZipCodeMessage = ref(false);
+
+const handleZipCodeChange = async () => {
+  const zipCode = formFields.zip_code;
+  if (zipCode) {
+    if (!Array.isArray(props.zipcodes) || props.zipcodes.length === 0) {
+      // Handle the case where props.zipcodes is undefined or empty
+      console.error("ZIP codes list is empty or undefined.");
+      return;
+    }
+
+    if (!props.zipcodes.includes(zipCode)) {
+      showInvalidZipCodeMessage.value = true;
+      props.errors.zip_code = "ZIP code does not exist"; // Set specific error message
+      return;
+    }
+
+    router.get(
+      `/getProvinceAndCity/${zipCode}`,
+      {},
+      {
+        preserveState: true,
+        preserveScroll: true,
+        only: [
+          "zipcode_zip",
+          "city_zip",
+          "province_zip",
+          "provinces",
+          "cities",
+          "errors",
+        ],
+
+        onSuccess: (page) => {
+          showInvalidZipCodeMessage.value = false;
+          formFields.province = page.props.province_zip;
+          formFields.city = page.props.city_zip;
+          formFields.zip_code = Array.isArray(page.props.zipcode_zip)
+            ? page.props.zipcode_zip.join(",")
+            : "";
+
+          console.log("Received province:", props.province_zip);
+          console.log("Received city:", props.city_zip);
+        },
+
+        onError: () => {
+          formFields.province = props.province_zip;
+          formFields.city = props.city_zip;
+          formFields.zip_code = Array.isArray(props.zipcode_zip)
+            ? props.zipcode_zip.join(",")
+            : "";
+
+          console.log(props.zipcode);
+        },
+      }
+    );
+  }
+};
+
+watch(
+  () => formFields.zip_code,
+  async (newZipCode, oldZipCode) => {
+    if (newZipCode !== oldZipCode && newZipCode) {
+      await handleZipCodeChange();
+    }
+  },
+  { immediate: true }
+);
+
+// Watch for changes in the ZIP code input field
 
 const removeImage = (field) => {
   // Clear the file input value
@@ -113,45 +249,56 @@ const removeImage = (field) => {
       <div class="mt-8">
         <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
           <div class="grid md:grid-cols-3 md:gap-6 p-2">
-            <div class="relative z-0 w-full mb-6 group">
-              <select
-                id="province"
-                v-model="form.skills"
-                :class="{ 'border-red-500': errors.skills }"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="" disabled hidden>Skills</option>
-                <option>Communication and Interpersonal Skills</option>
-                <option>Subject Knowledge Skills</option>
-                <option>Adaptability Skills</option>
-                <option>Technological Profiency Skills</option>
-                <option>Classroom Management Skills</option>
-                <option>Collaboration and Teamwork Skills</option>
-                <option>Emotional Support Skills</option>
-              </select>
+            <div class="relative z-1 w-full mb-6 group">
+              <Multiselect
+                v-model="formFields.skills"
+                :style="{ width: '300px' }"
+                :classes="{
+                  groupLabelSelected: 'bg-gold-600 text-white',
+                  groupLabelSelectedPointed:
+                    'bg-gold-600 text-white opacity-90',
+                  optionSelected: 'text-white bg-gold-600',
+                  optionSelectedPointed: 'text-white bg-gold-600 opacity-90',
+                }"
+                mode="tags"
+                :close-on-select="false"
+                :searchable="true"
+                :create-option="true"
+                :options="[
+                  {
+                    value: 'Communication and Interpersonal Skills',
+                    label: 'Communication and Interpersonal Skills',
+                  },
+                  {
+                    value: 'Subject Knowledge Skills',
+                    label: 'Subject Knowledge Skills',
+                  },
+                  {
+                    value: 'Adaptability Skills',
+                    label: 'Adaptability Skills',
+                  },
+                  {
+                    value: 'Technological Profiency Skills',
+                    label: 'Technological Profiency Skills',
+                  },
+                  {
+                    value: 'Classroom Management Skills',
+                    label: 'Classroom Management Skills',
+                  },
+                  {
+                    value: 'Collaboration and Teamwork Skills',
+                    label: 'Collaboration and Teamwork Skills',
+                  },
+                  {
+                    value: 'Emotional Support Skills',
+                    label: 'Emotional Support Skills',
+                  },
+                ]"
+              />
               <div v-if="errors.skills" class="text-red-500 text-sm mt-5">
                 {{ errors.skills }}
               </div>
             </div>
-
-            <!-- <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="skills"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.skills"
-                required
-                autofocus
-                autocomplete="skills"
-              />
-              <label
-                for="skills"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Skills</label
-              >
-              <InputError class="mt-2" :message="form.errors.skills" />
-            </div> -->
 
             <div class="relative z-0 w-full mb-6 group">
               <div class="relative max-w-sm">
@@ -172,7 +319,7 @@ const removeImage = (field) => {
                 </div>
                 <input
                   type="date"
-                  v-model="form.birthday"
+                  v-model="formFields.birthday"
                   :class="{ 'border-red-500': errors.birthday }"
                   class="flatpickr bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Birthday"
@@ -186,7 +333,7 @@ const removeImage = (field) => {
             <div class="relative z-0 w-full mb-6 group">
               <select
                 id="gender"
-                v-model="form.gender"
+                v-model="formFields.gender"
                 :class="{ 'border-red-500': errors.gender }"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
@@ -198,29 +345,11 @@ const removeImage = (field) => {
                 {{ errors.gender }}
               </div>
             </div>
-            <!-- <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="gender"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.gender"
-                required
-                autofocus
-                autocomplete="gender"
-              />
-              <label
-                for="gender"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Gender</label
-              >
-              <InputError class="mt-2" :message="form.errors.gender" />
-            </div> -->
 
             <div class="relative z-0 w-full mb-6 group">
               <select
                 id="relationship"
-                v-model="form.relationship"
+                v-model="formFields.relationship"
                 :class="{ 'border-red-500': errors.relationship }"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
@@ -240,7 +369,7 @@ const removeImage = (field) => {
                 :class="{ 'border-red-500': errors.nationality }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                v-model="form.nationality"
+                v-model="formFields.nationality"
                 autocomplete="nationality"
               />
               <label
@@ -260,7 +389,7 @@ const removeImage = (field) => {
                 :class="{ 'border-red-500': errors.contact_number }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                v-model="form.contact_number"
+                v-model="formFields.contact_number"
                 autocomplete="contact_number"
               />
               <label
@@ -276,7 +405,7 @@ const removeImage = (field) => {
               </div>
             </div>
 
-            <div class="relative z-0 w-full mb-6 group">
+            <!-- <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="home_address"
@@ -294,7 +423,7 @@ const removeImage = (field) => {
               <div v-if="errors.home_address" class="text-red-500 text-sm mt-5">
                 {{ errors.home_address }}
               </div>
-            </div>
+            </div> -->
 
             <div class="relative z-0 w-full mb-6 group">
               <input
@@ -303,7 +432,7 @@ const removeImage = (field) => {
                 :class="{ 'border-red-500': errors.guardian_name }"
                 class="block px-5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                v-model="form.guardian_name"
+                v-model="formFields.guardian_name"
                 autocomplete="guardian_name"
               />
               <label
@@ -319,14 +448,14 @@ const removeImage = (field) => {
               </div>
             </div>
 
-            <div class="relative z-0 w-full mb-7 group">
+            <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="guardian_contact"
                 :class="{ 'border-red-500': errors.guardian_contact }"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                v-model="form.guardian_contact"
+                v-model="formFields.guardian_contact"
                 autocomplete="guardian_contact"
               />
               <label
@@ -341,7 +470,7 @@ const removeImage = (field) => {
                 {{ errors.guardian_contact }}
               </div>
             </div>
-            <div class="sm:col-span-2">
+            <div class="relative z-0 w-full mb-6 group">
               <label
                 for="profile"
                 class="block text-sm font-medium leading-6 text-gray-900"
@@ -372,7 +501,7 @@ const removeImage = (field) => {
                     id="profile"
                     name="profile"
                     type="file"
-                    @input="form.profile = $event.target.files[0]"
+                    @input="formFields.profile = $event.target.files[0]"
                     class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700 sr-only"
                   />
                 </label>
@@ -383,13 +512,13 @@ const removeImage = (field) => {
                   'bg-red-500': errors.profile,
                 }"
                 class="rounded-md bg-[#F5F7FB] py-4 px-6 my-6"
-                v-if="form.profile"
+                v-if="formFields.profile"
               >
                 <div class="flex items-center justify-between">
                   <span
                     class="truncate pr-3 text-base font-medium text-[#07074D]"
                   >
-                    {{ form.profile.name }}
+                    {{ formFields.profile.name }}
                   </span>
                   <button
                     type="button"
@@ -423,7 +552,94 @@ const removeImage = (field) => {
                 {{ errors.profile }}
               </div>
             </div>
+            <!-- "sm:col-span-2" -->
           </div>
+
+          <h3>Home Address</h3>
+
+          <div class="grid md:grid-cols-3 md:gap-6 p-2">
+            <div class="relative z-0 w-full mb-6 group">
+              <select
+                id="provinces"
+                v-model="formFields.province"
+                @change="fetchCities(formFields.province)"
+                :class="{ 'border-red-500': errors.province }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">Select Province</option>
+                <option
+                  v-for="province in provinces"
+                  :key="province"
+                  :value="province"
+                >
+                  {{ province }}
+                </option>
+              </select>
+              <div v-if="errors.major_area" class="text-red-500 text-sm mt-5">
+                {{ errors.major_area }}
+              </div>
+            </div>
+
+            <div class="relative z-0 w-full mb-6 group">
+              <select
+                id="cities"
+                v-model="formFields.city"
+                @change="fetchZipCode(formFields.province, formFields.city)"
+                :class="{ 'border-red-500': errors.city }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">Select City/Municipality</option>
+                <option v-for="city in cities" :key="city" :value="city">
+                  {{ city }}
+                </option>
+              </select>
+              <div v-if="errors.major_area" class="text-red-500 text-sm mt-5">
+                {{ errors.major_area }}
+              </div>
+            </div>
+
+            <div class="relative z-0 w-full mb-6 group">
+              <input
+                type="text"
+                id="zip_code"
+                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                v-model="formFields.zip_code"
+                placeholder=" "
+                autocomplete="zip_code"
+                @input="handleZipCodeChange"
+              />
+              <label
+                for="zip_code"
+                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                >ZIP Code</label
+              >
+              <div v-if="errors.zip_code" class="text-red-500 text-sm mt-5">
+                {{ errors.zip_code }}
+              </div>
+            </div>
+
+            <div class="relative z-0 w-full mb-6 group">
+              <input
+                type="text"
+                id="barangay"
+                :class="{ 'border-red-500': errors.barangay }"
+                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                v-model="formFields.barangay"
+                autocomplete="barangay"
+              />
+              <label
+                for="barangay"
+                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                >Barangay</label
+              >
+              <div v-if="errors.barangay" class="text-red-500 text-sm mt-5">
+                {{ errors.barangay }}
+              </div>
+            </div>
+            <!-- "sm:col-span-2" -->
+          </div>
+
           <button
             type="submit"
             class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-gold hover:bg-gold/80 focus:bg-gold/90 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
@@ -435,3 +651,14 @@ const removeImage = (field) => {
     </div>
   </div>
 </template>
+
+<style>
+@import "@vueform/multiselect/themes/tailwind.css";
+
+.multiselect-blue {
+  --ms-tag-bg: #dbeafe;
+  --ms-tag-color: #2563eb;
+}
+/* or */
+/* @import './path/to/node_modules/@vueform/multiselect/themes/tailwind.css'; */
+</style>
