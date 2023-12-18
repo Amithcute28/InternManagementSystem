@@ -27,7 +27,10 @@ return new class extends Migration
             $table->string('relationship')->nullable();
             $table->string('nationality')->nullable();
             $table->string('contact_number')->nullable();
-            $table->string('home_address')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('barangay')->nullable();
             $table->string('guardian_name')->nullable();
             $table->string('guardian_contact')->nullable();
             $table->boolean('is_admin')->default(0);
@@ -39,7 +42,6 @@ return new class extends Migration
         });
     }
 
-    
     /**
      * Reverse the migrations.
      */

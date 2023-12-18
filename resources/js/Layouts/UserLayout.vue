@@ -13,6 +13,14 @@ import { usePage } from "@inertiajs/vue3";
 const page = usePage();
 const user = reactive({ ...page.props.auth.user });
 
+const props = defineProps({
+  application_forms: {
+    type: Object,
+  },
+});
+
+console.log(user.profile);
+
 const showingNavigationDropdown = ref(false);
 
 let currentRoute = ref("");
@@ -22,7 +30,7 @@ const isImage = (url) => {
 };
 
 const routeTitle = (route) => {
-  const parts = route.split('/').filter(Boolean);
+  const parts = route.split("/").filter(Boolean);
 
   if (parts[0] === "user" && parts.length === 1) {
     return "Dashboard";
@@ -30,7 +38,9 @@ const routeTitle = (route) => {
     const userId = parts[1];
     return `Edit Profile`;
   } else {
-    return parts[0]?.charAt(0).toUpperCase() + parts[0].substring(1) || "Unknown";
+    return (
+      parts[0]?.charAt(0).toUpperCase() + parts[0].substring(1) || "Unknown"
+    );
   }
 };
 
@@ -66,7 +76,7 @@ onMounted(() => {
           <p class="text-white"> {{ user.full_name }}</p> -->
           <div class="flex justify-center">
             <img
-              :src="`storage/${user.profile}`"
+              :src="`/storage/${user.profile}`"
               alt=""
               class="h-16 w-16 rounded-full border-2 border-gold object-cover"
             />
@@ -225,7 +235,6 @@ onMounted(() => {
           </button>
 
           <div class="flex space-x-4">
-          
             <button
               aria-label="search"
               class="w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200 md:hidden"

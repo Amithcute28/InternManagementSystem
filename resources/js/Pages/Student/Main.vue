@@ -111,9 +111,21 @@ defineProps(["users"]);
                     </div>
                   </div>
                   <div class="grid grid-cols-2">
+                    <div class="px-4 py-2 font-semibold">Province</div>
+                    <div class="px-4 py-2">
+                      {{ $page.props.auth.user.province }}
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Relationship</div>
                     <div class="px-4 py-2">
                       {{ $page.props.auth.user.relationship }}
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2">
+                    <div class="px-4 py-2 font-semibold">City/Municipality</div>
+                    <div class="px-4 py-2">
+                      {{ $page.props.auth.user.city }}
                     </div>
                   </div>
                   <div class="grid grid-cols-2">
@@ -123,15 +135,21 @@ defineProps(["users"]);
                     </div>
                   </div>
                   <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Home Address</div>
+                    <div class="px-4 py-2 font-semibold">Zip Code</div>
                     <div class="px-4 py-2">
-                      {{ $page.props.auth.user.home_address }}
+                      {{ $page.props.auth.user.zip_code }}
                     </div>
                   </div>
                   <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Guardian Name</div>
                     <div class="px-4 py-2">
                       {{ $page.props.auth.user.guardian_name }}
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2">
+                    <div class="px-4 py-2 font-semibold">Barangay</div>
+                    <div class="px-4 py-2">
+                      {{ $page.props.auth.user.barangay }}
                     </div>
                   </div>
                   <div class="grid grid-cols-2">

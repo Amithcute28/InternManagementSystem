@@ -29,7 +29,6 @@ class AdminSeeder extends Seeder
             'relationship'=> 'Single',
             'nationality'=> 'Filipino',
             'contact_number'=> '09691277480',
-            'home_address'=> 'Tacloban City',
             'guardian_name'=> 'Ian Ben',
             'guardian_contact'=> '123456789',
             'remember_token' => Str::random(10),

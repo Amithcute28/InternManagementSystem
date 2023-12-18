@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserStudentsController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\SchoolsControllerBSED;
 use App\Http\Controllers\OffCampusControllerBSED;
 use App\Http\Controllers\CoordinatorsControllerBSED;
 use App\Models\Student;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Auth;
 
 //admin dashboard BSED
@@ -145,10 +147,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/user', UserStudentsController::class)->middleware('role:user');
-    Route::resource('/application', ApplicationController::class);
+    Route::resource('/application', ApplicationController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::get('/application/{id}', [ApplicationController::class, 'editInternApplication'])->name('applications.editInternApplication');
-    Route::patch('/application/{id}', [ApplicationController::class, 'updateInternApplication'])->name('application.updateInternApplication');
+    Route::put('/application', [ApplicationController::class, 'updateInternApplication'])->name('applications.updateInternApplication')->middleware(HandlePrecognitiveRequests::class);
+    Route::delete('/application/delete/{id}', [ApplicationController::class, 'deleteInternApplication'])->name('applications.deleteInternApplication');
     Route::post('/user', [UserStudentsController::class, 'showProfile'])->name('user.showProfile');
+
+
+   
+    Route::get('/cities/{province}', [UserStudentsController::class, 'getCities']);
+    Route::get('/zipcodes/{province}/{city}', [UserStudentsController::class, 'getZipcode']);
+    Route::get('/getProvinceAndCity/{zipCode}', [UserStudentsController::class, 'getProvinceAndCity']);
+    
 });
 
 Route::post('/user', [UserStudentsController::class, 'updateNewIntern'])->name('user.updateNewIntern');

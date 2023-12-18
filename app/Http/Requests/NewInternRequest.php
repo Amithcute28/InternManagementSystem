@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Zipcode;
 
 class NewInternRequest extends FormRequest
 {
@@ -28,7 +29,16 @@ class NewInternRequest extends FormRequest
             'relationship' => 'required|string|max:255',
             'nationality' => 'required|string|max:255',
             'contact_number' => 'required|string|size:11',
-            'home_address' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zip_code' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+                // Check if the zip code exists in your database
+                $exists = Zipcode::where('zip_code', $value)->exists();
+                if (!$exists) {
+                    $fail('The zip code is invalid.');
+                }
+            }],
+            'barangay' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|size:11',
             'profile' => 'nullable|mimes:jpeg,jpg,png|max:10240',
@@ -65,17 +75,28 @@ class NewInternRequest extends FormRequest
             'contact_number.string' => 'The contact number must be a string.',
             'contact_number.size' => 'The contact number must be exactly 11 characters.',
 
-            'guardian_name.required' => 'The gender field is required.',
-            'guardian_name.string' => 'The gender field must be a string.',
-            'guardian_name.max' => 'The gender field must not exceed 255 characters.',
+            'guardian_name.required' => 'The guardian name is required.',
+            'guardian_name.string' => 'The guardian name must be a string.',
+            'guardian_name.max' => 'The guardian name must not exceed 255 characters.',
 
             'guardian_contact.required' => 'The contact number field is required.',
             'guardian_contact.string' => 'The contact number must be a string.',
             'guardian_contact.size' => 'The contact number must be exactly 11 characters.',
 
-            'home_address.required' => 'The home address field is required.',
-            'home_address.string' => 'The home address field must be a string.',
-            'home_address.max' => 'The home address field must not exceed 255 characters.',
+            'province.required' => 'The province field is required.',
+            'province.string' => 'The province field must be a string.',
+            'province.max' => 'The province field must not exceed 255 characters.',
+
+            'city.required' => 'The city field is required.',
+            'city.string' => 'The city field must be a string.',
+            'city.max' => 'The city field must not exceed 255 characters.',
+
+            'zip_code.required' => 'The zip code field is required.',
+            'zip_code.max' => 'The zip code must not exceed 255 characters.',
+
+            'barangay.required' => 'The home address field is required.',
+            'barangay.string' => 'The home address field must be a string.',
+            'barangay.max' => 'The home address field must not exceed 255 characters.',
 
             // ... Repeat similar pattern for other fields ...
 
