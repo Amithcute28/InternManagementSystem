@@ -17,22 +17,34 @@ class SchoolsController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(): Response
-    {
-        return Inertia::render('Admin/Pages/Schools', [
-            'schools' => School::all()->map(function ($school) {
-                return [
-                    'id' => $school->id,
-                    'name' => $school->name,
-                    'address' => $school->address,
-                    'school_logo' => asset('storage/' . $school->school_logo),
-                    'required_programs' => $school->required_programs,
-                    'skills' => $school->skills,
-                ];
-            })
+     public function index(): Response
+{
+    $user = auth()->user(); // Assuming you're using Laravel's built-in authentication
 
-        ]);
-    }
+    $schools = School::all()->map(function ($school) use ($user) {
+        $deductSlot = $user->choosen_institution == $school->id 
+                        && $user->choosen_school_id == $school->id;
+
+        if ($deductSlot && $school->slots > 0) {
+            $school->decrement('slots');
+            $school->save(); // Save the updated slot count back to the database
+        }
+
+        return [
+            'id' => $school->id,
+            'name' => $school->name,
+            'address' => $school->address,
+            'school_logo' => asset('storage/' . $school->school_logo),
+            'required_programs' => $school->required_programs,
+            'skills' => $school->skills,
+            'slots' => $school->slots,
+        ];
+    });
+
+    return Inertia::render('Admin/Pages/Schools', [
+        'schools' => $schools,
+    ]);
+}
 
     public function show($id)
     {
@@ -65,6 +77,7 @@ class SchoolsController extends Controller
             'schoolLogo' => 'nullable|file|mimes:jpeg,png|max:2048',
             'required_programs' => 'required|string|max:255',
             'skills' => 'required|string|max:255',
+            'slots' => 'required|string|max:255',
         ]);
 
         if ($request->hasFile('schoolLogo')) {
@@ -78,6 +91,7 @@ class SchoolsController extends Controller
             'school_logo' => $schoolLogo,
             'required_programs' => $request->required_programs,
             'skills' => $request->skills,
+            'slots' => $request->slots,
         ]);
 
         return Redirect::route('schools.index');
@@ -113,6 +127,7 @@ class SchoolsController extends Controller
                 'schoolAddress' => 'required|string|max:255',
                 'required_programs' => 'required|string|max:255',
                 'skills' => 'required|string|max:255',
+                'slots' => 'required|string|max:255',
             ]);
     
             if ($request->hasFile('schoolLogo')) {
@@ -129,6 +144,7 @@ class SchoolsController extends Controller
                 'school_logo' => $schoolLogo,
                 'required_programs' => $request->required_programs,
                 'skills' => $request->skills,
+                'slots' => $request->slots,
             ]);
     
             return redirect()->route('schools.index');

@@ -94,7 +94,7 @@ function openModal(institution) {
                             <p class="font-semibold text-sm text-gray-400">{{ institution.address }}</p>
                             <p class="font-semibold text-sm text-gray-400">{{ institution.required_programs }}</p>
                             <p class="font-semibold text-sm text-gray-400">{{ institution.skills }}</p>
-                            <p class="font-semibold text-sm text-gray-400 mb-5">Required Academic Performance: {{ institution.academic_performance }}</p>
+                            <p class="font-semibold text-sm text-gray-400 mb-5">Slots: {{ institution.slots }}</p>
                            <Link :href="route('status.update', {studentId: student.id, institutionId: institution.id})" method="PUT" as="button" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Choose</Link>
                             <button @click="openModal(institution)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-6">More info</button>
                             

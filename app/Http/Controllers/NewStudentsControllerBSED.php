@@ -32,13 +32,23 @@ class NewStudentsControllerBSED extends Controller
         $newstudentsbsed = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
         $totalNewStudents = $newstudentsbsed->count();
 
-        $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->paginate(8);
+        
 
 
-
-
+        $perPage = request()->input('perPage') ?: 5;
         return Inertia::render('Admin/PagesBSED/NewStudents', [
-            'newstudents' => UserResource::collection($newstudents),
+            'newstudents' => User::query()
+            ->when(request()->input('search'), function($query, $search) {
+                $query->where(function($subquery) use ($search) {
+                    $subquery->where('student_id', 'like', "%{$search}%")
+                            ->orWhere('full_name', 'like', "%{$search}%");
+                });
+            })
+            ->where('approved', '=', 0)
+            ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])
+            ->paginate($perPage)
+            ->withQueryString(),
+            'filters' => request()->only(['search', 'perPage']),
             'newstudentsbsed' => UserResource::collection($newstudentsbsed),
             'totalNewStudents' => $totalNewStudents,
         ]);

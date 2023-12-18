@@ -34,7 +34,7 @@ function getTags() {
     preserveState: true,
     replace: true,
   })
-}
+};
 
 // initialize components based on data attribute selectors
 onMounted(() => {

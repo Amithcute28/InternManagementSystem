@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('required_programs')->nullable();
             $table->text('skills')->nullable();
             $table->text('required_academic_performance')->nullable();
+            $table->string('slots');
             $table->timestamps();
         });
     }

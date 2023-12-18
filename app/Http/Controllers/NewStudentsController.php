@@ -58,21 +58,31 @@ class NewStudentsController extends Controller
             // })->where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
             // ->paginate($perPage)
             // ->withQueryString(),
-            //             'newstudents' => User::query()
-            // ->when(request()->input('search'), function($query, $search) {
-            //     $query->where(function($subquery) use ($search) {
+                        'newstudents' => User::query()
+            ->when(request()->input('search'), function($query, $search) {
+                $query->where(function($subquery) use ($search) {
+                    $subquery->where('student_id', 'like', "%{$search}%")
+                            ->orWhere('full_name', 'like', "%{$search}%");
+                });
+            })
+            ->where('approved', '=', 0)
+            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+            ->paginate($perPage)
+            ->withQueryString(),
+
+            // 'newstudents' => User::query()
+            // ->when(request()->input('search'), function ($query, $search) {
+            //     $query->where(function ($subquery) use ($search) {
             //         $subquery->where('student_id', 'like', "%{$search}%")
-            //                 ->orWhere('full_name', 'like', "%{$search}%");
+            //             ->orWhere('full_name', 'like', "%{$search}%");
             //     });
             // })
             // ->where('approved', '=', 0)
             // ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
             // ->paginate($perPage)
             // ->withQueryString(),
-
-            'newstudents' => $newstudents,
+            
             'filters' => request()->only(['search', 'perPage']),
-            'newstudents' => $newstudents,
             'newstudentsbeed' => UserResource::collection($newstudentsbeed),
             'totalNewStudents' => $totalNewStudents,
         ]);

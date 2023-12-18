@@ -433,6 +433,9 @@ const submit = () => {
         </TableRow>
       </template>
     </Table>
+    <div class="m-2 p-2">
+          <Pagination :links="approved.links"/>
+        </div>
     
 
     <dialog id="myModal" class="h-auto w-11/12 md:w-1/2 p-5  bg-white rounded-md ">

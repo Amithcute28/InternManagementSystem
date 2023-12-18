@@ -54,7 +54,7 @@ class CoordinatorsController extends Controller
 
         $request->validate([
             'student_id' => 'required|string|max:255',
-            'program' => 'required|string|in:BEED,BECEd,BSNEd,BPEd,BSED English,BSED Filipino,BSED Mathematics,BSED Science,BSED Social Studies',
+            'program' => 'required|string|in:BEED,BSED',
         'full_name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => ['required', 'confirmed', Password::min(8)
