@@ -14,31 +14,77 @@ class AdminDashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
-    {
-        $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
-        $totalStudents = $students->count();
+//     public function index(): Response
+// {
+//     $userProgram = auth()->user()->program;
 
-        $deployed = User::where('is_admin', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->where('approved', '=', 1)->where('is_off_campus', '=', 1)->where('choosen_institution', '!=', 0)->get();
-        $totalDeployed = $deployed->count();
+// // Ensure $userProgram is always an array
+// // $userProgram = is_array($userProgram) ? $userProgram : (json_decode($userProgram, true) ?? []);
 
-        $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
-        $totalNewStudents = $newstudents->count();
+// $students = User::where('approved', '=', 1)
+//     ->where('is_admin', '=', 0)
+//     ->whereJsonContains('program', $userProgram)
+//     ->get();
+
+//     $totalStudents = $students->count();
+
+//     $deployed = User::where('is_admin', '=', 0)
+//         ->where('approved', '=', 1)
+//         ->where('is_off_campus', '=', 1)
+//         ->where('choosen_institution', '!=', 0)
+//         ->whereJsonContains('program', $userProgram)
+//         ->get();
+
+//     $totalDeployed = $deployed->count();
+
+//     $newstudents = User::where('approved', '=', 0)
+//     ->whereIn('program', $userProgram)
+//     ->get();
+
+//     $totalNewStudents = $newstudents->count();
+
+//     $schools = School::all();
+//     $totalSchools = $schools->count();
+
+//     return Inertia::render('Admin/Pages/AdminDashboard',[
+//         'students' => UserResource::collection($students),
+//         'totalStudents' => $totalStudents,
+//         'deployed' => UserResource::collection($deployed),
+//         'totalDeployed' => $totalDeployed,
+//         'newstudents' => UserResource::collection($newstudents),
+//         'totalNewStudents' => $totalNewStudents,
+//         'schools' => SchoolResource::collection($schools),
+//         'totalSchools' => $totalSchools,
+//     ]);
+// }
+
+public function index(): Response
+{
+    $students = User::where('approved', '=', 1)->where('is_admin', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+    $totalStudents = $students->count();
+
+    $deployed = User::where('is_admin', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->where('approved', '=', 1)->where('is_off_campus', '=', 1)->where('choosen_institution', '!=', 0)->get();
+    $totalDeployed = $deployed->count();
+
+    $newstudents = User::where('approved', '=', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+    $totalNewStudents = $newstudents->count();
+
+    $schools = School::all();
+    $totalSchools = $schools->count();
+
+    return Inertia::render('Admin/Pages/AdminDashboard',[
+        'students' => UserResource::collection($students),
+        'totalStudents' => $totalStudents,
+        'deployed' => UserResource::collection($deployed),
+        'totalDeployed' => $totalDeployed,
+        'newstudents' => UserResource::collection($newstudents),
+        'totalNewStudents' => $totalNewStudents,
+        'schools' => SchoolResource::collection($schools),
+        'totalSchools' => $totalSchools,
+    ]);
+}
+
     
-        $schools = School::all();
-        $totalSchools = $schools->count();
-    
-        return Inertia::render('Admin/Pages/AdminDashboard',[
-            'students' => UserResource::collection($students),
-            'totalStudents' => $totalStudents,
-            'deployed' => UserResource::collection($deployed),
-            'totalDeployed' => $totalDeployed,
-            'newstudents' => UserResource::collection($newstudents),
-            'totalNewStudents' => $totalNewStudents,
-            'schools' => SchoolResource::collection($schools),
-            'totalSchools' => $totalSchools,
-        ]);
-    }
 
     /**
      * Show the form for creating a new resource.

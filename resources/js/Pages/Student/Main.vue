@@ -1,151 +1,215 @@
-
-
 <script setup>
-import UserLayout from "@/Layouts/UserLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import UserLayout from '@/Layouts/UserLayout.vue';
+import {Head, useForm, usePage} from '@inertiajs/vue3';
+import {computed, onMounted, ref, watch} from 'vue';
+import {daysUntilNthDayOfMonth} from "@/Composables/daysUntilNthDayOfMonthCalculator.js";
+import {daysBetweenNthDates} from "@/Composables/daysBetweenNthDatesCalculator.js";
+import NavLink from "@/Components/NavLink.vue";
+import GoBackNavLink from "@/Components/GoBackNavLink.vue";
+import Card from "@/Components/Card.vue";
+import BlockQuote from "@/Components/BlockQuote.vue";
+import IconCard from "@/Components/IconCard.vue";
+import ProgressBar from "@/Components/ProgressBar.vue";
+import ToolTip from "@/Components/ToolTip.vue";
+import PrimaryButton2 from "@/Components/PrimaryButton2.vue";
+import Swal from "sweetalert2";
+import HorizontalRule from "@/Components/HorizontalRule.vue";
+import MoneyIcon from "@/Components/Icons/MoneyIcon.vue";
+import CalendarIcon from "@/Components/Icons/CalendarIcon.vue";
+import TableIcon from "@/Components/Icons/TableIcon.vue";
+import MessageIcon from "@/Components/Icons/MessageIcon.vue";
+import {__} from "@/Composables/useTranslations.js";
+import {CallQuoteAPI} from "@/Composables/useCallQuoteAPI.js";
 import { Link } from "@inertiajs/vue3";
 
-import Table from "@/Components/Table.vue";
-import TableRow from "@/Components/TableRow.vue";
-import TableHeaderCell from "@/Components/TableHeaderCell.vue";
-import TableDataCell from "@/Components/TableDataCell.vue";
-
-import { onMounted } from "vue";
-import { initFlowbite } from "flowbite";
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-  initFlowbite();
+const props = defineProps({
+    salary: Object,
+    payroll_day: Number,
+    employee_stats: Object,
+    attendance_status: Number,
+    is_today_off: Boolean,
+    users: Object,
+});
+const days_remaining = computed(() => {
+    return daysUntilNthDayOfMonth(props.payroll_day);
 });
 
-defineProps(["users"]);
 
-// Component registration
+
+
+const today = (new Date()).toLocaleDateString(usePage().props.locale,
+    { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+const form = useForm({});
+
+const msg = computed(() => {
+    return (props.attendance_status === 0) ? ('Sign in') : ('Sign off')
+})
+
+let isSignIn = props.attendance_status === 0;
+watch(() => props.attendance_status,
+    () => {
+        isSignIn = (props.attendance_status === 0);
+    }
+)
+const submit = async () => {
+  const postRoute = isSignIn ? 'attendance.dashboardSignIn' : 'attendance.dashboardSignOff';
+
+  const confirmed = window.confirm(`Confirm ${isSignIn ? 'Sign in' : 'Sign off'} for attendance for ${today}?`);
+
+  if (confirmed) {
+    try {
+      await form.post(route(postRoute, { id: usePage().props.auth.user.id }));
+      alert(`Action Registered${isSignIn ? "\nDon't forget to come here and sign-off before you leave so that the attendance gets registered!" : ''}`);
+    } catch (error) {
+      alert('Error: Something went wrong. Please try again later.');
+    }
+  }
+};
+
+
+const quote = ref(null);
+onMounted(() => {
+    CallQuoteAPI(quote);
+});
+
 </script>
 
 <template>
-  <Head title="Student Profile" />
+<div>
+    <Head :title="('Dashboard')"/>
+    <UserLayout>
+        <template #tabs>
+            <!-- <GoBackNavLink/>
+            <NavLink :href="route('dashboard.index')" :active="route().current('dashboard.index')">
+                {{ ('Dashboard') }}
+            </NavLink> -->
+        </template>
 
-  <UserLayout>
-    <div class="bg-gray-100 mt-16">
-      <div class="w-full text-white bg-main-color">
-        <div
-          x-data="{ open: false }"
-          class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8"
-        ></div>
-      </div>
-      <!-- End of Navbar -->
-
-      <div class="container mx-auto bg-white">
-        <div class="md:flex no-wrap md:-mx-2">
-          <!-- Left Side -->
-
-          <!-- Right Side -->
-          <div class="w-full mx-2 h-64">
-            <!-- Profile tab -->
-            <!-- About Section -->
-            <div class="bg-white p-3 rounded-xl shadow-md">
-              <div
-                class="flex items-center space-x-2 ml-3 font-semibold text-gray-900 leading-8"
-              >
-                <span clas="text-green-500">
-                  <svg
-                    class="h-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </span>
-                <span class="tracking-wide">About</span>
-              </div>
-              <div class="text-gray-700">
-                <div class="grid md:grid-cols-2 text-sm">
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Full name</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.full_name }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Student ID</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.student_id }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Program</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.program }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Email</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.email }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Contact Number</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.contact_number }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Birthday</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.birthday }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Gender</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.gender }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Relationship</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.relationship }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Nationality</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.nationality }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Home Address</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.home_address }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">Guardian Name</div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.guardian_name }}
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2">
-                    <div class="px-4 py-2 font-semibold">
-                      Guardian Contact Number
-                    </div>
-                    <div class="px-4 py-2">
-                      {{ $page.props.auth.user.guardian_contact }}
-                    </div>
-                  </div>
+        <div class="py-8 mt-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="flex justify-between gap-4 ">
+                    <Card class="w-full md:w-3/4 !mt-0">
+                        <h1 class="!card-header !mb-0 mt-6 ml-6">Welcome,
+                            {{ $page.props.auth.user.full_name }}!</h1>
+                    </Card>
+                    <Card class="w-full md:w-1/4 !mt-0" vl :fancy-p="false">
+                        <form @submit.prevent="submit" class="w-full h-full"
+                              v-if="attendance_status !== 2 && !is_today_off">
+                            <PrimaryButton2 class="w-full h-full flex justify-center">
+                            <span class="text-xl">Attendance{{ msg }}
+                                <br>
+                                <span class="text-xs text-gray-200">{{ ('For') }}  {{ today }}</span>
+                            </span>
+                            </PrimaryButton2>
+                        </form>
+                        <PrimaryButton2 v-else
+                                       class="w-full h-full flex justify-center !border-0 bg-gradient-to-r from-green-500 to-green-400 cursor-not-allowed"
+                                       disabled>
+                            <span v-if="is_today_off" class="text-xl py-6 ">{{ ('Today is off! 🕺🕺') }}<br></span>
+                            <span v-else class="text-xl px-10">{{ ('Attendance Taken Today! 🎉') }}<br></span>
+                        </PrimaryButton2>
+                    </Card>
                 </div>
-              </div>
 
-              <Link
+                <!-- QUOTE + SALARY -->
+                <div class="flex flex-col md:flex-row justify-between md:gap-4">
+                    <Card class="w-full md:w-3/4">
+                        <h1 class="text-2xl mt-6 ml-6">{{ ('Quote of the day') }}</h1>
+                        <div class="flex justify items-center">
+                            <BlockQuote class="mb-0 ml-6" v-if="quote" :style="2" :quote="quote['content']"
+                                        :author="quote['author']"/>
+                            <BlockQuote class="mb-0 ml-6" v-else :style="2" :quote="('Loading Quote...')"
+                                        :author="('Loading Author...')"/>
+                        </div>
+                    </Card>
+
+                   
+                </div>
+
+                <!-- PAYDAY + ATTENDANCE -->
+                <div class="flex flex-col md:flex-row justify-between md:gap-4">
+
+                    <!-- PAY DAY -->
+                   
+                    <!-- MONTH DATA -->
+                    <Card class="w-full md:w-1/4">
+                        <h1 class="text-2xl">{{
+                                ('Data of :month', {month: new Date().toLocaleString($page.props.locale, {month: 'long'})})
+                            }}</h1>
+                        <div class="mt-4 w-full flex flex-col">
+                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
+                                <p class="font-medium">{{ ('Work Days') }}: </p>
+                               <p>{{ employee_stats && employee_stats['attendableThisMonth']
+  ? `${employee_stats['attendableThisMonth']} ${('Days')}`
+  : '' }}
+</p>
+                            </div>
+                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
+                                <p class="font-medium">{{ ('Weekends') }}: </p>
+                                <p>{{ employee_stats && employee_stats['weekendsThisMonth']
+  ? `${employee_stats['weekendsThisMonth']} ${('Days')}`
+  : '' }}
+</p>
+
+                            </div>
+                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
+                                <p class="font-medium">{{ ('Holidays') }}: </p>
+                                <p>{{ employee_stats && employee_stats['holidaysThisMonth']
+  ? `${employee_stats['holidaysThisMonth']} ${('Days')}`
+  : '' }}
+</p>
+
+                            </div>
+
+                        </div>
+                    </Card>
+
+                    <Card class="w-full md:w-2/4  ">
+                        <h1 class="text-2xl">{{ ('Your Attendance This Month') }}</h1>
+                        <div class="mt-4 grid grid-rows-3">
+                            <div class="flex flex-col lg:flex-row justify-between align-middle mb-6 sm:mb-2">
+                                <p class="w-full sm:w-1/3">{{ employee_stats && employee_stats['totalAttendanceSoFar']
+  ? `${('Attended')} ${employee_stats['totalAttendanceSoFar']}`
+  : '' }}
+</p>
+<div>
+    <!-- First ProgressBar -->
+    <ProgressBar class="col-span-3" color="bg-green-500" no-text
+                 :percentage="employee_stats && employee_stats['totalAttendanceSoFar'] && employee_stats['attendableThisMonth']
+                 ? (employee_stats['totalAttendanceSoFar'] / employee_stats['attendableThisMonth']) * 100
+                 : 0"
+                 :text="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['totalAbsenceSoFar'] > 0
+                 ? (employee_stats['totalAbsenceSoFar'] + ' Day(s)')
+                 : ''"/>
+
+    <!-- Second ProgressBar -->
+    <ProgressBar no-text color="bg-red-500"
+                 :percentage="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['YearStats'] && employee_stats['YearStats']['absence_limit']
+                 ? (employee_stats['totalAbsenceSoFar'] / employee_stats['YearStats']['absence_limit']) * 100
+                 : 0"
+                 :text="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['totalAbsenceSoFar'] > 0
+                 ? (employee_stats['totalAbsenceSoFar'] + ' Day(s)')
+                 : ''"/>
+
+    <!-- Third ProgressBar -->
+    <ProgressBar class="col-span-3"
+                 :percentage="employee_stats && employee_stats['hoursDifferenceSoFar']
+                 ? employee_stats['hoursDifferenceSoFar']
+                 : 0"
+                 :text="employee_stats && employee_stats['hoursDifferenceSoFar'] !== 0
+                 ? Math.abs(employee_stats['hoursDifferenceSoFar']).toFixed(2) + ' Hours ' + (employee_stats['hoursDifferenceSoFar'] > 0 ? 'extra' : 'late')
+                 : ''"
+                 :color="employee_stats && employee_stats['hoursDifferenceSoFar'] > 0 ? 'bg-green-500' : 'bg-red-500'"/>
+</div>
+
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                  <Link
                 v-for="user in users"
                 :key="user.id"
                 :href="route('user.edit', user.id)"
@@ -153,34 +217,30 @@ defineProps(["users"]);
                 >Edit Information</Link
               >
             </div>
-            <!-- End of about section -->
 
-            <div class="my-4"></div>
-
-            <!-- Experience and education -->
-
-            <!-- End of profile tab -->
-          </div>
+           
         </div>
-      </div>
+        
+    </UserLayout>
     </div>
-  </UserLayout>
 </template>
 
-<style>
-:root {
-  --main-color: #4a76a8;
+
+<style scoped>
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px indigo;
+    }
+    50% {
+        box-shadow: 0 0 10px indigo, 0 0 15px indigo;
+    }
+    100% {
+        box-shadow: 0 0 5px indigo;
+    }
 }
 
-.bg-main-color {
-  background-color: var(--main-color);
+.glow-element {
+    animation: glowing 7s infinite;
 }
 
-.text-main-color {
-  color: var(--main-color);
-}
-
-.border-main-color {
-  border-color: var(--main-color);
-}
 </style>

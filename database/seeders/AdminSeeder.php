@@ -33,6 +33,8 @@ class AdminSeeder extends Seeder
             'guardian_name'=> 'Ian Ben',
             'guardian_contact'=> '123456789',
             'remember_token' => Str::random(10),
+            'is_admin' => 1,
+            'approved' => 1,
         ])->assignRole('admin');
 
         

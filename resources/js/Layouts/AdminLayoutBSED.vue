@@ -77,7 +77,7 @@ const toggleApplicationsDropdown = () => {
       aria-label="Sidebar"
     >
       <div class="h-full px-3 py-4 bg-blue dark:bg-gray-800">
-        <a class="flex items-center pl-2.5 mt-2 ml-5">
+        <a class="flex items-center pl-2.5 ml-5">
           <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" /> -->
           <div>
             <a
@@ -90,7 +90,7 @@ const toggleApplicationsDropdown = () => {
           </div>
         </a>
 
-        <ul class="space-y-2 tracking-wide mt-10">
+        <ul class="space-y-2 tracking-wide mt-6">
           <li>
             <SidebarLink
               :href="route('admindashbsed.index')"

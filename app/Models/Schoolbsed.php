@@ -15,6 +15,7 @@ class Schoolbsed extends Model
         'school_logo',
         'required_programs',
         'skills',
+        'slots',
         'required_academic_performance',
     ];
     public function users()

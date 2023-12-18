@@ -99,9 +99,10 @@ const getFileUrl = (fileName) => {
 
 
 <template>
+<div>
   <Head title="Application" />
-
   <UserLayout>
+    
     <div class="py-4 mt-16">
       <!-- <h1> Student Profile,  {{ $page.props.auth.user.name }}</h1> -->
       <form
@@ -1141,4 +1142,5 @@ const getFileUrl = (fileName) => {
       </form>
     </div>
   </UserLayout>
+  </div>
 </template>

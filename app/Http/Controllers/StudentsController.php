@@ -16,6 +16,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\DB;
+use App\Models\EmployeeShift;
+use Spatie\Permission\Models\Role;
 // use App\Http\Resources\PermissionResource;
 // use App\Http\Resources\RoleResource;
 // use App\Http\Resources\StudentsResource;
@@ -62,6 +64,7 @@ public function index()
                 'is_off_campus' => $user->is_off_campus,
                 'in_campus' => $user->in_campus,
                 'full_name' => $student_name,
+                'email' => $user->email,
                 'program' => $user->program ?? null,
                 'eslip' => $applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null,
                 'psa' => $applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null,
@@ -280,7 +283,7 @@ public function index()
 
         $user = User::create([
             'student_id' => $request->student_id,
-            'program' => $request->program,
+            'program' => $request->program, // Encode the program array to JSON
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -290,57 +293,12 @@ public function index()
 
         ])->assignRole('user');
 
-
-        // $userId = $user->id;
-        // $eslip = '';
-        // $psa = '';
-        // $pros = '';
-        // $applicationF = '';
-        // $medical = '';
-        // $parent = '';
-        // $twobytwo = '';
-
-        // // Check if eslip file exists and store it
-        // if ($request->hasFile('eslip')) {
-        //     $eslip = $request->file('eslip')->store('student', 'public');
-        // }
-
-        // // Check if other files exist and store them
-        // if ($request->hasFile('psa')) {
-        //     $psa = $request->file('psa')->store('student', 'public');
-        // }
-        // if ($request->hasFile('pros')) {
-        //     $pros = $request->file('pros')->store('student', 'public');
-        // }
-        // if ($request->hasFile('applicationF')) {
-        //     $applicationF = $request->file('applicationF')->store('student', 'public');
-        // }
-        // if ($request->hasFile('medical')) {
-        //     $medical = $request->file('medical')->store('student', 'public');
-        // }
-        // if ($request->hasFile('parent')) {
-        //     $parent = $request->file('parent')->store('student', 'public');
-        // }
-        // if ($request->hasFile('twobytwo')) {
-        //     $twobytwo = $request->file('twobytwo')->store('student', 'public');
-        // }
-
-        // // Create new application form record in the database
-        // ApplicationForm::create([
-        //     'user_id' => $userId,
-        //     'eslip' => $eslip,
-        //     'psa' => $psa,
-        //     'pros' => $pros,
-        //     'applicationF' => $applicationF,
-        //     'medical' => $medical,
-        //     'parent' => $parent,
-        //     'twobytwo' => $twobytwo,
-        //     'approved' => 1,
-        //     'is_admin' => 0,
-        // ]);
-
-
-
+        EmployeeShift::create([
+            'employee_id' => $user->id,
+            'shift_id' => 1,
+            'start_date' => now()->format('Y-m-d'),
+            'end_date' => null,
+        ]);
 
         return to_route('newstudents.index');
     }

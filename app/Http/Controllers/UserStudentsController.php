@@ -20,26 +20,85 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Globals;
+use App\Services\CommonServices;
+use App\Services\AttendanceServices;
+use App\Services\ValidationServices;
+use Carbon\Carbon;
 
 class UserStudentsController extends Controller
 {
+    protected AttendanceServices $attendanceServices;
+    protected ValidationServices $validationServices;
+    protected CommonServices $commonServices;
+    public function __construct()
+    {
+        $this->attendanceServices = new AttendanceServices;
+        $this->validationServices = new ValidationServices;
+        $this->commonServices = new CommonServices;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
-    {
-        $user = Auth::user();
 
-        if ($user->new_intern == 0) {
-            return Inertia::render('Student/NewIntern', [
-                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
-            ]);
+     public function dashboardIndex()
+    {
+        $commonServices = new CommonServices();
+        $isTodayOff = $commonServices->isTodayOff();
+
+        $attendanceChecker = auth()->user()->attendances()->where('date', Carbon::today()->toDateString())->first();
+
+        if (is_null($attendanceChecker)) {
+            $attendanceStatus = 0;
+        } else if ($attendanceChecker->sign_off_time == null) {
+            $attendanceStatus = 1;
         } else {
-            return Inertia::render('Student/Main', [
-                'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
-            ]);
+            $attendanceStatus = 2;
         }
+        
+        return Inertia::render('Attendance/AttendanceDashboard', [
+            "employee_stats" => auth()->user()->myInfo(),
+            "attendance_status" => $attendanceStatus,
+            "is_today_off" => $isTodayOff,
+        ]);
     }
+
+
+    public function index(): Response
+{
+    $user = Auth::user();
+    
+   
+
+    $commonServices = new CommonServices();
+        $isTodayOff = $commonServices->isTodayOff();
+
+        $attendanceChecker = auth()->user()->attendances()->where('date', Carbon::today()->toDateString())->first();
+
+        if (is_null($attendanceChecker)) {
+            $attendanceStatus = 0;
+        } else if ($attendanceChecker->sign_off_time == null) {
+            $attendanceStatus = 1;
+        } else {
+            $attendanceStatus = 2;
+        }
+
+         if ($user->new_intern == 0) {
+        return Inertia::render('Student/NewIntern', [
+            'users' => UserResource::collection(User::where('id', '=', auth()->user()->id)->get()),
+        ]);
+    }
+   
+    return Inertia::render('Student/Main', [
+        'users' => UserResource::collection(User::where('id', '=', $user->id)->get()),
+        // 'salary' => $user->salary(),
+        // 'payroll_day' => Globals::first()->payroll_day,
+        // "employee_stats" => auth()->user()->myStats(),
+        "attendance_status" => $attendanceStatus,
+        "is_today_off" => $isTodayOff,
+    ]);
+}
+
 
     public function showProfile($id)
     {
@@ -155,6 +214,9 @@ class UserStudentsController extends Controller
             'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
+            'student_school_name' => 'required|string|max:255',
+            'student_school_code' => 'required|string|max:255',
+            'student_shift' => 'required|string|max:255',
 
 
         ]);
@@ -176,6 +238,9 @@ class UserStudentsController extends Controller
             'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
+            'student_school_name' => $request->student_school_name,
+            'student_school_code' => $request->student_school_code,
+            'student_shift' => $request->student_shift,
         ]);
 
         return to_route('user.index');

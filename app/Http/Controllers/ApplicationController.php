@@ -35,6 +35,7 @@ class ApplicationController extends Controller
 
         $qualifiedUsers = User::where('approved', 1)
             ->where('is_admin', 0)
+            ->where('applications', 0)
             ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
             ->where(function ($query) {
                 $query->where('in_campus', 0)
@@ -94,7 +95,7 @@ class ApplicationController extends Controller
             return in_array(strtolower($extension), $allowed_extensions);
         })->values();
 
-        $interns = User::where('approved', 1)->where('is_admin', 0)->where('in_campus', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
+        $interns = User::where('approved', 1)->where('is_admin', 0)->where('in_campus', 0)->where('applications', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalInterns = $interns->count();
 
         return Inertia::render('Admin/Pages/InCampusApplication', [
@@ -471,7 +472,23 @@ class ApplicationController extends Controller
     {
         $student = User::find($id);
 
+        
+        $student->applications = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('applications.inCampusApplication');
+    }
+
+    public function updateIncampusDone($id)
+    {
+        $student = User::find($id);
+
         $student->in_campus = 1;
+        $student->choosen_institution = 0;
+        $student->student_shift = 'Second';
         $student->save();
 
 
