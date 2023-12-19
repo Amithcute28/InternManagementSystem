@@ -23,7 +23,7 @@ class NewInternRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skills' => 'required|string|max:255',
+            'skills' => 'required|array',
             'birthday' => 'required|date|date_format:Y-m-d|before:today',
             'gender' => 'required|string|max:255',
             'relationship' => 'required|string|max:255',

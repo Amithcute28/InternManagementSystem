@@ -206,8 +206,11 @@ class UserStudentsController extends Controller
             $profile = $request->file('profile')->store('student', 'public');
         }
 
+        $skillsAsString = implode(', ', $request->skills);
+
         $user->update([
-            'skills' => $request->skills,
+
+            'skills' => $skillsAsString,
             'birthday' => $request->birthday,
             'gender' => $request->gender,
             'relationship' => $request->relationship,
