@@ -21,7 +21,8 @@ class SchoolBSEDResource extends JsonResource
         'school_address' => $this->school_address,
         'school_logo' => $this->school_logo,
         'required_programs' => $this->required_programs,
-        'skills' => $this->skills,   
+        'skills' => $this->skills,  
+        'slots' => $this->skills, 
        
                    
                     

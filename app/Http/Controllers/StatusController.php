@@ -33,6 +33,7 @@ class StatusController extends Controller
                         $innerQuery->whereIn('skills', explode(',', $student->skills));
                     });
                 })
+                ->where('slots', '>', 0)
                 ->get()
                 ->map(function ($institution) {
                     return [
@@ -53,6 +54,7 @@ class StatusController extends Controller
                             $innerQuery->whereIn('skills', explode(',', $student->skills));
                         });
                     })
+                    ->where('slots', '>', 0)
                     ->get()
                     ->map(function ($institution) {
                         return [
@@ -71,6 +73,7 @@ class StatusController extends Controller
            // Get institutions that match the required_programs of the user for School and SchoolBSED
 $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student->program}%")
 ->whereNotIn('id', $matchingInstitutions->pluck('id')) // Exclude institutions already matched by program and skills
+->where('slots', '>', 0)
 ->get()
 ->map(function ($institution) {
     return [
@@ -105,7 +108,7 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
 
             $student->recommended_institutions = $recommendedInstitutions;
 
-            if ($student->choosen_institution != 0) {
+            if ($student->choosen_institution != 0 && $student->in_campus == 0 && $student->is_off_campus == 0 && $student->applications == 1 && $student->student_shift == 'First') {
                 if ($student->program == 'BSED') {
                     $institution = Schoolbsed::findOrFail($student->choosen_institution);
                 } else {
@@ -116,7 +119,33 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
                     'student' => $student,
                     'institution' => $institution,
                 ]);
-            } elseif ($student->is_off_campus == 1) {
+            }  elseif ($student->choosen_institution != 0 && $student->in_campus == 1 && $student->is_off_campus == 1 && $student->student_shift == 'Second') {
+                if ($student->program == 'BSED') {
+                    $institution = Schoolbsed::findOrFail($student->choosen_institution);
+                } else {
+                    $institution = School::findOrFail($student->choosen_institution);
+                }
+                $institution->school_logo = asset('storage/'. $institution->school_logo);
+                return Inertia::render('Student/StatusRecommended', [
+                    'student' => $student,
+                    'institution' => $institution,
+                ]);
+            }elseif ($student->is_off_campus == 1 && $student->in_campus == 1 && $student->student_shift == 'Second') {
+               
+
+                if ($student->program == 'BSED' || $student->program == 'BSED English' || $student->program == 'BSED Filipino' || $student->program == 'BSED Mathematics' || $student->program == 'BSED Science' || $student->program == 'BSED Social Studies') {
+                    $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatchbsed);
+                } else {
+                    $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+                }
+                $student->recommended_institutions = $recommendedInstitutions;
+                return Inertia::render('Student/StatusChooseRecommendation', [
+                    'student' => $student,
+                    
+                ]);
+                
+                $student->recommended_institutions = $recommendedInstitutions;
+            }elseif ($student->is_off_campus == 0 && $student->in_campus == 0 && $student->applications == 1 && $student->student_shift == 'First') {
                
 
                 if ($student->program == 'BSED' || $student->program == 'BSED English' || $student->program == 'BSED Filipino' || $student->program == 'BSED Mathematics' || $student->program == 'BSED Science' || $student->program == 'BSED Social Studies') {
@@ -215,16 +244,23 @@ $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch)
      */
     public function update(Request $request, $studentId, $institutionId)
 {
-   $student = User::find($studentId);
-   $institution = School::find($institutionId);
+    $student = User::find($studentId);
+    $institution = School::find($institutionId);
 
-   if ($student && $institution) {
-       $student->choosen_institution = $institution->id; // Update the choosen_institution field with the institution ID
-       $student->save();
-   }
+    if ($student && $institution) {
+        // Check if the school has available slots
+        if ($institution->slots > 0) {
+            // Decrement the slots and save the changes
+            $institution->decrement('slots');
+            $institution->save();
+        }
 
-   return to_route('status.index');
+        // Update the chosen_institution field
+        $student->choosen_institution = $institution->id;
+        $student->save();
+    }
 
+    return redirect()->route('status.index');
 }
 
     /**

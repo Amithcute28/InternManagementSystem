@@ -437,7 +437,7 @@ const submit = () => {
           <!--Header End-->
         </div>
           <!-- Modal Content-->
-           <div class="bg-white pb-10 px-10 rounded-xl shadow-xl mt-16">
+           <div class="bg-white pb-10 px-10 mt-16">
       <div
         class="flex items-center justify-between space-x-2 ml-3 font-semibold text-gray-900 leading-8"
       >

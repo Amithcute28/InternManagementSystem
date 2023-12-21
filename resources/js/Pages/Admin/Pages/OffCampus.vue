@@ -239,12 +239,7 @@ function openModalRecommend(student) {
                 class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
                 >MISSING</a
               ></TableDataCell>
-                            <TableDataCell>
-                              <!-- <TableDataCell> <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell> -->
-                             <!-- <div class="flex items-center">
-                                <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Deployed
-                             </div> -->
-                            </TableDataCell>
+                             <TableDataCell>{{ student.choosen_institution }}</TableDataCell>
                             <TableDataCell class="space-x-4">
                                 <Link :href="route('offcampus.show', student.id)"  class="text-green-400 hover:text-green-600">View</Link>
                                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->

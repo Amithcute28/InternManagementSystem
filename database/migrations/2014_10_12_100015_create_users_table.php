@@ -18,7 +18,12 @@ return new class extends Migration
             $table->string('password');
             $table->string('full_name');
             $table->string('academic_performance')->nullable();
-            $table->string('program')->nullable();
+            
+            // Change the 'program' column to use the json type
+            $table->string('program')->nullable(); 
+            $table->string('school_name')->nullable(); 
+            $table->string('school_code')->nullable()->unique();
+            $table->string('ste_shift')->nullable();  
             $table->string('skills')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -33,12 +38,17 @@ return new class extends Migration
             $table->string('barangay')->nullable();
             $table->string('guardian_name')->nullable();
             $table->string('guardian_contact')->nullable();
+            $table->string('student_school_name')->nullable();
+            $table->string('student_school_code')->nullable();
+            $table->string('student_shift')->nullable();
+            $table->boolean('is_ste')->default(0);
             $table->boolean('is_admin')->default(0);
             $table->boolean('approved')->default(false);
             $table->boolean('new_intern')->default(false);
             $table->boolean('choosen_institution')->default(false);
             $table->rememberToken();
             $table->timestamps();
+            $table->boolean('applications')->default(false);
         });
     }
 

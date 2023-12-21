@@ -12,10 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('in_campus')->default(false);
-            $table->boolean('is_off_campus')->default(false);
             $table->boolean('status')->default(false);
-            $table->boolean('choose_institution')->default(false);
+           
         });
     }
 
@@ -24,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     //
+        // });
     }
 };

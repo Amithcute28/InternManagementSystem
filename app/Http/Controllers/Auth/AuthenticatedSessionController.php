@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
@@ -41,6 +41,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         } elseif ($user->is_admin && $user->approved && $user->program == 'BSED') {
             return redirect('/admindashbsed');
+        }elseif ($user->approved && $user->is_ste) {
+            return redirect('/ste-dashboard');
         } elseif ($user->approved) {
             return redirect('/user');
         } else {
@@ -50,6 +52,7 @@ class AuthenticatedSessionController extends Controller
         }
     }
 
+    
 
     /**
      * Destroy an authenticated session.

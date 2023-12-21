@@ -16,6 +16,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\DB;
+use App\Models\EmployeeShift;
+use Spatie\Permission\Models\Role;
 
 // use App\Http\Resources\PermissionResource;
 // use App\Http\Resources\RoleResource;
@@ -278,6 +280,12 @@ class StudentsControllerBSED extends Controller
 
         ])->assignRole('user');
 
+        EmployeeShift::create([
+            'employee_id' => $user->id,
+            'shift_id' => 1,
+            'start_date' => now()->format('Y-m-d'),
+            'end_date' => null,
+        ]);
 
         // $userId = $user->id;
         // $eslip = '';

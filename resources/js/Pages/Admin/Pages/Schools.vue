@@ -136,7 +136,7 @@ const submitEdit = () => {
             <ReusableCard v-for="school in schools" :key="school.id">
               <img :src="school.school_logo" class="w-auto h-24 rounded-lg" />
               <div>
-                <p class="font-semibold text-base">{{ school.name }}</p>
+                <p class="font-semibold text-base">{{ school.name }} - {{ school.id }}</p>
                 <p class="font-semibold text-sm text-gray-400 mb-2">
                   {{ school.address }}
                 </p>
@@ -618,6 +618,26 @@ const submitEdit = () => {
                 name="schoolAddress"
                 id="skills"
                 placeholder="Skills"
+                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              />
+            </div>
+          </div>
+
+           <div class="grid grid-cols-2 gap-5">
+    
+            <div class="col-span-1 mb-5">
+              <label
+                for="schoolName"
+                class="mb-3 block text-base font-medium text-[#07074D]"
+              >
+                Slots
+              </label>
+              <input
+                type="text"
+                v-model="editForm.slots"
+                name="slots"
+                id="slots"
+                placeholder="slots"
                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>

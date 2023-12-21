@@ -3,6 +3,11 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\StudentCalendarController;
+use App\Http\Controllers\STEController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\UserStudentsController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\StatusController;
@@ -14,6 +19,7 @@ use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\SchoolsDeleteController;
 use App\Http\Controllers\CoordinatorsController;
 use App\Http\Controllers\OffCampusController;
+use App\Http\Controllers\InCampusController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
@@ -84,7 +90,20 @@ Route::get('/', function () {
 //student dashboard
 Route::resource('/application', ApplicationController::class);
 Route::resource('/status', StatusController::class);
+
+Route::resource('/student-calendar', StudentCalendarController::class);
+Route::get('/calendar-items', [CalendarController::class, 'calendarIndex'])->name('calendar.calendarIndex');
 Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
+Route::get('/my-attendance', [AttendanceController::class, 'attendanceDashboard'])->middleware('auth')->name('attendance.dashboard');
+Route::resource('/attendance', AttendanceController::class);
+Route::resource('/requests', RequestController::class)->only(['index', 'show', 'create', 'store', 'destroy']);
+Route::resource('/calendar', CalendarController::class);
+Route::get('/requests-admin', [RequestController::class, 'adminRequestsIndex'])->name('requests-admin.requestsIndex');
+Route::put('/requests-update/{id}', [RequestController::class, 'update'])->name('requests-update.update');
+Route::get('/request-show-student/{id}', [RequestController::class, 'showStudent'])->name('requests-show-student.show');
+
+Route::post('attendance/signin', [AttendanceController::class, 'dashboardSignInAttendance'])->name('attendance.dashboardSignIn');
+Route::post('attendance/signoff', [AttendanceController::class, 'dashboardSignOffAttendance'])->name('attendance.dashboardSignOff');
 
 
 //admin dashboard BEED
@@ -108,6 +127,8 @@ Route::put('/recommender/{id}', [RecommenderController::class, 'update'])->name(
 Route::put('/newstudentsupdateApprove/{id}', [NewStudentsController::class, 'updateApproved'])->name('newstudents.updateApproved');
 Route::put('/applications/{id}', [ApplicationController::class, 'updateOffcampus'])->name('applications.updateOffcampus');
 Route::put('/applicationsUpdate/{id}', [ApplicationController::class, 'updateIncampus'])->name('applications.updateIncampus');
+Route::put('/applicationsUpdateDone/{id}', [ApplicationController::class, 'updateIncampusDone'])->name('applications.updateIncampusDone');
+
 Route::put('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
 Route::delete('/schools/{id}', [SchoolsController::class, 'schoolsDestroy'])->name('schools.schoolsDestroy');
 Route::put('/schools/{id}', [SchoolsController::class, 'update'])->name('schools.update');
@@ -141,8 +162,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('in-campus-application-edit', [ApplicationController::class, 'edit'])->name('applications.edit');
     Route::DELETE('in-campus-application-destroy', [ApplicationController::class, 'destroy'])->name('applications.destroy');
     Route::delete('in-campus-application/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
+    
+    Route::get('attendances/{date}', [AttendanceController::class, 'dayShow'])->name('attendances.show');
+    Route::delete('attendance', [AttendanceController::class, 'dayDelete'])->name('attendance.destroy');
+    Route::get('/attendance-list', [AttendanceController::class, 'attendanceList'])->name('attendance-list.attendanceList');
+
+    Route::resource('/first-shift', InCampusController::class);
 });
 
+
+Route::resource('/ste-dashboard', SteController::class);
+Route::get('/admin-stes', [SteController::class, 'adminStes'])->name('admin-stes.adminStes');
+Route::get('/ste-interns', [SteController::class, 'interns'])->name('stes-interns.interns');
+Route::get('/ste-attendance', [SteController::class, 'attendanceSte'])->name('ste-attendance.attendanceSte');
+Route::get('ste-attendances/{date}', [SteController::class, 'dayShow'])->name('ste-attendances.show');
+Route::post('/ste-store', [SteController::class, 'storeSte'])->name('ste-store.storeSte');
+Route::delete('ste', [SteController::class, 'dayDelete'])->name('ste.destroy');
 
 
 

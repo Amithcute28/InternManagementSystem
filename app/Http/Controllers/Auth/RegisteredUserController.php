@@ -19,6 +19,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\EmployeeShift;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -50,7 +52,20 @@ class RegisteredUserController extends Controller
 
         ])->assignRole('user');
 
-        $user->sendEmailVerificationNotification();
+      
+
+            EmployeeShift::create([
+                'employee_id' => $user->id,
+                'shift_id' => 1,
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => null,
+            ]);
+
+           
+        
+        
+
+        // $user->sendEmailVerificationNotification();
 
 
         Auth::login($user);

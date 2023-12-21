@@ -390,9 +390,10 @@ const getFileUrl = (fileName) => {
 
 
 <template>
+<div>
   <Head title="Application" />
-
   <UserLayout>
+    
     <div class="py-4 mt-16">
       <form
         v-if="!isFormLoading"
@@ -1594,4 +1595,5 @@ const getFileUrl = (fileName) => {
       </form>
     </div>
   </UserLayout>
+  </div>
 </template>
