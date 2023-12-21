@@ -548,14 +548,14 @@ class ApplicationController extends Controller
     {
         $student = User::find($id);
 
-        
+
         $student->applications = 1;
         $student->save();
 
 
         // Add any additional logic or response handling as needed
 
-        return redirect()->route('applications.inCampusApplication');
+        return redirect()->route('application.index');
     }
 
     public function updateIncampusDone($id)

@@ -44,19 +44,17 @@ const form = useForm({
   relationship: props.user?.relationship,
   nationality: props.user?.nationality,
   contact_number: props.user?.contact_number,
-  home_address: props.user?.home_address,
   zip_code: props.user?.zip_code,
   guardian_name: props.user?.guardian_name,
   guardian_contact: props.user?.guardian_contact,
-        student_school_name: props.user?.student_school_name,
-        student_school_code: props.user?.student_school_code,
-        student_shift: props.user?.student_shift,
+  student_school_name: props.user?.student_school_name,
+  student_school_code: props.user?.student_school_code,
+  student_shift: props.user?.student_shift,
   profile: null,
 });
 
 const onFileChange = (e) => {
   form.profile = e.target.files[0];
-
 };
 
 const submit = () => {
@@ -65,7 +63,7 @@ const submit = () => {
 
   // Append all form fields except the profile picture.
   for (const [key, value] of Object.entries(form)) {
-    if (key !== 'profile') {
+    if (key !== "profile") {
       formData.append(key, value);
     }
   }
@@ -136,24 +134,6 @@ const submit = () => {
                   >Program</label
                 >
                 <InputError class="mt-2" :message="form.errors.program" />
-              </div>
-              <div class="relative z-0 w-full mb-6 group">
-                <input
-                  type="text"
-                  id="year_level"
-                  class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  v-model="form.year_level"
-                  required
-                  autofocus
-                  autocomplete="year_level"
-                />
-                <label
-                  for="year_level"
-                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                  >Year Level</label
-                >
-                <InputError class="mt-2" :message="form.errors.year_level" />
               </div>
             </div>
 
@@ -318,25 +298,6 @@ const submit = () => {
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
-                id="home_address"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.home_address"
-                required
-                autofocus
-                autocomplete="home_address"
-              />
-              <label
-                for="home_address"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Home Address</label
-              >
-              <InputError class="mt-2" :message="form.errors.home_address" />
-            </div>
-
-            <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
                 id="guardian_name"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
@@ -375,52 +336,63 @@ const submit = () => {
               />
             </div>
 
-<div class="relative z-0 w-full mb-6 group">
-    <input 
-    type="text" 
-    id="student_school_name" 
-    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-    placeholder=" "
-    v-model="form.student_school_name"
-    required
-    autofocus
-    autocomplete="student_school_name" />
-    <label 
-    for="student_school_name" 
-    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">School Name</label>
-    <InputError class="mt-2" :message="form.errors.student_school_name" />
-    </div>
-
-    <div class="grid md:grid-cols-2 md:gap-4">
-    <div class="relative z-0 w-full mb-6 group">
-        <input 
-        type="text" 
-        id="student_school_code" 
-        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-        placeholder=" "
-        v-model="form.student_school_code"
-        required
-        autofocus
-        autocomplete="student_school_code" />
-        <label 
-        for="student_school_code" 
-        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Code</label>
-        <InputError class="mt-2" :message="form.errors.student_school_code" />
-    </div>
-     <div class="relative z-0 w-full mb-6 group">
-              <select
-                id="shift"
-                v-model="form.student_shift"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <div class="relative z-0 w-full mb-6 group">
+              <input
+                type="text"
+                id="student_school_name"
+                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                v-model="form.student_school_name"
+                required
+                autofocus
+                autocomplete="student_school_name"
+              />
+              <label
+                for="student_school_name"
+                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                >School Name</label
               >
-                <option value="" disabled hidden>Shift</option>
-                <option>First</option>
-                <option>Second</option>
-              </select>
-              <InputError class="mt-2" :message="form.errors.student_shift" />
+              <InputError
+                class="mt-2"
+                :message="form.errors.student_school_name"
+              />
             </div>
-  </div>
 
+            <div class="grid md:grid-cols-2 md:gap-4">
+              <div class="relative z-0 w-full mb-6 group">
+                <input
+                  type="text"
+                  id="student_school_code"
+                  class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  v-model="form.student_school_code"
+                  required
+                  autofocus
+                  autocomplete="student_school_code"
+                />
+                <label
+                  for="student_school_code"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >Code</label
+                >
+                <InputError
+                  class="mt-2"
+                  :message="form.errors.student_school_code"
+                />
+              </div>
+              <div class="relative z-0 w-full mb-6 group">
+                <select
+                  id="shift"
+                  v-model="form.student_shift"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="" disabled hidden>Shift</option>
+                  <option>First</option>
+                  <option>Second</option>
+                </select>
+                <InputError class="mt-2" :message="form.errors.student_shift" />
+              </div>
+            </div>
           </div>
           <input type="file" @change="onFileChange" accept="image/*" />
           <button
