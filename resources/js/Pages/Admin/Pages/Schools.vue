@@ -7,6 +7,7 @@ import Arrow from "@/Components/Arrow.vue";
 import { Head } from "@inertiajs/vue3";
 import { Link, useForm, router } from "@inertiajs/vue3";
 import { ref } from "vue";
+import Swal from "sweetalert2";
 
 const props = defineProps({
   schools: Array,
@@ -35,27 +36,45 @@ const form = useForm({
 });
 
 const submit = () => {
-  let formData = new FormData();
-  formData.append("schoolName", form.schoolName);
-  formData.append("schoolAddress", form.schoolAddress);
-  formData.append("schoolLogo", form.schoolLogo);
-  formData.append("required_programs", form.required_programs);
-  formData.append("skills", form.skills);
-  formData.append("slots", form.slots);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to submit this form?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, submit it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let formData = new FormData();
+      formData.append("schoolName", form.schoolName);
+      formData.append("schoolAddress", form.schoolAddress);
+      formData.append("schoolLogo", form.schoolLogo);
+      formData.append("required_programs", form.required_programs);
+      formData.append("skills", form.skills);
+      formData.append("slots", form.slots);
 
-  form.post(route("schools.store"), formData, {
-    onFinish: () =>
-      form.reset(
-        "schoolName",
-        "schoolAddress",
-        "schoolLogo",
-        "required_programs",
-        "skills",
-        "slots"
-      ),
+      form.post(route("schools.store"), formData, {
+        onFinish: () => {
+          form.reset(
+            "schoolName",
+            "schoolAddress",
+            "schoolLogo",
+            "required_programs",
+            "skills",
+            "slots"
+          );
+          Swal.fire({
+            title: "Success!",
+            text: "Your form has been submitted.",
+            icon: "success",
+          });
+        },
+      });
+
+      modalActive.value = false;
+    }
   });
-
-  modalActive.value = false;
 };
 
 const selectedInstitution = ref(null);
@@ -66,7 +85,6 @@ function openModal(school) {
 }
 
 const schoolEdit = ref(null);
-
 function openModalEdit(school) {
   editForm.id = school.id;
   editForm.schoolName = school.name;
@@ -78,9 +96,44 @@ function openModalEdit(school) {
 
   console.log("Button clicked!", school);
   schoolEdit.value = school;
-  document.getElementById("myModal").close();
 
+  // Show the 'myModalEdit' modal
   document.getElementById("myModalEdit").showModal();
+
+  // Open SweetAlert confirmation dialog after showing 'myModalEdit'
+  Swal.fire({
+    title: "Update School",
+    text: "Are you sure you want to update this school?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, update it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Assuming an updateSchool function that sends the edited form data to the server for update
+      updateSchool(
+        editForm.id,
+        editForm.schoolName,
+        editForm.schoolAddress,
+        editForm.schoolLogo,
+        editForm.required_programs,
+        editForm.skills,
+        editForm.slots
+      )
+        .then(() => {
+          // Show success message after successful update
+          Swal.fire("Updated!", "The school has been updated.", "success");
+        })
+        .catch(() => {
+          // Show error message if update fails
+          Swal.fire("Error!", "Failed to update the school.", "error");
+        });
+    } else {
+      // Optionally handle the case where the user cancels the update
+      console.log("Update canceled");
+    }
+  });
 }
 
 const editForm = useForm({
@@ -112,6 +165,23 @@ const submitEdit = () => {
     console.log("hello")
   );
 };
+
+const deleteAction = (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to delete. This action cannot be undone. Are you sure you want to delete?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // If confirmed, proceed with the delete action
+      form.delete(route("schools.destroy", id));
+    }
+  });
+};
 </script>
 
 
@@ -136,7 +206,9 @@ const submitEdit = () => {
             <ReusableCard v-for="school in schools" :key="school.id">
               <img :src="school.school_logo" class="w-auto h-24 rounded-lg" />
               <div>
-                <p class="font-semibold text-base">{{ school.name }} - {{ school.id }}</p>
+                <p class="font-semibold text-base">
+                  {{ school.name }} - {{ school.id }}
+                </p>
                 <p class="font-semibold text-sm text-gray-400 mb-2">
                   {{ school.address }}
                 </p>
@@ -157,13 +229,12 @@ const submitEdit = () => {
                   Edit HTE
                 </button>
 
-                           <Link
-                              
-                            class="px-2 py-2.5 text-white bg-red-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-3"
-                            >Delete</Link>
+                <Link
+                  @click="deleteAction(school.id)"
+                  class="px-2 py-2.5 text-white bg-red-500 hover:bg-indigo-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-3"
+                  >Delete</Link
+                >
 
-                             
-                           
                 <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
               </div>
             </ReusableCard>
@@ -270,6 +341,7 @@ const submitEdit = () => {
                   <div class="mb-8">
                     <input
                       type="file"
+                      accept=".jpg,.jpeg,.png"
                       @input="form.schoolLogo = $event.target.files[0]"
                       name="schoolLogo"
                       id="schoolLogo"
@@ -623,8 +695,7 @@ const submitEdit = () => {
             </div>
           </div>
 
-           <div class="grid grid-cols-2 gap-5">
-    
+          <div class="grid grid-cols-2 gap-5">
             <div class="col-span-1 mb-5">
               <label
                 for="schoolName"
@@ -651,6 +722,7 @@ const submitEdit = () => {
             <div class="mb-8">
               <input
                 type="file"
+                accept=".jpg,.jpeg,.png"
                 @input="editForm.schoolLogo = $event.target.files[0]"
                 name="schoolLogo"
                 id="schoolLogo"
@@ -766,12 +838,12 @@ const submitEdit = () => {
                 class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12"
               >
                 <div class="map-container-2 w-full">
-                  <iframe
+                  <!-- <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1956.657715528662!2d125.00004053842936!3d11.238190528016471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3308772c87c4c367%3A0xa5e5c080ec6a88ef!2sLeyte%20Normal%20University!5e0!3m2!1sen!2sph!4v1683656352509!5m2!1sen!2sph"
                     class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg"
                     frameborder="0"
                     allowfullscreen
-                  ></iframe>
+                  ></iframe> -->
                 </div>
               </div>
               <div

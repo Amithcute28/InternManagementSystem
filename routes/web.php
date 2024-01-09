@@ -134,7 +134,7 @@ Route::put('/applicationsUpdate/{id}', [ApplicationController::class, 'updateInc
 Route::put('/applicationsUpdateDone/{id}', [ApplicationController::class, 'updateIncampusDone'])->name('applications.updateIncampusDone');
 
 Route::put('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
-Route::delete('/schools/{id}', [SchoolsController::class, 'schoolsDestroy'])->name('schools.schoolsDestroy');
+Route::delete('/schools/{id}', [SchoolsController::class, 'destroy'])->name('schools.destroy');
 Route::put('/schools/{id}', [SchoolsController::class, 'update'])->name('schools.update');
 Route::get('/schools/{id}', [SchoolsController::class, 'edit'])->name('schools.edit');
 
@@ -166,7 +166,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('in-campus-application-edit', [ApplicationController::class, 'edit'])->name('applications.edit');
     Route::DELETE('in-campus-application-destroy', [ApplicationController::class, 'destroy'])->name('applications.destroy');
     Route::delete('in-campus-application/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
-    
+
     Route::get('attendances/{date}', [AttendanceController::class, 'dayShow'])->name('attendances.show');
     Route::delete('attendance', [AttendanceController::class, 'dayDelete'])->name('attendance.destroy');
     Route::get('/attendance-list', [AttendanceController::class, 'attendanceList'])->name('attendance-list.attendanceList');
@@ -196,11 +196,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/user', [UserStudentsController::class, 'showProfile'])->name('user.showProfile');
 
 
-   
+
     Route::get('/cities/{province}', [UserStudentsController::class, 'getCities']);
     Route::get('/zipcodes/{province}/{city}', [UserStudentsController::class, 'getZipcode']);
     Route::get('/getProvinceAndCity/{zipCode}', [UserStudentsController::class, 'getProvinceAndCity']);
-    
 });
 
 Route::post('/user', [UserStudentsController::class, 'updateNewIntern'])->name('user.updateNewIntern');

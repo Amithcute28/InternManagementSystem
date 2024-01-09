@@ -41,10 +41,9 @@ class SteController extends Controller
      */
     public function index(): Response
     {
-       
-    
+
+
         return Inertia::render('STE/steDashboard');
-           
     }
 
     public function adminStes()
@@ -118,7 +117,7 @@ class SteController extends Controller
         ]);
     }
 
-    
+
     public function interns()
     {
         // in-campus logic goes herea
@@ -127,7 +126,7 @@ class SteController extends Controller
 
         $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
             ->where('new_intern', 1)
-            ->where('in_campus', 1)
+            ->where('in_campus', 0)
             ->where('is_off_campus', 0)
             ->where('student_school_code', $userSchoolCode) // Compare student_school_code with the school_code of the logged-in user
             ->where('student_shift', $userShift)
@@ -186,11 +185,11 @@ class SteController extends Controller
         })->values();
 
         $interns = User::where('approved', 1)->where('is_admin', 0)
-        ->where('new_intern', 1)
-        ->where('in_campus', 0)
-        ->where('is_off_campus', 0)
-        ->where('student_school_code', $userSchoolCode) // Compare student_school_code with the school_code of the logged-in user
-        ->where('student_shift', $userShift)->get();
+            ->where('new_intern', 1)
+            ->where('in_campus', 0)
+            ->where('is_off_campus', 0)
+            ->where('student_school_code', $userSchoolCode) // Compare student_school_code with the school_code of the logged-in user
+            ->where('student_shift', $userShift)->get();
         $totalInterns = $interns->count();
 
         return Inertia::render('STE/interns', [
@@ -198,85 +197,88 @@ class SteController extends Controller
             'offCampus' => $paginateData,
             'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
-            'totalInterns' => $totalInterns,    
+            'totalInterns' => $totalInterns,
         ]);
     }
 
     public function attendanceSte(Request $request)
-{
-    $request->validate([
-        'term' => 'nullable|date_format:Y-m-d',
-    ]);
+    {
+        $request->validate([
+            'term' => 'nullable|date_format:Y-m-d',
+        ]);
 
-    $dateParam = $request->input('term', '');
+        $dateParam = $request->input('term', '');
 
-    if ($dateParam) {
-        $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
-        if ($date->isAfter(Carbon::today())) {
-            return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
+        if ($dateParam) {
+            $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
+            if ($date->isAfter(Carbon::today())) {
+                return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
+            }
+
+            $date = $date->toDateString();
+        } else {
+            $date = '';
         }
 
-        $date = $date->toDateString();
-    } else {
-        $date = '';
+        $userSchoolCode = auth()->user()->school_code;
+        $userShift = auth()->user()->ste_shift;
+
+        $attendanceList = Attendance::join('users', 'attendances.student_id', '=', 'users.id')
+            ->where('users.student_school_code', '=', $userSchoolCode)
+            ->where('users.student_shift', '=', $userShift)
+            ->where('in_campus', 0)
+            ->where('is_off_campus', 0)
+            ->where('applications', 1)
+            ->select(
+                'attendances.date',
+                DB::raw('COUNT(CASE WHEN attendances.status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
+                DB::raw('COUNT(CASE WHEN attendances.status = \'on_time\' THEN 1 END) as on_time_count'),
+                DB::raw('COUNT(CASE WHEN attendances.status = \'late\' THEN 1 END) as late_count'),
+                DB::raw(
+                    'COUNT(CASE WHEN attendances.status = \'missed\' THEN 1 END) as missed_count'
+                )
+            )
+            ->groupBy('attendances.date')
+            ->orderByDesc('attendances.date');
+
+        if ($date) {
+            $attendanceList->where('attendances.date', '=', $date);
+        }
+
+        return Inertia::render('STE/attendanceSte', [
+            "attendanceList" => $attendanceList->paginate(config('constants.data.pagination_count')),
+            "dateParam" => $date,
+        ]);
     }
 
-    $userSchoolCode = auth()->user()->school_code;
-    $userShift = auth()->user()->ste_shift;
 
-    $attendanceList = Attendance::join('users', 'attendances.student_id', '=', 'users.id')
-        ->where('users.student_school_code', '=', $userSchoolCode)
-        ->where('users.student_shift', '=', $userShift)
-        ->where('in_campus', 0)
-        ->where('is_off_campus', 0)
-        ->where('applications', 1)
-        ->select('attendances.date',
-            DB::raw('COUNT(CASE WHEN attendances.status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
-            DB::raw('COUNT(CASE WHEN attendances.status = \'on_time\' THEN 1 END) as on_time_count'),
-            DB::raw('COUNT(CASE WHEN attendances.status = \'late\' THEN 1 END) as late_count'),
-            DB::raw('COUNT(CASE WHEN attendances.status = \'missed\' THEN 1 END) as missed_count'
-        ))
-        ->groupBy('attendances.date')
-        ->orderByDesc('attendances.date');
-
-    if ($date) {
-        $attendanceList->where('attendances.date', '=', $date);
-    }
-
-    return Inertia::render('STE/attendanceSte', [
-        "attendanceList" => $attendanceList->paginate(config('constants.data.pagination_count')),
-        "dateParam" => $date,
-    ]);
-}
-
-
-public function dayShow(string $day)
-{
-    $date = $this->validationServices->validateDayAttendanceDateParameter($day);
-    if (!is_string($date)) // ERROR
-        return $date; // Error Message
+    public function dayShow(string $day)
+    {
+        $date = $this->validationServices->validateDayAttendanceDateParameter($day);
+        if (!is_string($date)) // ERROR
+            return $date; // Error Message
 
         $userSchoolCode = auth()->user()->school_code;
         $userShift = auth()->user()->ste_shift;
 
         $attendanceList = Attendance::where('date', $date)
-        ->join('users', 'attendances.student_id', '=', 'users.id')
-        ->where('users.student_school_code', '=', $userSchoolCode)
-        ->where('users.student_shift', '=', $userShift)
-        ->select(['attendances.student_id', 'users.full_name', 'attendances.status', 'attendances.sign_in_time', 'attendances.sign_off_time', 'attendances.notes'])
-        ->orderByDesc('date')->paginate(config('constants.data.pagination_count'));
+            ->join('users', 'attendances.student_id', '=', 'users.id')
+            ->where('users.student_school_code', '=', $userSchoolCode)
+            ->where('users.student_shift', '=', $userShift)
+            ->select(['attendances.student_id', 'users.full_name', 'attendances.status', 'attendances.sign_in_time', 'attendances.sign_off_time', 'attendances.notes'])
+            ->orderByDesc('date')->paginate(config('constants.data.pagination_count'));
 
-    return Inertia::render('STE/AttendanceDayViewSte', [
-        "attendanceList" => $attendanceList,    
-        "day" => $date
-    ]);
-}
+        return Inertia::render('STE/AttendanceDayViewSte', [
+            "attendanceList" => $attendanceList,
+            "day" => $date
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
-   public function create(Request $request)
+    public function create(Request $request)
     {
-        
+
         if ($request->term) {
             $request->validate([
                 'term' => 'required|date_format:Y-m-d',
@@ -294,26 +296,26 @@ public function dayShow(string $day)
         $userShift = auth()->user()->ste_shift;
 
         $attendanceList = Attendance::where('date', $date)
-        ->join('users', 'attendances.student_id', '=', 'users.id')
-        ->where('users.student_school_code', '=', $userSchoolCode)
-        ->where('users.student_shift', '=', $userShift)
-        ->select(['attendances.student_id', 'users.full_name', 'attendances.status', 'attendances.sign_in_time', 'attendances.sign_off_time', 'attendances.notes'])
-        ->orderByDesc('date');
+            ->join('users', 'attendances.student_id', '=', 'users.id')
+            ->where('users.student_school_code', '=', $userSchoolCode)
+            ->where('users.student_shift', '=', $userShift)
+            ->select(['attendances.student_id', 'users.full_name', 'attendances.status', 'attendances.sign_in_time', 'attendances.sign_off_time', 'attendances.notes'])
+            ->orderByDesc('date');
 
-                
-        
+
+
         $attendable = !$this->commonServices->isDayOff($date);
-        
-        
+
+
         return Inertia::render('STE/AttendanceCreateSte', [
             "dateParam" => $request->term ?? Carbon::today()->toDateString(),
             "employees" => User::select(['id', 'full_name', 'student_id'])
-            ->where('users.student_school_code', '=', $userSchoolCode)
-        ->where('users.student_shift', '=', $userShift)
-        ->orderBy('id')->get(),
+                ->where('users.student_school_code', '=', $userSchoolCode)
+                ->where('users.student_shift', '=', $userShift)
+                ->orderBy('id')->get(),
             "attendances" => $attendanceList->get(),
             "attendable" => $attendable,
-        ]); 
+        ]);
     }
 
     public function storeSte(Request $request)
@@ -337,14 +339,14 @@ public function dayShow(string $day)
     {
 
         $request->validate([
-        'student_id' => 'required|string|max:255',
-        'ste_shift' => 'required|string|max:255',
-        'school_name' => 'required|string|max:255',
-        'school_code' => 'required|string|max:255',
-        'full_name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'contact_number' => 'required|string|max:255',
-        'password' => ['required', 'confirmed', Password::min(8)
+            'student_id' => 'required|string|max:255',
+            'ste_shift' => 'required|string|max:255',
+            'school_name' => 'required|string|max:255',
+            'school_code' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'contact_number' => 'required|string|max:255',
+            'password' => ['required', 'confirmed', Password::min(8)
                 ->letters()
                 ->mixedCase()
                 ->numbers()],
@@ -361,7 +363,7 @@ public function dayShow(string $day)
             'password' => Hash::make($request->password),
             'is_ste' => 1,
             'approved' => 1,
-            
+
 
 
         ])->assignRole('user');
@@ -390,7 +392,7 @@ public function dayShow(string $day)
         //
         $student = User::find($id);
 
-        $student->off_campus = 1;
+        $student->in_campus = 1;
         $student->save();
 
 

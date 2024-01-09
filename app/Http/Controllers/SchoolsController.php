@@ -17,34 +17,34 @@ class SchoolsController extends Controller
      * Display a listing of the resource.
      */
 
-     public function index(): Response
-{
-    $user = auth()->user(); // Assuming you're using Laravel's built-in authentication
+    public function index(): Response
+    {
+        $user = auth()->user(); // Assuming you're using Laravel's built-in authentication
 
-    $schools = School::all()->map(function ($school) use ($user) {
-        $deductSlot = $user->choosen_institution == $school->id 
-                        && $user->choosen_school_id == $school->id;
+        $schools = School::all()->map(function ($school) use ($user) {
+            $deductSlot = $user->choosen_institution == $school->id
+                && $user->choosen_school_id == $school->id;
 
-        if ($deductSlot && $school->slots > 0) {
-            $school->decrement('slots');
-            $school->save(); // Save the updated slot count back to the database
-        }
+            if ($deductSlot && $school->slots > 0) {
+                $school->decrement('slots');
+                $school->save(); // Save the updated slot count back to the database
+            }
 
-        return [
-            'id' => $school->id,
-            'name' => $school->name,
-            'address' => $school->address,
-            'school_logo' => asset('storage/' . $school->school_logo),
-            'required_programs' => $school->required_programs,
-            'skills' => $school->skills,
-            'slots' => $school->slots,
-        ];
-    });
+            return [
+                'id' => $school->id,
+                'name' => $school->name,
+                'address' => $school->address,
+                'school_logo' => asset('storage/' . $school->school_logo),
+                'required_programs' => $school->required_programs,
+                'skills' => $school->skills,
+                'slots' => $school->slots,
+            ];
+        });
 
-    return Inertia::render('Admin/Pages/Schools', [
-        'schools' => $schools,
-    ]);
-}
+        return Inertia::render('Admin/Pages/Schools', [
+            'schools' => $schools,
+        ]);
+    }
 
     public function show($id)
     {
@@ -117,7 +117,7 @@ class SchoolsController extends Controller
 
 
 
-    
+
     public function update(Request $request, $id)
     {
         try {
@@ -129,7 +129,7 @@ class SchoolsController extends Controller
                 'skills' => 'required|string|max:255',
                 'slots' => 'required|string|max:255',
             ]);
-    
+
             if ($request->hasFile('schoolLogo')) {
                 if ($school->school_logo) {
                     Storage::delete('public/' . $school->school_logo);
@@ -146,18 +146,20 @@ class SchoolsController extends Controller
                 'skills' => $request->skills,
                 'slots' => $request->slots,
             ]);
-    
+
             return redirect()->route('schools.index');
         } catch (\Exception $e) {
-            
+
             return redirect()->back()->with('error', 'Error updating school: ' . $e->getMessage());
         }
     }
 
 
-    
-    public function destroy(string $id)
+
+    public function destroy($id)
     {
-        //
+        $school = School::find($id);
+        $school->delete();
+        return to_route('schools.index');
     }
 }
