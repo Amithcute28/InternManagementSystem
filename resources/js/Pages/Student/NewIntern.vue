@@ -476,17 +476,7 @@ const removeImage = (field) => {
                 class="block text-sm font-medium leading-6 text-gray-900"
                 >Profile Picture</label
               >
-              <!-- <div class="mt-2">
-              <label>
-                <input
-                  id="profile"
-                  name="profile"
-                  type="file"
-                  @input="form.profile = $event.target.files[0]"
-                  class="text-sm text-grey-500 file:mr-5 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700"
-                /><br />
-              </label>
-            </div> -->
+           
               <div class="mt-4">
                 <label
                   for="profile"
