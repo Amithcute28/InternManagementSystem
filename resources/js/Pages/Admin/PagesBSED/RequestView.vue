@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
 import {Head, useForm} from '@inertiajs/vue3';
 import {ref} from "vue";
 import ReqTabs from "@/Components/Tabs/ReqTabs.vue";
@@ -27,36 +27,22 @@ const form = useForm({
     admin_response: '',
 });
 
-const submit = async () => {
-    const isConfirmed = await Swal.fire({
-        title: `Are you sure you want to ${message.value} this request?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel',
-    });
+const submit = () => {
+    const isConfirmed = window.confirm(`Are you sure you want to ${message.value} this request?`);
 
-    if (isConfirmed.value) {
-        const rejectionReason =
-            message.value === 'reject'
-                ? await Swal.fire({
-                      title: '(Optional) Provide a reason for rejecting this request:',
-                      input: 'text',
-                      inputPlaceholder: 'Reason...',
-                      showCancelButton: true,
-                  })
-                : '';
+    if (isConfirmed) {
+        const rejectionReason = message.value === 'reject' ? window.prompt('(Optional) Provide a reason for rejecting this request:') : '';
 
         // Update the form or perform other actions
-        form.admin_response = rejectionReason.value || '';
-        form.put(route('requests-update.update', { id: props.request.id }), {
+        form.admin_response = rejectionReason || '';
+        form.put(route('requests-update.updateBsed', { id: props.request.id }), {
             preserveScroll: true,
             onError: () => {
-                Swal.fire('Error Updating Request Status', '', 'error');
+                alert('Error Updating Request Status');
             },
             onSuccess: () => {
-                Swal.fire('Request Status Updated Successfully', '', 'success');
-            },
+                alert('Request Status Updated Successfully');
+            }
         });
     }
 };
@@ -68,7 +54,7 @@ const destroy = async () => {
     const confirmed = window.confirm("Are you sure? You won't be able to revert this!");
 
     if (confirmed) {
-        await form.delete(route('requests.destroy', { id: props.request.id }), {
+        await form.delete(route('requests-admin.destroyBsed', { id: props.request.id }), {
             preserveScroll: true,
             onError: () => {
                 alert('Error Deleting Request');
@@ -87,7 +73,7 @@ const destroy = async () => {
 
 <template>
     <Head :title="('Request Data')"/>
-    <AdminLayout>
+    <AdminLayoutBSED>
         <template #tabs>
             <ReqTabs />
         </template>
@@ -181,5 +167,5 @@ const destroy = async () => {
                 </Card>
             </div>
         </div>
-    </AdminLayout>
+    </AdminLayoutBSED>
 </template>

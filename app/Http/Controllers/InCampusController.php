@@ -145,7 +145,63 @@ class InCampusController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+        $student = User::findOrFail($id);
+
+        // Get institutions that match the user's program and skills
+        $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student->program}%")
+            ->where(function ($query) use ($student) {
+                $query->where(function ($innerQuery) use ($student) {
+                    $innerQuery->whereIn('skills', explode(',', $student->skills));
+                });
+            })
+            ->get()
+            ->map(function ($institution) {
+                return [
+                    'id' => $institution->id,
+                    'name' => $institution->name,
+                    'address' => $institution->address,
+                    'school_logo' => asset('storage/' . $institution->school_logo),
+                    'required_programs' => $institution->required_programs,
+                    'required_academic_performance' => $institution->required_academic_performance,
+                    'skills' => $institution->skills,
+                ];
+            });
+
+        // Get institutions that match the required_programs of the user
+        $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student->program}%")
+            ->whereNotIn('id', $matchingInstitutions->pluck('id')) // Exclude institutions already matched by program and skills
+            ->get()
+            ->map(function ($institution) {
+                return [
+                    'id' => $institution->id,
+                    'name' => $institution->name,
+                    'address' => $institution->address,
+                    'school_logo' => asset('storage/' . $institution->school_logo),
+                    'required_programs' => $institution->required_programs,
+                    'required_academic_performance' => $institution->required_academic_performance,
+                    'skills' => $institution->skills,
+                ];
+            });
+
+        $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+
+        $student->recommended_institutions = $recommendedInstitutions;
+
+
+
+        if ($student->choosen_institution != 0) {
+            $institution = School::findOrFail($student->choosen_institution);
+            $institution->school_logo = asset('storage/' . $institution->school_logo);
+            return Inertia::render('Admin/Pages/ViewOffCampusFirst', [
+                'student' => $student,
+                'institution' => $institution,
+            ]);
+        } else {
+            return Inertia::render('Admin/Pages/WaitingOffCampusFirst', [
+                'student' => $student,
+            ]);
+        }
     }
 
     /**

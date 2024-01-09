@@ -1,5 +1,5 @@
 <script setup>
- import UserLayout from '@/Layouts/UserLayout.vue';
+ import AdminLayout from '@/Layouts/AdminLayout.vue';
     import { Head } from '@inertiajs/vue3';
     import { Link} from "@inertiajs/vue3";
     import { defineProps, ref } from 'vue';
@@ -21,8 +21,17 @@
 <template>
     <Head title="Status" />
 
-    <UserLayout>
-           
+    <AdminLayout>
+        <div class="container mx-auto bg-white mt-16">
+           <Link :href="route('first-shift.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
+        <div class="md:flex no-wrap md:-mx-2 ">
+            <!-- Left Side -->
+            
+            <!-- Right Side -->
+            <div class="w-full mx-2 h-64">
+                <!-- Profile tab -->
+                <!-- About Section -->
+                <div class="bg-white p-3 rounded-xl shadow-md">
                    
                    
                    
@@ -31,11 +40,11 @@
    
     </div>
     <Head>
-      <title>Recommended Institutions for {{ student.full_name }}</title>
+      <title>Recommendeds Institutions for {{ student.full_name }}</title>
     </Head>
-    <div class="mt-16">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-10 bg-white border-b border-gray-200">
+        <div class="p-6 bg-white border-b border-gray-200">
           <h1 class="text-2xl font-bold mb-4">{{ student.full_name }}</h1>
           
           <div class="mb-4 grid md:grid-cols-2">
@@ -59,11 +68,11 @@
 
           <section class="text-gray-800">
   
-  <div class="block rounded-lg  bg-white">
+  <div class="block rounded-lg shadow-lg bg-white">
     <div class="flex flex-wrap">
       <div class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
         <div class="map-container-2 w-full">
-          <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1956.657715528662!2d125.00004053842936!3d11.238190528016471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3308772c87c4c367%3A0xa5e5c080ec6a88ef!2sLeyte%20Normal%20University!5e0!3m2!1sen!2sph!4v1683656352509!5m2!1sen!2sph" class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg" frameborder="0" allowfullscreen></iframe> -->
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1956.657715528662!2d125.00004053842936!3d11.238190528016471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3308772c87c4c367%3A0xa5e5c080ec6a88ef!2sLeyte%20Normal%20University!5e0!3m2!1sen!2sph!4v1683656352509!5m2!1sen!2sph" class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg" frameborder="0" allowfullscreen></iframe>
         </div>
       </div>  
       <div class="grow-0 shrink-0 basis-auto w-full lg:w-6/12 xl:w-8/12">
@@ -121,11 +130,22 @@
         </div>
       </div>
     </div>
- 
+  </div>
+                         
+                         
+                </div>
+                <!-- End of about section -->
+
+                
+
+               
+            </div>
+        </div>
+    
       
 
 
-    </UserLayout>
+    </AdminLayout>
 </template>
 
 <style>

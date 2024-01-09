@@ -434,6 +434,10 @@ public function dayShow(string $day)
      */
     public function destroy(string $id)
     {
-        //
+        $student = User::find($id);
+        $student->delete();
+        return to_route('admin-stes.adminStes');
     }
+
+    
 }

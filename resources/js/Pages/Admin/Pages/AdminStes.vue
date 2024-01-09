@@ -175,6 +175,20 @@ const submit = () => {
             <TableDataCell>{{ form.ste_shift }}</TableDataCell>
             <TableDataCell>{{ form.school_name }} - {{ form.school_code }}</TableDataCell>
             <TableDataCell>{{ form.contact_number }}</TableDataCell>
+             <TableDataCell class="space-x-4">
+                <Link
+                  
+                  class="text-green-400 hover:text-green-600"
+                  >Edit</Link
+                >
+                <Link
+                  :href="route('ste-dashboard.destroy', form.id)"
+                  method="DELETE"
+                  as="button"
+                  class="text-red-400 hover:text-red-600"
+                  >Delete</Link
+                >
+              </TableDataCell>
           
 
           

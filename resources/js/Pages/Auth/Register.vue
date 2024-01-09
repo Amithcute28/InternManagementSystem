@@ -65,6 +65,11 @@ const submit = () => {
       class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 z-20 mx-6 flex items-center"
     >
       <div class="">
+         <h1
+          class="text-4xl md:text-4xl font-bold leading-tight mt-12 flex justify-center"
+        >
+          Sign Up
+        </h1>
         <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
           <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 w-full mb-6 group">

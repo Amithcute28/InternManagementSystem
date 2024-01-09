@@ -526,7 +526,7 @@ const toggleApplicationsDropdown = () => {
               <span class="sr-only">Open user menu</span>
               <img
                 class="w-10 h-10 m-auto border-2 border-gold rounded-full object-cover lg:w-12 lg:h-12"
-                src="@/Assets/maamAriaso.jpg"
+                src="@/Assets/ddd.jpg"
                 alt="user photo"
               />
               <svg

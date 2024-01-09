@@ -94,14 +94,29 @@ Route::resource('/status', StatusController::class);
 Route::resource('/student-calendar', StudentCalendarController::class);
 Route::get('/calendar-items', [CalendarController::class, 'calendarIndex'])->name('calendar.calendarIndex');
 Route::get('/calendar-items-ste', [StudentCalendarController::class, 'indexSte'])->name('calendar.calendarSte');
+Route::resource('/calendar', CalendarController::class);
+
+Route::get('/calendar-bsed', [CalendarController::class, 'indexBsed'])->name('calendar-bsed.indexBsed');
+Route::post('/calendar-store-bsed', [CalendarController::class, 'storeBsed'])->name('calendar-bsed.storeBsed');
+Route::get('/calendar-bsed-add', [CalendarController::class, 'createBsed'])->name('calendar-bsed.createBsed');
+Route::get('/calendar-items-bsed', [CalendarController::class, 'calendarIndexBsed'])->name('calendar.calendarIndexBsed');
+Route::get('/calendar-edit-bsed/{id}', [CalendarController::class, 'editBsed'])->name('calendar.editBsed');
+Route::put('/calendar-update-bsed/{id}', [CalendarController::class, 'updateBsed'])->name('calendar.updateBsed');
+
 Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
 Route::get('/my-attendance', [AttendanceController::class, 'attendanceDashboard'])->middleware('auth')->name('attendance.dashboard');
 Route::resource('/attendance', AttendanceController::class);
 Route::resource('/requests', RequestController::class)->only(['index', 'show', 'create', 'store', 'destroy']);
-Route::resource('/calendar', CalendarController::class);
+
 Route::get('/requests-admin', [RequestController::class, 'adminRequestsIndex'])->name('requests-admin.requestsIndex');
 Route::put('/requests-update/{id}', [RequestController::class, 'update'])->name('requests-update.update');
 Route::get('/request-show-student/{id}', [RequestController::class, 'showStudent'])->name('requests-show-student.show');
+
+Route::get('/requests-admin-bsed', [RequestController::class, 'adminRequestsIndexBsed'])->name('requests-admin.adminRequestsIndexBsed');
+Route::get('/requests-show-bsed/{id}', [RequestController::class, 'showBsed'])->name('requests-admin.showBsed');
+Route::put('/requests-update-bsed/{id}', [RequestController::class, 'updateBsed'])->name('requests-update.updateBsed');
+Route::delete('/requests-destroy-bsed/{id}', [RequestController::class, 'destroyBsed'])->name('requests-admin.destroyBsed');
+
 
 Route::post('attendance/signin', [AttendanceController::class, 'dashboardSignInAttendance'])->name('attendance.dashboardSignIn');
 Route::post('attendance/signoff', [AttendanceController::class, 'dashboardSignOffAttendance'])->name('attendance.dashboardSignOff');
@@ -177,6 +192,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 Route::resource('/ste-dashboard', SteController::class);
+Route::delete('/ste-dashboard-destroy/{id}', [SteController::class, 'destroy'])->name('ste-dashboard.destroy');
 Route::get('/admin-stes', [SteController::class, 'adminStes'])->name('admin-stes.adminStes');
 Route::get('/ste-interns', [SteController::class, 'interns'])->name('stes-interns.interns');
 Route::get('/ste-attendance', [SteController::class, 'attendanceSte'])->name('ste-attendance.attendanceSte');

@@ -209,7 +209,6 @@ function openModalEvalForm(intern) {
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
              <TableHeaderCell class="whitespace-nowrap">Application</TableHeaderCell>
-             <TableHeaderCell class="whitespace-nowrap">Attendance</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap"
               >Evaluation Form</TableHeaderCell>
             <TableHeaderCell>Status</TableHeaderCell>
@@ -229,7 +228,7 @@ function openModalEvalForm(intern) {
             
             <TableDataCell>{{ form.program }}</TableDataCell>
             <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
-            <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Check</button></TableDataCell>
+            
             <TableDataCell
               ><a
                 v-if="isImage(form.eval_form)"

@@ -44,5 +44,19 @@ class RequestServices
         return to_route('requests.index');
     }
 
+    public function updateRequestBsed($request, $id)
+    {
+        $req = $request->validate([
+            'status' => ['required', 'integer', 'in:1,2'],
+            'admin_response' => ['nullable', 'string'],
+        ]);
+        $empReq = \App\Models\Requests::findOrFail($id);
+        $empReq->update($req);
+
+        // Send Email to Employee informing them of the status update.
+        // Mail::to($empReq->user->email)->send(new RequestStatusUpdated($empReq));
+        return to_route('requests-admin.adminRequestsIndexBsed');
+    }
+
 
 }
