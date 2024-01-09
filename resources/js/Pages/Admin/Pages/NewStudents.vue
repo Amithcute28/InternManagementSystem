@@ -10,31 +10,52 @@ import TableDataCell from "@/Components/TableDataCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { initFlowbite } from "flowbite";
 import { onMounted } from "vue";
-import { ref, watch} from "vue";
-import { router } from '@inertiajs/vue3'
+import { ref, watch, computed } from "vue";
+import { router } from "@inertiajs/vue3";
+import defaultProfileImage from "@/assets/defaultProfile.jpg";
 
 const props = defineProps({
   newstudents: Object,
   newstudentsbeed: Array,
-  filters: Object
+  filters: Object,
+});
+const studentProfile = ref(props.newstudents.profile);
+const errorLoadingImage = ref(false);
+
+function handleImageError() {
+  errorLoadingImage.value = true;
+}
+
+const studentProfileImage = computed(() => {
+  return errorLoadingImage.value
+    ? defaultProfileImage
+    : `storage/${studentProfile.value}`;
 });
 
 const search = ref(props.filters.search);
 const perPage = ref(5);
 
 watch(search, (value) => {
-  router.get('newstudents', { search: value }, {
-    preserveState: true,
-    replace: true
-  });
+  router.get(
+    "newstudents",
+    { search: value },
+    {
+      preserveState: true,
+      replace: true,
+    }
+  );
 });
 
 function getTags() {
-  router.get('newstudents', { perPage: perPage.value }, {
-    preserveState: true,
-    replace: true,
-  })
-};
+  router.get(
+    "newstudents",
+    { perPage: perPage.value },
+    {
+      preserveState: true,
+      replace: true,
+    }
+  );
+}
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -91,7 +112,7 @@ console.log(totalNewStudents);
                 </svg>
               </div>
               <input
-              v-model="search"
+                v-model="search"
                 type="text"
                 id="table-search-users"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-72 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -103,15 +124,13 @@ console.log(totalNewStudents);
               <select
                 v-model="perPage"
                 @change="getTags"
-                class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:ring-0 text-sm">
-                <option value="5">5 Per Page</option> 
-                <option value="10">10 Per Page</option> 
-                <option value="15">15 Per Page</option> 
-
-
+                class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:ring-0 text-sm"
+              >
+                <option value="5">5 Per Page</option>
+                <option value="10">10 Per Page</option>
+                <option value="15">15 Per Page</option>
               </select>
               <!-- Dropdown menu -->
-              
             </div>
             <!-- <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -175,8 +194,9 @@ console.log(totalNewStudents);
               >
                 <img
                   class="w-8 h-8 rounded-full"
-                  :src="`storage/${newstudent.profile}`"
+                  :src="studentProfileImage"
                   alt=""
+                  @error="handleImageError"
                 />
                 <div class="pl-3">
                   <div class="text-base font-semibold">
@@ -214,9 +234,8 @@ console.log(totalNewStudents);
           </template>
         </Table>
         <div class="m-2 p-2">
-          <Pagination :links="newstudents.links"/>
+          <Pagination :links="newstudents.links" />
         </div>
-
       </div>
     </div>
   </AdminLayout>

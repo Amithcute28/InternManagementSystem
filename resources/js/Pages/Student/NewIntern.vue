@@ -655,9 +655,25 @@ const removeImage = (field) => {
 <style>
 @import "@vueform/multiselect/themes/tailwind.css";
 
-.multiselect-blue {
-  --ms-tag-bg: #dbeafe;
-  --ms-tag-color: #2563eb;
+.multiselect-tag {
+  background-color: #f2ce02; /* Change background color */
+  color: #fff; /* Change text color */
+  border-color: #f6e05e; /* Change border color */
+  /* Add any other styles as needed */
+}
+
+.multiselect-tag-remove {
+  background-color: #fff;
+  color: #fff;
+  border-color: #fff;
+  /* Change background color */
+  /* Change text color */
+  /* Change border color */
+  /* Add any other styles as needed */
+}
+
+.multiselect.is-active {
+  outline-color: #0743b2;
 }
 /* or */
 /* @import './path/to/node_modules/@vueform/multiselect/themes/tailwind.css'; */
