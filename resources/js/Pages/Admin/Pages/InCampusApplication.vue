@@ -104,7 +104,7 @@ function openModal(form) {
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
        <div class="flex justify-between">
-        <p class="text-2xl font-semibold ml-4">In-Campus Interns Application</p>
+        <p class="text-2xl font-semibold ml-4">First Shift Application</p>
           
         <!-- <Link
           :href="route('students.create')"

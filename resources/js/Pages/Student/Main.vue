@@ -87,10 +87,10 @@ onMounted(() => {
         </template>
 
         <div class="py-8 mt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
                 <div class="flex justify-between gap-4 ">
                     <Card class="w-full md:w-3/4 !mt-0">
-                        <h1 class="!card-header !mb-0 mt-6 ml-6">Welcome,
+                        <h1 class="!card-header !mb-0">Welcome,
                             {{ $page.props.auth.user.full_name }}!</h1>
                     </Card>
                     <Card class="w-full md:w-1/4 !mt-0" vl :fancy-p="false">
@@ -106,7 +106,7 @@ onMounted(() => {
                         <PrimaryButton2 v-else
                                        class="w-full h-full flex justify-center !border-0 bg-gradient-to-r from-green-500 to-green-400 cursor-not-allowed"
                                        disabled>
-                            <span v-if="is_today_off" class="text-xl py-6 ">{{ ('Today is off! 🕺🕺') }}<br></span>
+                            <span v-if="is_today_off" class="text-xl py-6 ">{{ ('Today is off!') }}<br></span>
                             <span v-else class="text-xl px-10">{{ ('Attendance Taken Today! 🎉') }}<br></span>
                         </PrimaryButton2>
                     </Card>
@@ -115,7 +115,7 @@ onMounted(() => {
                 <!-- QUOTE + SALARY -->
                 <div class="flex flex-col md:flex-row justify-between md:gap-4">
                     <Card class="w-full md:w-3/4">
-                        <h1 class="text-2xl mt-6 ml-6">{{ ('Quote of the day') }}</h1>
+                        <h1 class="text-2xl">{{ ('Quote of the day') }}</h1>
                         <div class="flex justify items-center">
                             <BlockQuote class="mb-0 ml-6" v-if="quote" :style="2" :quote="quote['content']"
                                         :author="quote['author']"/>
@@ -127,86 +127,8 @@ onMounted(() => {
                    
                 </div>
 
-                <!-- PAYDAY + ATTENDANCE -->
-                <div class="flex flex-col md:flex-row justify-between md:gap-4">
-
-                    <!-- PAY DAY -->
-                   
-                    <!-- MONTH DATA -->
-                    <Card class="w-full md:w-1/4">
-                        <h1 class="text-2xl">{{
-                                ('Data of :month', {month: new Date().toLocaleString($page.props.locale, {month: 'long'})})
-                            }}</h1>
-                        <div class="mt-4 w-full flex flex-col">
-                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
-                                <p class="font-medium">{{ ('Work Days') }}: </p>
-                               <p>{{ employee_stats && employee_stats['attendableThisMonth']
-  ? `${employee_stats['attendableThisMonth']} ${('Days')}`
-  : '' }}
-</p>
-                            </div>
-                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
-                                <p class="font-medium">{{ ('Weekends') }}: </p>
-                                <p>{{ employee_stats && employee_stats['weekendsThisMonth']
-  ? `${employee_stats['weekendsThisMonth']} ${('Days')}`
-  : '' }}
-</p>
-
-                            </div>
-                            <div class="flex justify-between align-middle mb-6 sm:mb-2">
-                                <p class="font-medium">{{ ('Holidays') }}: </p>
-                                <p>{{ employee_stats && employee_stats['holidaysThisMonth']
-  ? `${employee_stats['holidaysThisMonth']} ${('Days')}`
-  : '' }}
-</p>
-
-                            </div>
-
-                        </div>
-                    </Card>
-
-                    <Card class="w-full md:w-2/4  ">
-                        <h1 class="text-2xl">{{ ('Your Attendance This Month') }}</h1>
-                        <div class="mt-4 grid grid-rows-3">
-                            <div class="flex flex-col lg:flex-row justify-between align-middle mb-6 sm:mb-2">
-                                <p class="w-full sm:w-1/3">{{ employee_stats && employee_stats['totalAttendanceSoFar']
-  ? `${('Attended')} ${employee_stats['totalAttendanceSoFar']}`
-  : '' }}
-</p>
-<div>
-    <!-- First ProgressBar -->
-    <ProgressBar class="col-span-3" color="bg-green-500" no-text
-                 :percentage="employee_stats && employee_stats['totalAttendanceSoFar'] && employee_stats['attendableThisMonth']
-                 ? (employee_stats['totalAttendanceSoFar'] / employee_stats['attendableThisMonth']) * 100
-                 : 0"
-                 :text="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['totalAbsenceSoFar'] > 0
-                 ? (employee_stats['totalAbsenceSoFar'] + ' Day(s)')
-                 : ''"/>
-
-    <!-- Second ProgressBar -->
-    <ProgressBar no-text color="bg-red-500"
-                 :percentage="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['YearStats'] && employee_stats['YearStats']['absence_limit']
-                 ? (employee_stats['totalAbsenceSoFar'] / employee_stats['YearStats']['absence_limit']) * 100
-                 : 0"
-                 :text="employee_stats && employee_stats['totalAbsenceSoFar'] && employee_stats['totalAbsenceSoFar'] > 0
-                 ? (employee_stats['totalAbsenceSoFar'] + ' Day(s)')
-                 : ''"/>
-
-    <!-- Third ProgressBar -->
-    <ProgressBar class="col-span-3"
-                 :percentage="employee_stats && employee_stats['hoursDifferenceSoFar']
-                 ? employee_stats['hoursDifferenceSoFar']
-                 : 0"
-                 :text="employee_stats && employee_stats['hoursDifferenceSoFar'] !== 0
-                 ? Math.abs(employee_stats['hoursDifferenceSoFar']).toFixed(2) + ' Hours ' + (employee_stats['hoursDifferenceSoFar'] > 0 ? 'extra' : 'late')
-                 : ''"
-                 :color="employee_stats && employee_stats['hoursDifferenceSoFar'] > 0 ? 'bg-green-500' : 'bg-red-500'"/>
-</div>
-
-                            </div>
-                        </div>
-                    </Card>
-                </div>
+               
+              
 
                 <!-- QUICK ACTIONS -->
                   <Link
@@ -216,7 +138,7 @@ onMounted(() => {
                 class="flex justify-center block w-full text-white text-sm font-semibold rounded-lg bg-gold hover:bg-indigo-400 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
                 >Edit Information</Link
               >
-            </div>
+            
 
            
         </div>

@@ -115,7 +115,7 @@ function openModalEvalForm(form) {
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
        <div class="flex justify-between">
-        <p class="text-2xl font-semibold ml-4">Off-Campus Interns Application</p>
+        <p class="text-2xl font-semibold ml-4">First Shift</p>
           
         <!-- <Link
           :href="route('students.create')"
@@ -190,9 +190,9 @@ function openModalEvalForm(form) {
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
-             <TableHeaderCell class="whitespace-nowrap">In-Campus</TableHeaderCell>
-            <TableHeaderCell class="whitespace-nowrap"
-              >Evaluation Form</TableHeaderCell>
+             <TableHeaderCell class="whitespace-nowrap">Applications</TableHeaderCell>
+            <!-- <TableHeaderCell class="whitespace-nowrap"
+              ></TableHeaderCell> -->
             <TableHeaderCell>Status</TableHeaderCell>
             <TableHeaderCell>Action</TableHeaderCell>
           </TableRow>
@@ -210,7 +210,7 @@ function openModalEvalForm(form) {
             
             <TableDataCell>{{ form.program }}</TableDataCell>
             <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
-            <TableDataCell
+            <!-- <TableDataCell
               ><a
                 v-if="isImage(form.eval_form)"
                 :href="form.psa"
@@ -242,7 +242,7 @@ function openModalEvalForm(form) {
                 target="_blank"
                 class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
                 >MISSING</a
-              ></TableDataCell>
+              ></TableDataCell> -->
 
               <TableDataCell>
                <template v-if="isComplete(form)">
@@ -262,7 +262,7 @@ function openModalEvalForm(form) {
             <TableDataCell
               ><div class="flex item-center space-x-2">
                
-                 <Link :href="route('applications.updateIncampusDone', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">Proceed</Link>
+                 <Link :href="route('first-shift.update', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">Proceed</Link>
                 <Link
                   class="w-4 mr-2 mb-2 transform hover:text-purple-500 hover:scale-110"
                   :href="route('application.edit', form.id)"

@@ -93,6 +93,7 @@ Route::resource('/status', StatusController::class);
 
 Route::resource('/student-calendar', StudentCalendarController::class);
 Route::get('/calendar-items', [CalendarController::class, 'calendarIndex'])->name('calendar.calendarIndex');
+Route::get('/calendar-items-ste', [StudentCalendarController::class, 'indexSte'])->name('calendar.calendarSte');
 Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
 Route::get('/my-attendance', [AttendanceController::class, 'attendanceDashboard'])->middleware('auth')->name('attendance.dashboard');
 Route::resource('/attendance', AttendanceController::class);
@@ -178,7 +179,8 @@ Route::get('/ste-attendance', [SteController::class, 'attendanceSte'])->name('st
 Route::get('ste-attendances/{date}', [SteController::class, 'dayShow'])->name('ste-attendances.show');
 Route::post('/ste-store', [SteController::class, 'storeSte'])->name('ste-store.storeSte');
 Route::delete('ste', [SteController::class, 'dayDelete'])->name('ste.destroy');
-
+Route::put('/ste-interns-proceed/{id}', [SteController::class, 'proceed'])->name('stes-interns.proceed');
+Route::put('/ste-dashboard/{id}', [SchoolsController::class, 'update'])->name('ste-dashboard.update');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

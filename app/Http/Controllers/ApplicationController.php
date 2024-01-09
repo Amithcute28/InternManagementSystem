@@ -196,7 +196,7 @@ class ApplicationController extends Controller
     {
         $student = User::find($id);
 
-        $student->in_campus = 1;
+        $student->applications = 1;
         $student->save();
 
 
@@ -209,7 +209,7 @@ class ApplicationController extends Controller
     {
         $student = User::find($id);
 
-
+        $student->choosen_institution = 0;
         $student->is_off_campus = 1;
         $student->save();
 

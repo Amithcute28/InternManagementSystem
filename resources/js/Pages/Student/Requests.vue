@@ -33,8 +33,7 @@ defineProps({
         </template>
         <div class="py-8 mt-10">
             <p class="text-2xl font-semibold ml-4 mb-6">Current Requests</p>
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Card class="!mt-0">
+            
                     <div class="flex justify-between items-center pb-4">
 
                         <FlexButton :href="route('requests.create')"
@@ -106,8 +105,7 @@ defineProps({
                         </template>
         <!-- Additional content for the table -->
       </Table>
-                </Card>
-            </div>
+            
         </div>
     </UserLayout>
 </template>

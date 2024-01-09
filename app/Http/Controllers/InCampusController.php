@@ -127,8 +127,30 @@ class InCampusController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $student = User::find($id);
+
+        $student->in_campus = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('first-shift.index');
     }
 
+    public function updateIncampus($id)
+    {
+        $student = User::find($id);
+
+        $student->in_campus = 1;
+        $student->applications = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('applications.inCampusApplication');
+    }
     /**
      * Remove the specified resource from storage.
      */

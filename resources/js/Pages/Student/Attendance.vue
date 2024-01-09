@@ -18,11 +18,17 @@ import TableHeaderCell from "@/Components/TableHeaderCell.vue";
 import TableDataCell from "@/Components/TableDataCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 
+import {computed, onMounted} from "vue";
+import {initTooltips} from "flowbite";
+import ToolTip from "@/Components/ToolTip.vue";
+
+
 
 
 const props = defineProps({
     attendanceList: Object,
     dateParam: String,
+    EmployeeStats: Object,
 });
 
 
@@ -43,6 +49,29 @@ const search = (() => {
 });
 watch(date, search);
 
+
+onMounted(() => {
+    initTooltips();
+});
+
+
+const workableThisYear = computed(() => {
+  // Use your fixed values for total working days in a year
+  const totalWorkingDaysThisYear = 24;
+  return totalWorkingDaysThisYear;
+});
+
+const attendancePercentage = computed(() => {
+  // Use your fixed values for total working days in a year
+  const totalWorkingDaysThisYear = 24;
+  return (props.EmployeeStats['totalAttendanceSoFar'] / totalWorkingDaysThisYear * 100).toFixed(0);
+});
+
+const absencePercentage = computed(() => {
+  // Use your fixed values for total working days in a year
+  const totalWorkingDaysThisYear = 24;
+  return ((props.EmployeeStats['totalAbsenceSoFar'] / totalWorkingDaysThisYear) * 100).toFixed(0);
+});
 </script>
 
 <template>
@@ -53,30 +82,104 @@ watch(date, search);
             <AttendanceTabs/>
         </template>
         <div class="py-8 mt-10">
-          <p class="text-2xl font-semibold ml-4 mb-6">Attendance List</p>
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Card class="!mt-0">
-                    
-                    <div class="flex justify-between items-center pb-4 gap-4">
-                        <FlexButton :href="route('attendance.create')" :text="('Take/Edit Attendance')">
-                            <PlusIcon/>
-                        </FlexButton>
-                        <div>
-                            <InputLabel for="date" :value="('Filter by Date:')"/>
-                            <VueDatePicker
-                                id="date"
-                                v-model="date"
-                                class="py-1 block w-full"
-                                :placeholder="('Select a Date..')"
-                                :enable-time-picker="false"
-                                :max-date="new Date()"
-                                :dark="inject('isDark')"
-                                required
-                            ></VueDatePicker>
-                            <InputError v-if="Object.keys($page.props.errors).length" class="mt-2"
-                                        :message="$page.props.errors"/>
+          <p class="text-2xl font-semibold ml-4">Attendance List</p>
+            
+              
+
+         <div>
+        <Card>
+        <h1 class="text-2xl mb-6">{{('Total Attendance')}}</h1>
+
+                    <!-- Attendance -->
+    <div class="mt-4">
+    <h2 class="font-bold mb-1">{{ 'Attendance' }}</h2>
+    <p class="mb-2">
+      {{ `Attended ${EmployeeStats.totalAttendanceSoFar} from ${workableThisYear}` }}
+    </p>
+    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+      <div
+        class="bg-green-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+        :style="{ width: `${attendancePercentage > 100 ? 100 : attendancePercentage}%` }"
+      >
+        {{ `${attendancePercentage}%` }}
+      </div>
+    </div>
+  </div>
+
+                    <!-- Absence -->
+                    <div class="mt-4">
+                        <h2 class="font-bold mb-1 mt-4">{{('Absence')}}</h2>
+                       <p class="mb-2">
+  {{ `Absented: ${EmployeeStats['totalAbsenceSoFar'] || 0} of ${EmployeeStats['YearStats'] ? EmployeeStats['YearStats']['absence_limit'] || 0 : 0}` }}
+</p>
+                        <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div
+                                class="bg-red-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                                :style="'width:'+ (absencePercentage > 100 ? 100 : absencePercentage) + '%'"> {{ absencePercentage+'%' }}
+                            </div>
                         </div>
                     </div>
+
+               
+                  
+
+                    <!-- <hr class="my-6 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/> -->
+
+                    <!-- Support -->
+
+                    
+                </Card>
+                        </div>
+
+                       <div>
+                  <Card>
+                    <!-- Attendance -->
+
+                    <!-- Hours -->
+                   <div class="mt-4">
+    <h2 class="inline font-bold mt-8">{{ 'Total Hours' }}</h2>
+    <!-- <ToolTip>
+        <div>{{('Compensation Hours are the hours you have worked more/less than the required hours')}}.</div>
+        <div>{{('Extra Hours are rewarded, while negative hours will result in deduction..')}}</div>
+        <div>{{('The final numbers are cleared and accounted in the payroll by the end of the month.')}}</div>
+    </ToolTip> -->
+
+    <p class="mb-2 mt-1">
+      {{ `Attended ${EmployeeStats.actualHoursThisMonth.toFixed(2)} of ${EmployeeStats.expectedHoursThisMonth} Hours` }}
+    </p>
+
+    <p class="mb-2 mt-1">
+      {{ `Progress So Far: ${EmployeeStats.hoursDifferenceSoFar.toFixed(2)} Hours` }}
+    </p>
+
+    <p class="mb-2 mt-1">
+      Remaining Until Month's End: <span v-if="EmployeeStats.hoursDifference > 0">+</span>
+      {{ EmployeeStats.hoursDifference.toFixed(2) }} Hours.
+    </p>
+  </div>
+                </Card>
+                       </div>
+                       
+                    
+  
+      <div class="flex justify-between items-center pb-4 gap-4">
+          <div></div>
+          <div>
+              <InputLabel for="date" :value="('Filter by Date:')"/>
+              <VueDatePicker
+                  id="date"
+                  v-model="date"
+                  class="py-1 block w-full"
+                  :placeholder="('Select a Date..')"
+                  :enable-time-picker="false"
+                  :max-date="new Date()"
+                  :dark="inject('isDark')"
+                  required
+              ></VueDatePicker>
+              <InputError v-if="Object.keys($page.props.errors).length" class="mt-2"
+                          :message="$page.props.errors"/>
+          </div>
+      </div>
                     <!-- <DataTable
                         :controller="'attendance'"
                         :head='[("Date"), ("Status"), ("Attended On Time"), ("Attended Late"), ("Absented")]'
@@ -171,8 +274,10 @@ watch(date, search);
         </template>
         <!-- Additional content for the table -->
       </Table>
-                </Card>
-            </div>
+                
+            
+
+           
         </div>
     </UserLayout>
     </div>

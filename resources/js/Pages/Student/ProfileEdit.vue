@@ -315,7 +315,7 @@ const submit = () => {
               </div>
             </div>
 
-            <div class="relative z-0 w-full mb-6 group">
+            <!-- <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
                 id="home_address"
@@ -332,7 +332,7 @@ const submit = () => {
                 >Home Address</label
               >
               <InputError class="mt-2" :message="form.errors.home_address" />
-            </div>
+            </div> -->
 
             <div class="relative z-0 w-full mb-6 group">
               <input

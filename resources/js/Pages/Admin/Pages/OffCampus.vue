@@ -111,7 +111,7 @@ function openModalRecommend(student) {
 
         <div class="mt-16">
            <div class="flex justify-between">
-        <p class="text-2xl font-semibold ml-4">Off-Campus</p>
+        <p class="text-2xl font-semibold ml-4">2nd Shift</p>
           
         <!-- <Link
           :href="route('students.create')"
@@ -179,7 +179,8 @@ function openModalRecommend(student) {
                         <TableHeaderCell>Student ID</TableHeaderCell>
                         <TableHeaderCell>Name</TableHeaderCell>
                         <TableHeaderCell>Program</TableHeaderCell>
-                        <TableHeaderCell>In-Campus</TableHeaderCell>
+                        <TableHeaderCell>Application</TableHeaderCell>
+                        <TableHeaderCell>Attendance</TableHeaderCell>
                         <TableHeaderCell>Evaluation Form</TableHeaderCell>
                         <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>Action</TableHeaderCell>

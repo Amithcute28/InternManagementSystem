@@ -23,6 +23,7 @@ use App\Services\ValidationServices;
 use Carbon\CarbonImmutable;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ApplicationForm;
 
 class SteController extends Controller
 {
@@ -126,7 +127,7 @@ class SteController extends Controller
 
         $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
             ->where('new_intern', 1)
-            ->where('in_campus', 0)
+            ->where('in_campus', 1)
             ->where('is_off_campus', 0)
             ->where('student_school_code', $userSchoolCode) // Compare student_school_code with the school_code of the logged-in user
             ->where('student_shift', $userShift)
@@ -197,7 +198,7 @@ class SteController extends Controller
             'offCampus' => $paginateData,
             'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
-            'totalInterns' => $totalInterns,
+            'totalInterns' => $totalInterns,    
         ]);
     }
 
@@ -225,7 +226,10 @@ class SteController extends Controller
 
     $attendanceList = Attendance::join('users', 'attendances.student_id', '=', 'users.id')
         ->where('users.student_school_code', '=', $userSchoolCode)
-         ->where('users.student_shift', '=', $userShift)
+        ->where('users.student_shift', '=', $userShift)
+        ->where('in_campus', 0)
+        ->where('is_off_campus', 0)
+        ->where('applications', 1)
         ->select('attendances.date',
             DB::raw('COUNT(CASE WHEN attendances.status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
             DB::raw('COUNT(CASE WHEN attendances.status = \'on_time\' THEN 1 END) as on_time_count'),
@@ -381,12 +385,48 @@ public function dayShow(string $day)
         //
     }
 
+    public function proceed(Request $request, string $id)
+    {
+        //
+        $student = User::find($id);
+
+        $student->off_campus = 1;
+        $student->save();
+
+
+        // Add any additional logic or response handling as needed
+
+        return redirect()->route('stes-interns.interns');
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Retrieve the user record from the database
+        $user = User::findOrFail($id);
+
+
+        // Retrieve the associated application record
+        $application = ApplicationForm::where('user_id', $id)->first();
+
+        // Validate the incoming request data
+        $request->validate([
+            'evalForm' => 'nullable|file',
+        ]);
+
+        // Handle the evaluation form file if provided
+        if ($request->hasFile('evalForm')) {
+            $evalForm = $request->file('evalForm')->store('student', 'public');
+            $application->eval_form = $evalForm;
+        }
+
+        // Save the updated application record
+        $application->user()->associate($user); // Associate the user with the application
+        $application->save();
+
+        // Redirect back to the previous page or show a success message
+        return to_route('stes-interns.interns');
     }
 
     /**

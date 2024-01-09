@@ -34,6 +34,20 @@ class StudentCalendarController extends Controller
         ]);
     }
 
+    public function indexSte()
+    {
+        // if (!isAdmin()) {
+        //     // Don't expose leave requests to non-admins other than the employee's.
+        //     $leaveRequests = \App\Models\Request::with('employee')->where('status', 1)->where('employee_id', '=', auth()->user()->id)->get();
+        // } else {
+        //     $leaveRequests = \App\Models\Request::with('employee')->where('status', 1)->get();
+        // }
+        return Inertia::render('STE/Calendar', [
+            'calendarItems' => Calendar::get(),
+            // 'leaveRequests' => $leaveRequests,
+        ]);
+    }
+
     public function calendarIndex()
     {
         return Inertia::render('Student/CalendarItems', [

@@ -63,7 +63,7 @@ const submitForm = () => {
         </template>
         <div class="py-8 mt-10">
             <p class="text-2xl font-semibold ml-4 mb-6">Create a Request</p>
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
                 <Card class="!mt-0">
                     <form @submit.prevent="submitForm">
                         <div class="grid grid-cols-2 gap-4">
@@ -119,7 +119,7 @@ const submitForm = () => {
                     </form>
                 </Card>
 
-            </div>
+            
         </div>
     </UserLayout>
 </template>

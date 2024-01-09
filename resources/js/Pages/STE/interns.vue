@@ -63,7 +63,7 @@ const forms = useForm({
 });
 
 const submit = () => {
-  router.post(route("applications.update", props.offCampus?.id), {
+  router.post(route("ste-dashboard.update", forms.id), {
     _method: "put",
     studentId: forms.studentId,
     studentName: forms.studentName,
@@ -103,10 +103,16 @@ function openModal(form) {
 
 const evalForm = ref(null);
 
-function openModalEvalForm(form) {
-  evalForm.value = form;
+function openModalEvalForm(intern) {
+  forms.id = intern.id;
+  forms.full_name = intern.full_name,
+  forms.program = intern.program,
+
+  evalForm.value = forms;
   document.getElementById('myModalEvalForm').showModal();
 }
+
+
 </script>
 
 <template>
@@ -115,7 +121,7 @@ function openModalEvalForm(form) {
   <SteLayout>
     <div class="max-w-7xl mx-aut mt-16">
        <div class="flex justify-between">
-        <p class="text-2xl font-semibold ml-4">Off-Campus Interns Application</p>
+        <p class="text-2xl font-semibold ml-4">Interns</p>
           
         <!-- <Link
           :href="route('students.create')"
@@ -190,7 +196,8 @@ function openModalEvalForm(form) {
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
-             <TableHeaderCell class="whitespace-nowrap">In-Campus</TableHeaderCell>
+             <TableHeaderCell class="whitespace-nowrap">Application</TableHeaderCell>
+             <TableHeaderCell class="whitespace-nowrap">Attendance</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap"
               >Evaluation Form</TableHeaderCell>
             <TableHeaderCell>Status</TableHeaderCell>
@@ -210,6 +217,7 @@ function openModalEvalForm(form) {
             
             <TableDataCell>{{ form.program }}</TableDataCell>
             <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
+             <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Check</button></TableDataCell>
             <TableDataCell
               ><a
                 v-if="isImage(form.eval_form)"
@@ -262,18 +270,19 @@ function openModalEvalForm(form) {
             <TableDataCell
               ><div class="flex item-center space-x-2">
                
-                 <Link :href="route('applications.updateOffcampus', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">Recommend</Link>
-                <Link
-                  class="w-4 mr-2 mb-2 transform hover:text-purple-500 hover:scale-110"
-                  :href="route('application.edit', form.id)"
-                >
-                  <svg
+                 <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
+                
+                
+                  
+                
+                  <svg 
+                  @click="openModalEvalForm(form)"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="w-5 h-5"
+                    class="w-5 h-5 transform hover:text-purple-500 hover:scale-110"
                   >
                     <path
                       stroke-linecap="round"
@@ -281,7 +290,7 @@ function openModalEvalForm(form) {
                       d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                </Link>
+               
                 <div
                   class="w-4 mr-2 ml-1 transform hover:text-purple-500 hover:scale-110"
                 >
@@ -325,10 +334,172 @@ function openModalEvalForm(form) {
         </div>
     </div>
 
+ <dialog id="myModalEvalForm" class="p-5  bg-darkWhite rounded-md ">
+      <div class="flex w-full h-auto justify-between items-center">
+          <div class="flex h-auto py-3 justify-center items-center text-2xl font-bold">
+                Eval Form
+          </div>
+          <div onclick="document.getElementById('myModalEvalForm').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+        </div>
+        <div class="flex items-center flex-col p-10">
+        <!-- main card -->
+      
+            <!-- headers content-->
+           
+            <!-- subscriptions -->
+            
+        <form
+          class="py-6 px-9"
+          @submit.prevent="submit"
+          action="https://formbold.com/s/FORM_ID"
+          method="POST"
+        >
+          <div class="mb-5">
+            <label
+              for="studentId"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              Student ID:
+            </label>
+            <input
+              type="text"
+              v-model="forms.id"
+              name="studentId"
+              id="studentId"
+              placeholder="Name of the School"
+              :disabled="true"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+
+          <div class="mb-5">
+            <label
+              for="schoolName"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              Name:
+            </label>
+            <input
+              type="text"
+              v-model="forms.full_name"
+              name="studentName"
+              id="studentName"
+              placeholder="Address of the school"
+              :disabled="true"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+
+          <div class="mb-5">
+            <label
+              for="schoolName"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              Program:
+            </label>
+            <input
+              type="text"
+              v-model="forms.program"
+              name="program"
+              id="program"
+              :disabled="true"
+              placeholder="Address of the school"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+
+          <div class="mb-6 pt-4">
+            <label class="mb-5 block text-xl font-semibold text-[#07074D]">
+              Upload Evaluation Form
+            </label>
+
+            <div class="mb-8">
+              <input
+                type="file"
+                @input="forms.evalForm = $event.target.files[0]"
+                name="evalForm"
+                id="evalForm"
+                class="sr-only"
+              />
+              <label
+                for="evalForm"
+                class="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center"
+              >
+                <div>
+                  <span class="mb-2 block text-xl font-semibold text-[#07074D]">
+                    Drop files here
+                  </span>
+                  <span class="mb-2 block text-base font-medium text-[#6B7280]">
+                    Or
+                  </span>
+                  <span
+                    class="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]"
+                  >
+                    Browse
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            <div
+              class="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8"
+              v-if="forms.evalForm"
+            >
+              <div class="flex items-center justify-between">
+                <span
+                  class="truncate pr-3 text-base font-medium text-[#07074D]"
+                >
+                  {{ forms.evalForm.name }}
+                </span>
+                <button class="text-[#07074D]">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M0.279337 0.279338C0.651787 -0.0931121 1.25565 -0.0931121 1.6281 0.279338L9.72066 8.3719C10.0931 8.74435 10.0931 9.34821 9.72066 9.72066C9.34821 10.0931 8.74435 10.0931 8.3719 9.72066L0.279337 1.6281C-0.0931125 1.25565 -0.0931125 0.651788 0.279337 0.279338Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M0.279337 9.72066C-0.0931125 9.34821 -0.0931125 8.74435 0.279337 8.3719L8.3719 0.279338C8.74435 -0.0931127 9.34821 -0.0931123 9.72066 0.279338C10.0931 0.651787 10.0931 1.25565 9.72066 1.6281L1.6281 9.72066C1.25565 10.0931 0.651787 10.0931 0.279337 9.72066Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+               onclick="document.getElementById('myModalEvalForm').close();"
+              class="hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      
+           
+        </div>
+  
+   
+</dialog>
+
     <dialog id="myModal" class="p-5  bg-darkWhite rounded-md ">
       <div class="flex w-full h-auto justify-between items-center">
           <div class="flex h-auto py-3 justify-center items-center text-2xl font-bold">
-                In-Campus Application
+                Application
           </div>
           <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -653,9 +824,7 @@ function openModalEvalForm(form) {
         </div>
            
 
-            <div class="flex justify-center">
-                <button class="mt-12 bg-gold text-white px-8 rounded-lg py-2">Complete</button>
-            </div>
+          
         </div>
   
    

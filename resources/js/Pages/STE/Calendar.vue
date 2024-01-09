@@ -1,5 +1,5 @@
 <script setup>
-import UserLayout from '@/Layouts/UserLayout.vue';
+import SteLayout from '@/Layouts/SteLayout.vue';
 import {Head, useForm} from '@inertiajs/vue3';
 import CalendarTabs from "@/Components/Tabs/CalendarTabs.vue";
 import {CalendarView, CalendarViewHeader} from "vue-simple-calendar";
@@ -121,7 +121,7 @@ onMounted(() => {
 <template>
 <div>
     <Head :title="('Calendar')"/>
-    <UserLayout>
+    <SteLayout>
         <template #tabs>
             <CalendarTabs />
         </template>
@@ -157,7 +157,7 @@ onMounted(() => {
 
            
         </div>
-    </UserLayout>
+    </SteLayout>
     </div>
 </template>
 
