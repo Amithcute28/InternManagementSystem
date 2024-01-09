@@ -22,16 +22,7 @@
     <Head title="Status" />
 
     <UserLayout>
-           <div class="container mx-auto bg-white mt-16">
-          
-        <div class="md:flex no-wrap md:-mx-2 ">
-            <!-- Left Side -->
-            
-            <!-- Right Side -->
-            <div class="w-full mx-2 h-64">
-                <!-- Profile tab -->
-                <!-- About Section -->
-                <div class="bg-white p-3 rounded-xl shadow-md">
+           
                    
                    
                    
@@ -42,9 +33,9 @@
     <Head>
       <title>Recommended Institutions for {{ student.full_name }}</title>
     </Head>
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="mt-16">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 bg-white border-b border-gray-200">
+        <div class="p-10 bg-white border-b border-gray-200">
           <h1 class="text-2xl font-bold mb-4">{{ student.full_name }}</h1>
           
           <div class="mb-4 grid md:grid-cols-2">
@@ -68,7 +59,7 @@
 
           <section class="text-gray-800">
   
-  <div class="block rounded-lg shadow-lg bg-white">
+  <div class="block rounded-lg  bg-white">
     <div class="flex flex-wrap">
       <div class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
         <div class="map-container-2 w-full">
@@ -130,17 +121,7 @@
         </div>
       </div>
     </div>
-  </div>
-                         
-                         
-                </div>
-                <!-- End of about section -->
-
-                
-
-               
-            </div>
-        </div>
+ 
       
 
 

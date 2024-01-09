@@ -41,71 +41,7 @@ class AttendanceController extends Controller
             ]);
         }
 
-    //     public function attendanceList(Request $request)
-    // {
-    //     $request->validate([
-    //         'term' => 'nullable|date_format:Y-m-d',
-    //     ]);
-    //     $dateParam = $request->input('term', '');
-
-    //     if ($dateParam) {
-    //         $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
-    //         if ($date->isAfter(Carbon::today()))
-    //             return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
-
-    //         $date = $date->toDateString();
-    //     } else {
-    //         $date = '';
-    //     }
-
-    //     if ($date)
-    //         $attendanceList->where('date', '=', $date);
-
-    //         $users = User::all();
-
-    //         $allusersAttendance = collect();
-    //         // Retrieve user data from the users table
-
-    //         foreach ($users as $user) {
-    //         $userData = User::find($user->id);
-            
-    //         // Retrieve attendance data
-    //         $studentAttendance = AttendanceResource::collection(
-    //             Attendance::where('student_id', $user->id)->get() ?? []
-    //         )->map(function ($attendance) use ($userData) {
-    //             // Add user data to each attendance record
-    //             return [
-    //                 'date' => $attendance->date,
-    //                 'status' => $attendance->status,
-    //                 'full_name' => $userData->full_name, // Change this according to your user model's attribute
-    //                 'sign_in_time' => $attendance->sign_in_time,
-    //                 'sign_off_time' => $attendance->sign_off_time,
-    //                 'notes' => $attendance->notes,
-    //             ];
-    //         });
-
-    //         $allusersAttendance = $allusersAttendance->merge($studentAttendance);
-    //     }
-           
-    //         $commonServices = new CommonServices();
-    //         $isTodayOff = $commonServices->isTodayOff();
     
-    //         $attendanceChecker = auth()->user()->attendances()->where('date', Carbon::today()->toDateString())->first();
-    
-    //         if (is_null($attendanceChecker)) {
-    //             $attendanceStatus = 0;
-    //         } else if ($attendanceChecker->sign_off_time == null) {
-    //             $attendanceStatus = 1;
-    //         } else {
-    //             $attendanceStatus = 2;
-    //         }
-
-    //     return Inertia::render('Admin/Pages/Attendance', [
-    //         // "attendanceList" => AttendanceResource::collection(Attendance::where('student_id', $user->id)->get() ?? []),
-    //         "attendanceList" => $allusersAttendance,
-    //         "dateParam" => $date,
-    //     ]);
-    // }
       
     public function attendanceList(Request $request)
 {
@@ -189,6 +125,7 @@ public function index(Request $request)
     return Inertia::render('Student/Attendance', [
         "attendanceList" => $attendanceList->get(), // Use get to retrieve the results
         "dateParam" => $date,
+        "EmployeeStats" => $user->myInfo(),
     ]);
 }
 

@@ -3,6 +3,7 @@ import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref, onMounted, computed, watch, reactive } from "vue";
 import Swal from "sweetalert2";
+import Card from "@/Components/Card.vue";
 
 const props = defineProps({
   application_forms: {
@@ -120,7 +121,7 @@ const setOrClearError = (field, file) => {
     localErrors[field] = isPdfFile(file) ? null : errorMessages[field];
   }
 };
-
+`w`
 const setOrClearImage = (field, file) => {
   checkFileRequired(file, field);
   if (file) {
@@ -395,6 +396,7 @@ const getFileUrl = (fileName) => {
   <UserLayout>
     
     <div class="py-4 mt-16">
+      <p class="text-2xl font-semibold ml-4">Application</p>
       <form
         v-if="!isFormLoading"
         @submit.prevent="submit"
@@ -403,8 +405,8 @@ const getFileUrl = (fileName) => {
         enctype="multipart/form-data"
       >
         <div class="space-y-12">
-          <div class="rounded pb-12 bg-white px-14 py-10">
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+          <Card>
+            <div class=" grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
               <div class="sm:col-span-2 sm:col-start-1 pb-3">
                 <label
                   for="country"
@@ -1564,20 +1566,18 @@ const getFileUrl = (fileName) => {
                     class="truncate pr-3 text-base font-medium text-[#07074D]"
                   >
                     No file selected
+                    
                   </span>
+                  
                 </div>
               </div>
             </div>
-          </div>
+          
+          </Card>
         </div>
 
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button
-            type="button"
-            class="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Cancel
-          </button>
+             <div class=" flex items-center justify-end gap-x-6">
+         
           <button
             type="submit"
             :class="{
@@ -1592,6 +1592,7 @@ const getFileUrl = (fileName) => {
             }}
           </button>
         </div>
+       
       </form>
     </div>
   </UserLayout>

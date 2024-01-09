@@ -51,14 +51,13 @@ function openModal(institution) {
 <template>
 <UserLayout>
 
-  <div class="py-12">
+  <div class="py-16">
     <div>
    
     </div>
     <Head>
       <title>Recommended Institutions for {{ student.full_name }}</title>
     </Head>
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 bg-white border-b border-gray-200">
           <h1 class="text-2xl font-bold mb-4">Recommended Institutions for {{ student.full_name }}</h1>
@@ -80,11 +79,11 @@ function openModal(institution) {
           </ul> -->
         </div>
       </div>
-    </div>
+    
   </div>
 
    <div class="grid grid-cols-2 gap-0">
-            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8 px-6 py-6">
+            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8">
                 <div class="grid grid-cols-12 gap-6 ">
                     <ReusableCard v-for="institution in student.recommended_institutions" :key="institution.name" :student="student">
                        

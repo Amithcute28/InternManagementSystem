@@ -304,6 +304,7 @@ class UserStudentsController extends Controller
             'relationship' => 'required|string|max:255',
             'nationality' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
+            
             'zip_code' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
             'guardian_contact' => 'required|string|max:255',
@@ -342,6 +343,7 @@ class UserStudentsController extends Controller
             'relationship' => $request->relationship,
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
+            'home_address' => $request->home_address,
             'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,

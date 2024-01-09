@@ -76,8 +76,8 @@ class User extends Authenticatable
    
 
     public function myInfo()
-{
-    // Get Data for current month
+    {
+        // Get Data for current month
         $now = CarbonImmutable::now();
         $curDay = $now->day;
         $curMonth = $now->month;
@@ -86,73 +86,68 @@ class User extends Authenticatable
         $globalSettings = Globals::first();
         $commonServices = new \App\Services\CommonServices();
         $monthDates = [$curYear, $curMonth, 1, $curYear, $curMonth, $monthEnd];
-
+    
         // Calculations for the entire month
         $holidaysCount = $commonServices->countHolidays($monthDates);
         $weekendsCount = $commonServices->calcOffDays(json_decode($globalSettings->weekend_off_days), $this->hired_on, $monthDates);
         $workingDays = $monthEnd - $holidaysCount - $weekendsCount;
-
+    
         // Calculations from the start of the month until today.
         $holidaysCountSoFar = $commonServices->countHolidays([$curYear, $curMonth, 1, $curYear, $curMonth, $curDay]);
-        $workingDaysSoFar = $curDay - 1 -$holidaysCountSoFar - // -1 to exclude today
+        $workingDaysSoFar = $curDay - 1 - $holidaysCountSoFar - // -1 to exclude today
             $commonServices->calcOffDays(json_decode($globalSettings->weekend_off_days), $this->hired_on, [$curYear, $curMonth, 1, $curYear, $curMonth, $curDay]);
-
+    
         // Calculations for the entire year until today
         $workDaysSoFarThisYear = $now->startOfYear()->diffInDays($now) - $commonServices->countHolidays([$curYear, 1, 1, $curYear, $curMonth, $curDay]) -
             $commonServices->calcOffDays(json_decode($globalSettings->weekend_off_days), $this->hired_on, [$curYear, 1, 1, $curYear, $curMonth, $curDay]);
-
+    
         // Calculating attendance stats for the month
-        // $totalAttendanceSoFar attendance from the start of the year (or hire date if they weren't hired this year) until today.
-
         $attended = $this->getAttended();
         $absented = $this->getAbsented();
-
+    
         $monthAttendance = (clone $attended)->whereYear('date', $curYear)->whereMonth('date', $curMonth)->get();
-
+    
         if (Carbon::parse($this->hired_on)->year < $curYear) {
             $totalAttendanceSoFar = (clone $attended)->whereYear('date', $curYear)
                 ->whereDate('date', '<=', $now)->count();
-
+    
             $totalAbsentedSoFar = (clone $absented)->whereYear('date', $curYear)
-                    ->whereDate('date', '<=', $now)->count();
+                ->whereDate('date', '<=', $now)->count();
         } else {
             $totalAttendanceSoFar = (clone $attended)->whereDate('date', '<=', $now)->count();
             $totalAbsentedSoFar = (clone $absented)->whereDate('date', '<=', $now)->count();
         }
-        $actualHours =
-            $monthAttendance->sum(function ($attendance) {
-                $signInTime = Carbon::parse($attendance->sign_in_time);
-                $signOffTime = Carbon::parse($attendance->sign_off_time);
-                return $signInTime->diffInMinutes($signOffTime) / 60;
-            });
-
-
+    
+        $actualHours = $monthAttendance->sum(function ($attendance) {
+            $signInTime = Carbon::parse($attendance->sign_in_time);
+            $signOffTime = Carbon::parse($attendance->sign_off_time);
+            return $signInTime->diffInMinutes($signOffTime) / 60;
+        });
+    
         $shiftHours = $this->activeShiftPeriod();
-        $expectedHours = $workingDays * $shiftHours;
-        $expectedHoursSoFar = $workingDaysSoFar * $shiftHours;
-        
-
+        $fixedTotalHours = 144;
+        $expectedHours = min($workingDays * $shiftHours, $fixedTotalHours);
+        $expectedHoursSoFar = min($workingDaysSoFar * $shiftHours, $fixedTotalHours);
+    
         return [
-            
-
             "attendableThisMonth" => $workingDays,
             "holidaysThisMonth" => $holidaysCount,
             "weekendsThisMonth" => $weekendsCount,
             "attendedThisMonth" => $monthAttendance->count(),
             "absentedThisMonth" => $this->getAbsented()->whereMonth('date', $curMonth)->count(),
-
+    
             "totalAttendanceThisYear" => $totalAttendanceSoFar,
             "totalAbsenceThisYear" => $workDaysSoFarThisYear - $totalAttendanceSoFar,
-
+    
             "totalAttendanceSoFar" => $totalAttendanceSoFar,
             "totalAbsenceSoFar" => $totalAbsentedSoFar,
-
+    
             "expectedHoursThisMonth" => $expectedHours,
             "actualHoursThisMonth" => $actualHours,
             "hoursDifference" => $actualHours - $expectedHours,
             "hoursDifferenceSoFar" => $actualHours - $expectedHoursSoFar,
         ];
-}
+    }
 
     public function applicationForms()
     {
@@ -331,36 +326,42 @@ class User extends Authenticatable
     }
 
     public function monthHours($year, $month): array
-    {
-        $monthEnd = Carbon::createFromDate($year, $month, 1)->endOfMonth()->format('j');
-        $commonServices = new \App\Services\CommonServices();
-        $monthDates = [$year, $month, 1, $year, $month, $monthEnd];
+{
+    $monthEnd = Carbon::createFromDate($year, $month, 1)->endOfMonth()->format('j');
+    $commonServices = new \App\Services\CommonServices();
+    $monthDates = [$year, $month, 1, $year, $month, $monthEnd];
 
-        // Calculations for the entire month
-        $holidaysCount = $commonServices->countHolidays($this->hired_on, $monthDates);
-        $workingDays = $monthEnd - $holidaysCount -
-            $commonServices->calcOffDays(json_decode(Globals::first()->weekend_off_days), $this->hired_on, $monthDates);
+    // Calculations for the entire month
+    $holidaysCount = $commonServices->countHolidays($this->hired_on, $monthDates);
+    $workingDays = $monthEnd - $holidaysCount -
+        $commonServices->calcOffDays(json_decode(Globals::first()->weekend_off_days), $this->hired_on, $monthDates);
 
-        $attended = $this->getAttended();
+    $attended = $this->getAttended();
 
-        $monthAttendance = (clone $attended)->whereYear('date', $year)->whereMonth('date', $month)->get();
+    $monthAttendance = (clone $attended)->whereYear('date', $year)->whereMonth('date', $month)->get();
 
-        $actualHours =
-            $monthAttendance->sum(function ($attendance) {
-                $signInTime = Carbon::parse($attendance->sign_in_time);
-                $signOffTime = Carbon::parse($attendance->sign_off_time);
-                return $signInTime->diffInMinutes($signOffTime) / 60;
-            });
+    $shiftHours = $this->activeShiftPeriod();
+    $expectedHours = $workingDays * $shiftHours;
 
-        $shiftHours = $this->activeShiftPeriod();
-        $expectedHours = $workingDays * $shiftHours;
+    // Ensure the total hours are capped at the fixed value (144)
+    $fixedTotalHours = 144;
+    $expectedHours = min($expectedHours, $fixedTotalHours);
 
-        return [
-            "expectedHours" => $expectedHours,
-            "actualHours" => $actualHours,
-            "hoursDifference" => $actualHours - $expectedHours,
-        ];
-    }
+    $actualHours = $monthAttendance->sum(function ($attendance) {
+        $signInTime = Carbon::parse($attendance->sign_in_time);
+        $signOffTime = Carbon::parse($attendance->sign_off_time);
+        return $signInTime->diffInMinutes($signOffTime) / 60;
+    });
+
+    // Ensure actual hours do not exceed the fixed total hours
+    $actualHours = min($actualHours, $fixedTotalHours);
+
+    return [
+        "expectedHours" => $expectedHours,
+        "actualHours" => $actualHours,
+        "hoursDifference" => $actualHours - $expectedHours,
+    ];
+}
 
 
 

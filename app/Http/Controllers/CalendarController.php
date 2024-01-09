@@ -34,6 +34,8 @@ class CalendarController extends Controller
         ]);
     }
 
+    
+
     public function calendarIndex()
     {
         return Inertia::render('Student/CalendarItems', [

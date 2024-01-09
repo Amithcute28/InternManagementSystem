@@ -104,7 +104,7 @@ class RequestController extends Controller
     public function create()
     {
         return Inertia::render('Student/RequestCreate', [
-            'types' => ['complaint', 'payment', 'leave', 'other'],
+            'types' => ['complaint', 'leave', 'other'],
         ]);
     }
 
