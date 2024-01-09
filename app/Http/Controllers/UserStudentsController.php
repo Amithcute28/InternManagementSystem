@@ -289,31 +289,9 @@ class UserStudentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(NewInternRequest $request, User $user): RedirectResponse
     {
-        $request->validate([
-
-            'student_id' => 'required|string|max:255|' . Rule::unique('users', 'student_id')->ignore($user),
-            'profile' => 'nullable||max:10240',
-            'program' => 'required|string|max:255',
-            'year_level' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($user),
-            'birthday' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            
-            'zip_code' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_contact' => 'required|string|max:255',
-            'student_school_name' => 'required|string|max:255',
-            'student_school_code' => 'required|string|max:255',
-            'student_shift' => 'required|string|max:255',
-
-
-        ]);
+       
 
         $profile = '';
 

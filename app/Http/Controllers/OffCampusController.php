@@ -40,7 +40,7 @@ class OffCampusController extends Controller
                     'program' => $user->program,
                     'skills' => $user->skills,
                     'in_campus' => $user->in_campus,
-                    'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/student/' . $applicationForm->eval_form) : null) : null,
+                    'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
                     'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/student/' . $applicationForm->eslip) : null) : null,
                     'psa' => $applicationForm ? ($applicationForm->psa ? asset('storage/student/' . $applicationForm->psa) : null) : null,
                     'pros' => $applicationForm ? ($applicationForm->pros ? asset('storage/student/' . $applicationForm->pros) : null) : null,
@@ -95,7 +95,7 @@ class OffCampusController extends Controller
                 return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
             });
         });
-        
+
         $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
             $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
             $filteredData->count(),
@@ -103,64 +103,70 @@ class OffCampusController extends Controller
             null,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-        
+
         $paginateData = $paginatedData->appends(request()->query());
 
         $interns = User::where('approved', 1)->where('is_admin', 0)->where('is_off_campus', 1)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalInterns = $interns->count();
 
-       
+
         return Inertia::render('Admin/Pages/OffCampus', [
             'students' => $paginateData,
             'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
         ]);
- 
     }
 
     public function attendanceStudent(Request $request, string $id)
-{
-    $request->validate([
-        'term' => 'nullable|date_format:Y-m-d',
-    ]);
-    
-    $user = User::findOrFail($id); // Get the logged-in user
+    {
+        $request->validate([
+            'term' => 'nullable|date_format:Y-m-d',
+        ]);
 
-    $dateParam = $request->input('term', '');
+        $user = User::findOrFail($id); // Get the logged-in user
 
-    if ($dateParam) {
-        $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
-        if ($date->isAfter(Carbon::today())) {
-            return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
+        $dateParam = $request->input('term', '');
+
+        if ($dateParam) {
+            $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
+            if ($date->isAfter(Carbon::today())) {
+                return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
+            }
+
+            $date = $date->toDateString();
+        } else {
+            $date = '';
         }
 
-        $date = $date->toDateString();
-    } else {
-        $date = '';
+        $attendanceList = Attendance::select(
+            'date',
+            'status',
+            'sign_in_time',
+            'sign_off_time',
+            'notes',
+            DB::raw('COUNT(CASE WHEN status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
+            DB::raw('COUNT(CASE WHEN status = \'on_time\' THEN 1 END) as on_time_count'),
+            DB::raw('COUNT(CASE WHEN status = \'late\' THEN 1 END) as late_count'),
+            DB::raw(
+                'COUNT(CASE WHEN status = \'missed\' THEN 1 END) as missed_count'
+            )
+        )
+            ->with('user') // Eager load the User model relationship
+            ->where('student_id', $user->id) // Filter by the logged-in user's ID
+            ->groupBy('date', 'status', 'sign_in_time', 'sign_off_time', 'notes')
+            ->orderByDesc('date');
+
+        if ($date) {
+            $attendanceList->where('date', '=', $date);
+        }
+
+        return Inertia::render('Admin/Pages/AttendanceStudent', [
+            "attendanceList" => $attendanceList->get(), // Use get to retrieve the results
+            "dateParam" => $date,
+            "EmployeeStats" => $user->myInfo(),
+        ]);
     }
-
-    $attendanceList = Attendance::select('date', 'status','sign_in_time', 'sign_off_time', 'notes',
-        DB::raw('COUNT(CASE WHEN status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
-        DB::raw('COUNT(CASE WHEN status = \'on_time\' THEN 1 END) as on_time_count'),
-        DB::raw('COUNT(CASE WHEN status = \'late\' THEN 1 END) as late_count'),
-        DB::raw('COUNT(CASE WHEN status = \'missed\' THEN 1 END) as missed_count'
-    ))
-    ->with('user') // Eager load the User model relationship
-    ->where('student_id', $user->id) // Filter by the logged-in user's ID
-    ->groupBy('date', 'status', 'sign_in_time', 'sign_off_time', 'notes')
-    ->orderByDesc('date');
-
-    if ($date) {
-        $attendanceList->where('date', '=', $date);
-    }
-
-    return Inertia::render('Admin/Pages/AttendanceStudent', [
-        "attendanceList" => $attendanceList->get(), // Use get to retrieve the results
-        "dateParam" => $date,
-        "EmployeeStats" => $user->myInfo(),
-    ]);
-}
 
 
     /**
