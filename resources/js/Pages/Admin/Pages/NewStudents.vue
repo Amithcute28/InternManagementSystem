@@ -74,7 +74,7 @@ console.log(totalNewStudents);
 </script>
 
     <template>
-  <Head title="New Students" />
+  <Head title="New Interns" />
 
   <AdminLayout>
     <div class="max-w-7xl mx-auto mt-16">

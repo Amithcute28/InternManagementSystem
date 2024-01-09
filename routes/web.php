@@ -114,7 +114,10 @@ Route::resource('/recommender', RecommenderController::class);
 Route::resource('/students', StudentsController::class);
 Route::resource('/newstudents', NewStudentsController::class);
 Route::resource('/coordinators', CoordinatorsController::class);
+
 Route::resource('/offcampus', OffCampusController::class);
+Route::get('/offcampus-attendance/{id}', [OffCampusController::class, 'attendanceStudent'])->name('offcampus-attendance.attendanceStudent');
+
 Route::resource('schools', SchoolsController::class);
 Route::resource('adminProfile', AdminProfileController::class);
 Route::put('/adminProfile/{id}', [AdminProfileController::class, 'update'])->name('adminProfile.update');
@@ -169,6 +172,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/attendance-list', [AttendanceController::class, 'attendanceList'])->name('attendance-list.attendanceList');
 
     Route::resource('/first-shift', InCampusController::class);
+    Route::put('/first-shift-update/{id}', [InCampusController::class, 'updateEval'])->name('first-shift.updateEval');
 });
 
 

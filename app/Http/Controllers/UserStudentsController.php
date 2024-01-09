@@ -343,7 +343,6 @@ class UserStudentsController extends Controller
             'relationship' => $request->relationship,
             'nationality' => $request->nationality,
             'contact_number' => $request->contact_number,
-            'home_address' => $request->home_address,
             'zip_code' => $request->zip_code,
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,

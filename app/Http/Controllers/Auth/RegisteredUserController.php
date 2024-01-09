@@ -52,20 +52,20 @@ class RegisteredUserController extends Controller
 
         ])->assignRole('user');
 
+      
 
+            EmployeeShift::create([
+                'employee_id' => $user->id,
+                'shift_id' => 1,
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => null,
+            ]);
 
-        EmployeeShift::create([
-            'employee_id' => $user->id,
-            'shift_id' => 1,
-            'start_date' => now()->format('Y-m-d'),
-            'end_date' => null,
-        ]);
+           
+        
+        
 
-
-
-
-
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
 
         Auth::login($user);
@@ -75,3 +75,4 @@ class RegisteredUserController extends Controller
         return redirect()->route('verification.notice');
     }
 }
+

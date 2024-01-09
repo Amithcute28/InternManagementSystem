@@ -116,7 +116,7 @@ const submitEdit = () => {
 
 
 <template>
-  <Head title="Schools" />
+  <Head title="HTEs" />
 
   <AdminLayout>
     <div class="h-screen mt-16">

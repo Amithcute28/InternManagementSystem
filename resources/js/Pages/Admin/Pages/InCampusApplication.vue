@@ -99,7 +99,7 @@ function openModal(form) {
 </script>
 
     <template>
-  <Head title="Students" />
+  <Head title="First Shift Application" />
 
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
@@ -118,7 +118,7 @@ function openModal(form) {
               
               <div class="flex items-center flex-1 space-x-4">
                   <h5>
-                      <span class="text-gray-500">All In-Campus Interns: </span>
+                      <span class="text-gray-500">All First Shift Applications: </span>
                       <span class="dark:text-white">{{ totalInterns }}</span>
                   </h5>
         
