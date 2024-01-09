@@ -70,7 +70,7 @@ function openModalRecommend(student) {
 </script>
 
 <template>
-    <Head title="Off Campus" />
+    <Head title="Second Shift" />
 
     <AdminLayout>
         <!-- <div class="mt-16 flex">
@@ -111,7 +111,7 @@ function openModalRecommend(student) {
 
         <div class="mt-16">
            <div class="flex justify-between">
-        <p class="text-2xl font-semibold ml-4">2nd Shift</p>
+        <p class="text-2xl font-semibold ml-4">Second Shift</p>
           
         <!-- <Link
           :href="route('students.create')"
@@ -125,7 +125,7 @@ function openModalRecommend(student) {
               
               <div class="flex items-center flex-1 space-x-4">
                   <h5>
-                      <span class="text-gray-500">All Off-Campus Interns: </span>
+                      <span class="text-gray-500">All Second Shift Interns: </span>
                       <span class="dark:text-white">{{ totalInterns }}</span>
                   </h5>
         
@@ -207,6 +207,10 @@ function openModalRecommend(student) {
                             </TableDataCell>
                              <TableDataCell>{{ student.program }}</TableDataCell>
                               <TableDataCell> <button @click="openModal(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
+                                 <TableDataCell class="space-x-4">
+                                <Link :href="route('offcampus-attendance.attendanceStudent', student.id)"  class="text-green-400 hover:text-green-600">Chesck</Link>
+                               <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
+                            </TableDataCell>
                                <TableDataCell
               ><a
                 v-if="isImage(student.eval_form)"

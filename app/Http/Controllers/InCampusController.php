@@ -14,21 +14,23 @@ use App\Http\Resources\ApplicationResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\School;
 
 class InCampusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   
+    public function index(Request $request): Response
     {
-        $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
-            ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
-            ->where('in_campus', 0)
-            ->where('applications', 1)
-            ->where('is_off_campus', 0)
+        $students = User::where('approved', 1)->where('is_admin', 0)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
+        ->where('in_campus', 0)
+        ->where('applications', 1)
+        ->where('is_off_campus', 0)
             ->with(['applicationForms' => function ($query) {
-                $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo', 'created_at');
+                $query->select('user_id', 'eval_form', 'eslip', 'psa', 'pros', 'applicationF', 'medical', 'parent', 'twobytwo');
             }])
             ->get()
             ->map(function ($user) {
@@ -41,6 +43,7 @@ class InCampusController extends Controller
                     'profile' => $user->profile,
                     'full_name' => $user->full_name,
                     'program' => $user->program,
+                    'skills' => $user->skills,
                     'in_campus' => $user->in_campus,
                     'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/student/' . $applicationForm->eval_form) : null) : null,
                     'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/student/' . $applicationForm->eslip) : null) : null,
@@ -50,17 +53,54 @@ class InCampusController extends Controller
                     'medical' => $applicationForm ? ($applicationForm->medical ? asset('storage/student/' . $applicationForm->medical) : null) : null,
                     'parent' => $applicationForm ? ($applicationForm->parent ? asset('storage/student/' . $applicationForm->parent) : null) : null,
                     'twobytwo' => $applicationForm ? ($applicationForm->twobytwo ? asset('storage/student/' . $applicationForm->twobytwo) : null) : null,
-                    'created_at' => $applicationForm ? $applicationForm->created_at->format('d-m-y H:i:s') : null,
                 ];
             });
 
+        $students->each(function ($student) {
+            $matchingInstitutions = School::where('required_programs', 'LIKE', "%{$student['program']}%")
+                ->where(function ($query) use ($student) {
+                    $query->whereIn('skills', explode(',', $student['skills']));
+                })
+                ->get()
+                ->map(function ($institution) {
+                    return [
+                        'id' => $institution->id,
+                        'name' => $institution->name,
+                        'address' => $institution->address,
+                        'school_logo' => asset('storage/student/' . $institution->school_logo),
+                        'required_programs' => $institution->required_programs,
+                        'required_academic_performance' => $institution->required_academic_performance,
+                        'skills' => $institution->skills,
+                    ];
+                });
+
+            $requiredProgramsMatch = School::where('required_programs', 'LIKE', "%{$student['program']}%")
+                ->whereNotIn('id', $matchingInstitutions->pluck('id'))
+                ->get()
+                ->map(function ($institution) {
+                    return [
+                        'id' => $institution->id,
+                        'name' => $institution->name,
+                        'address' => $institution->address,
+                        'school_logo' => asset('storage/' . $institution->school_logo),
+                        'required_programs' => $institution->required_programs,
+                        'required_academic_performance' => $institution->required_academic_performance,
+                        'skills' => $institution->skills,
+                    ];
+                });
+
+            $recommendedInstitutions = $matchingInstitutions->concat($requiredProgramsMatch);
+
+            $student['recommended_institutions'] = $recommendedInstitutions;
+        });
+
         $perPage = request()->input('perPage') ?: 5;
-        $filteredData = $qualifiedUsers->when(request()->input('search'), function ($collection, $search) {
+        $filteredData = $students->when(request()->input('search'), function ($collection, $search) {
             return $collection->filter(function ($item) use ($search) {
                 return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
             });
         });
-
+        
         $paginatedData = new \Illuminate\Pagination\LengthAwarePaginator(
             $filteredData->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $perPage),
             $filteredData->count(),
@@ -68,25 +108,20 @@ class InCampusController extends Controller
             null,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-
+        
         $paginateData = $paginatedData->appends(request()->query());
-
-        $filtered_files = collect(Storage::allFiles())->filter(function ($value, $key) {
-            $allowed_extensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-            $extension = pathinfo($value, PATHINFO_EXTENSION);
-            return in_array(strtolower($extension), $allowed_extensions);
-        })->values();
 
         $interns = User::where('approved', 1)->where('is_admin', 0)->where('in_campus', 0)->where('applications', 1)->where('is_off_campus', 0)->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
         $totalInterns = $interns->count();
 
+       
         return Inertia::render('Admin/Pages/InCampus', [
-            'files' => $filtered_files,
-            'offCampus' => $paginateData,
+            'students' => $paginateData,
             'filters' => request()->only(['search', 'perPage']),
             'interns' => $interns,
             'totalInterns' => $totalInterns,
         ]);
+ 
     }
 
     /**
@@ -119,6 +154,34 @@ class InCampusController extends Controller
     public function edit(string $id)
     {
         //
+    }
+
+    public function updateEval(Request $request, $id)
+    {
+        // Retrieve the user record from the database
+        $user = User::findOrFail($id);
+
+
+        // Retrieve the associated application record
+        $application = ApplicationForm::where('user_id', $id)->first();
+
+        // Validate the incoming request data
+        $request->validate([
+            'evalForm' => 'nullable|file',
+        ]);
+
+        // Handle the evaluation form file if provided
+        if ($request->hasFile('evalForm')) {
+            $evalForm = $request->file('evalForm')->store('student', 'public');
+            $application->eval_form = $evalForm;
+        }
+
+        // Save the updated application record
+        $application->user()->associate($user); // Associate the user with the application
+        $application->save();
+
+        // Redirect back to the previous page or show a success message
+        return to_route('applications.offCampusApplication');
     }
 
     /**

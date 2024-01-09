@@ -80,7 +80,8 @@ const inCampus = (form) => {
     form.parent &&
     form.twobytwo && 
     form.eval_form && 
-    form.is_off_campus === 0
+    form.in_campus === 0
+
   );
 };
 
@@ -128,7 +129,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Students" />
+  <Head title="Interns" />
 
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
@@ -326,19 +327,19 @@ const submit = () => {
              <TableDataCell>
               <template v-if="offCampus(form)">
                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-violet-500 mr-2"></div> Off-Campus
+                    <div class="h-2.5 w-2.5 rounded-full bg-violet-500 mr-2"></div> 2nd Shift
                   </div>
               </template>
 
               <template v-else-if="inCampus(form)">
               <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></div> In-Campus
+                    <div class="h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></div> First Shift
                   </div>
               </template>
               
               <template v-else>
                 <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"></div> Processing In-Campus
+                    <div class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"></div> First Shift
                   </div>
               </template></TableDataCell>
 

@@ -88,7 +88,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Students" />
+  <Head title="STEs" />
 
   <AdminLayout>
     <div class="max-w-7xl mx-aut mt-16">
