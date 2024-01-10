@@ -34,11 +34,33 @@ class CalendarController extends Controller
         ]);
     }
 
+    public function indexBsed()
+    {
+        // if (!isAdmin()) {
+        //     // Don't expose leave requests to non-admins other than the employee's.
+        //     $leaveRequests = \App\Models\Request::with('employee')->where('status', 1)->where('employee_id', '=', auth()->user()->id)->get();
+        // } else {
+        //     $leaveRequests = \App\Models\Request::with('employee')->where('status', 1)->get();
+        // }
+        return Inertia::render('Admin/PagesBSED/Calendar', [
+            'calendarItems' => Calendar::get(),
+            // 'leaveRequests' => $leaveRequests,
+        ]);
+    }
+
     
 
     public function calendarIndex()
     {
         return Inertia::render('Student/CalendarItems', [
+            'calendarItems' => Calendar::select(['id', 'title', 'type', 'start_date', 'end_date'])
+                ->paginate(config('constants.data.pagination_count')),
+        ]);
+    }
+
+    public function calendarIndexBsed()
+    {
+        return Inertia::render('Admin/PagesBSED/CalendarItems', [
             'calendarItems' => Calendar::select(['id', 'title', 'type', 'start_date', 'end_date'])
                 ->paginate(config('constants.data.pagination_count')),
         ]);
@@ -54,6 +76,13 @@ class CalendarController extends Controller
         ]);
     }
 
+    public function createBsed()
+    {
+        return Inertia::render('Admin/PagesBSED/CalendarItemCreate', [
+            'types' => ['holiday', 'meeting', 'event', 'other'],
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -61,6 +90,12 @@ class CalendarController extends Controller
     {
         $res = $this->validationServices->validateCalendarItemCreationDetails($request);
         $this->calendarServices->createCalendarItem($res);
+    }
+
+    public function storeBsed(Request $request)
+    {
+        $res = $this->validationServices->validateCalendarItemCreationDetails($request);
+        $this->calendarServices->createCalendarItemBSed($res);
     }
 
     /**
@@ -84,6 +119,14 @@ class CalendarController extends Controller
         ]);
     }
 
+    public function editBsed(string $id)
+    {
+        return Inertia::render('Admin/PagesBSED/CalendarItemEdit', [
+            'types' => ['holiday', 'meeting', 'event', 'other'],
+            'calendarItem' => Calendar::findOrFail($id),
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -91,6 +134,12 @@ class CalendarController extends Controller
     {
         $res = $this->validationServices->validateCalendarItemCreationDetails($request);
         return $this->calendarServices->updateCalendarItem($res, $id);
+    }
+
+    public function updateBsed(Request $request, string $id)
+    {
+        $res = $this->validationServices->validateCalendarItemCreationDetails($request);
+        return $this->calendarServices->updateCalendarItemBsed($res, $id);
     }
 
     /**

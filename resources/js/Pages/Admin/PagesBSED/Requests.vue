@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
 import {Head} from '@inertiajs/vue3';
 import FlexButton from "@/Components/FlexButton.vue";
 import ReqTabs from "@/Components/Tabs/ReqTabs.vue";
@@ -27,7 +27,7 @@ defineProps({
 </script>
 <template>
     <Head :title="('Requests')"/>
-    <AdminLayout>
+    <AdminLayoutBSED>
         <template #tabs>
             <ReqTabs />
         </template>  
@@ -87,12 +87,12 @@ defineProps({
         </template>
          <template #default>
                             <TableRow v-for="request in requests" :key="request.id">
-                                <TableBodyHeader :href="route('requests.show', {id: request.id})">{{request.id}}</TableBodyHeader>
-                                <TableBodyHeader :href="route('requests.show', {id: request.id})" >{{request.full_name}}</TableBodyHeader>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request_types[request.type]}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request.start_date}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request.end_date ?? ('N/A')}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">
+                                <TableBodyHeader :href="route('requests-admin.showBsed', {id: request.id})">{{request.id}}</TableBodyHeader>
+                                <TableBodyHeader :href="route('requests-admin.showBsed', {id: request.id})" >{{request.full_name}}</TableBodyHeader>
+                                <TableBody :href="route('requests-admin.showBsed', {id: request.id})">{{request_types[request.type]}}</TableBody>
+                                <TableBody :href="route('requests-admin.showBsed', {id: request.id})">{{request.start_date}}</TableBody>
+                                <TableBody :href="route('requests-admin.showBsed', {id: request.id})">{{request.end_date ?? ('N/A')}}</TableBody>
+                                <TableBody :href="route('requests-admin.showBsed', {id: request.id})">
                                     {{  request.status === "Pending" ? request_status_types['pending'] + ' ⏳' :
                                         request.status === "Approved" ? request_status_types['approved'] + ' ✅' :
                                             request_status_types['rejected'] + ' 🚫'
@@ -109,5 +109,5 @@ defineProps({
               
            
         </div>
-    </AdminLayout>
+    </AdminLayoutBSED>
 </template>

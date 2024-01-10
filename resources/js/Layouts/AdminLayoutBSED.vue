@@ -141,11 +141,39 @@ const toggleApplicationsDropdown = () => {
               >
             </SidebarLink> -->
           </li>
+          <li>
+            <SidebarLink
+              :href="route('calendar-bsed.indexBsed')"
+              :active="route().current('calendar-bsed.indexBsed')"
+            >
+            
+            <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+    <path fill="currentColor" d="M6 1a1 1 0 0 0-2 0h2ZM4 4a1 1 0 0 0 2 0H4Zm7-3a1 1 0 1 0-2 0h2ZM9 4a1 1 0 1 0 2 0H9Zm7-3a1 1 0 1 0-2 0h2Zm-2 3a1 1 0 1 0 2 0h-2ZM1 6a1 1 0 0 0 0 2V6Zm18 2a1 1 0 1 0 0-2v2ZM5 11v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 11v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 15v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 15v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 11v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM5 15v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM2 4h16V2H2v2Zm16 0h2a2 2 0 0 0-2-2v2Zm0 0v14h2V4h-2Zm0 14v2a2 2 0 0 0 2-2h-2Zm0 0H2v2h16v-2ZM2 18H0a2 2 0 0 0 2 2v-2Zm0 0V4H0v14h2ZM2 4V2a2 2 0 0 0-2 2h2Zm2-3v3h2V1H4Zm5 0v3h2V1H9Zm5 0v3h2V1h-2ZM1 8h18V6H1v2Zm3 3v.01h2V11H4Zm1 1.01h.01v-2H5v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H5v2h.01v-2ZM9 11v.01h2V11H9Zm1 1.01h.01v-2H10v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM9 15v.01h2V15H9Zm1 1.01h.01v-2H10v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM14 15v.01h2V15h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM14 11v.01h2V11h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM4 15v.01h2V15H4Zm1 1.01h.01v-2H5v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H5v2h.01v-2Z"/>
+  </svg>
+
+              <span class="ml-4">Calendar</span>
+            </SidebarLink>
+          </li>
 
           <li>
             <SidebarLink
-              :href="route('offcampusbsed.index')"
-              :active="route().current('offcampusbsed.index')"
+              :href="route('requests-admin.adminRequestsIndexBsed')"
+              :active="route().current('requests-admin.adminRequestsIndexBsed')"
+            >
+            <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 2-8.4 7.05a1 1 0 0 1-1.2 0L1 2m18 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1m18 0v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2"/>
+  </svg>
+
+              <span class="ml-4">Requests</span>
+            </SidebarLink>
+          </li>
+
+         
+
+           <li>
+            <SidebarLink
+              :href="route('attendance-list.attendanceList')"
+              :active="route().current('attendance-list.attendanceList')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -163,9 +191,37 @@ const toggleApplicationsDropdown = () => {
                 />
               </svg>
 
-              <span class="ml-4">Off-Campus</span>
+              <span class="ml-4">Attendance</span>
             </SidebarLink>
           </li>
+
+          <li>
+            <SidebarLink
+              :href="route('offcampusbsed.index')"
+              :active="route().current('offcampusbsed.index')"
+            >
+              <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 12">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5m8 6L5 7l-4 4"/>
+  </svg>
+
+              <span class="ml-4">2nd Shift</span>
+            </SidebarLink>
+          </li>
+
+          <li>
+            <SidebarLink
+              :href="route('first-shift.index')"
+              :active="route().current('first-shift.index')"
+            >
+              <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+  </svg>
+
+              <span class="ml-4">1st Shift</span>
+            </SidebarLink>
+          </li>
+
+        
           <li>
             <SidebarLink
               :href="route('schoolsbsed.index')"
@@ -189,7 +245,7 @@ const toggleApplicationsDropdown = () => {
 
               <span
                 class="-mr-1 font-medium group-hover:text-blue-600 transition duration-500 ease-in-out"
-                >Host Training Establishments</span
+                >HTEs</span
               >
             </SidebarLink>
           </li>
@@ -452,7 +508,7 @@ const toggleApplicationsDropdown = () => {
               <span class="sr-only">Open user menu</span>
               <img
                 class="w-10 h-10 m-auto border-2 border-gold rounded-full object-cover lg:w-12 lg:h-12"
-                src="@/Assets/maamtan.jpg"
+                src="@/Assets/ddd.jpg"
                 alt="user photo"
               />
               <svg

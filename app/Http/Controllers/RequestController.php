@@ -29,7 +29,9 @@ class RequestController extends Controller
     public function adminRequestsindex()
     {
         // Retrieve all users
-        $users = User::all();
+        $users = User::where('approved', '=', 1)
+        ->where('is_admin', '=', 0)
+        ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])->get();
     
         // Retrieve attendance data for all users
         $allUsersAttendance = collect();
@@ -62,6 +64,48 @@ class RequestController extends Controller
         }
     
         return Inertia::render('Admin/Pages/Requests', [
+            'requests' => $allUsersAttendance,
+        ]);
+    }
+
+    public function adminRequestsindexBsed()
+    {
+        // Retrieve all users
+         $users = User::where('approved', '=', 1)
+        ->where('is_admin', '=', 0)
+        ->whereIn('program', ['BSED', 'BSED English', 'BSED Filipino', 'BSED Mathematics', 'BSED Science', 'BSED Social Studies'])->get();
+    
+        // Retrieve attendance data for all users
+        $allUsersAttendance = collect();
+    
+        foreach ($users as $user) {
+            // Retrieve user data from the users table
+            $userData = User::find($user->id);
+    
+            // Retrieve attendance data
+            $userAttendance = RequestResource::collection(
+                Requests::where('employee_id', $user->id)->get() ?? []
+            )->map(function ($attendance) use ($userData) {
+                // Add user data to each attendance record
+                return [
+                    'id' => $attendance->id,
+                    'full_name' => $userData->full_name,
+                    'employee_id' => $attendance->employee_id,
+                    'type' => $attendance->type,
+                    'start_date' => $attendance->start_date,
+                    'end_date' => $attendance->end_date,
+                    'message' => $attendance->message,
+                    'status' => $attendance->status,
+                    'admin_response' => $attendance->admin_response,
+                    'is_seen' => $attendance->notes,
+                ];
+            });
+    
+            // Merge user attendance data into the overall collection
+            $allUsersAttendance = $allUsersAttendance->merge($userAttendance);
+        }
+    
+        return Inertia::render('Admin/PagesBSED/Requests', [
             'requests' => $allUsersAttendance,
         ]);
     }
@@ -150,6 +194,36 @@ class RequestController extends Controller
         ]);
     }
 
+    public function showBsed(string $id)
+    {
+        $request = \App\Models\Requests::with('user')->findOrFail($id);
+    
+        // Retrieve user data from the users table
+        $userData = User::find($request->employee_id);
+    
+        // Mark the request as seen by the employee if it was approved or rejected.
+        // This will be used to display the number of unseen requests in the sidebar of the user dashboard.
+        if (auth()->user()->id == $request->employee_id && $request->status != 'Pending') {
+            $request->update(['is_seen' => true]);
+        }
+    
+        return Inertia::render('Admin/PagesBSED/RequestView', [
+            'request' => [
+                'id' => $request->id,
+                'full_name' => $userData->full_name,
+                'employee_id' => $request->employee_id, // Change this according to your user model's attribute
+                'type' => $request->type,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'message' => $request->message,
+                'status' => $request->status,
+                'admin_response' => $request->admin_response,
+                'is_seen' => $request->is_seen,
+                'created_at' => $request->created_at,
+            ],
+        ]);
+    }
+
     public function showStudent(string $id)
     {
         $request = \App\Models\Requests::with('user')->findOrFail($id);
@@ -189,6 +263,11 @@ class RequestController extends Controller
         $this->requestServices->updateRequest($request, $id);
     }
 
+    public function updateBsed(Request $request, string $id)
+    {
+        $this->requestServices->updateRequestBsed($request, $id);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -196,5 +275,11 @@ class RequestController extends Controller
     {
         \App\Models\Requests::findOrFail($id)->delete();
         return to_route('requests-admin.requestsIndex');
+    }
+
+    public function destroyBsed(string $id)
+    {
+        \App\Models\Requests::findOrFail($id)->delete();
+        return to_route('requests-admin.requestsIndexBsed');
     }
 }

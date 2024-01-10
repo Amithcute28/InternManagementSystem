@@ -88,9 +88,9 @@ onMounted(() => {
 
         <div class="py-8 mt-10">
             
-                <div class="flex justify-between gap-4 ">
+                 <div class="flex justify-between gap-4 ">
                     <Card class="w-full md:w-3/4 !mt-0">
-                        <h1 class="!card-header !mb-0">Welcome,
+                        <h1 class="!card-header !mb-0 mt-6 ml-6">Welcome,
                             {{ $page.props.auth.user.full_name }}!</h1>
                     </Card>
                     <Card class="w-full md:w-1/4 !mt-0" vl :fancy-p="false">
@@ -106,7 +106,7 @@ onMounted(() => {
                         <PrimaryButton2 v-else
                                        class="w-full h-full flex justify-center !border-0 bg-gradient-to-r from-green-500 to-green-400 cursor-not-allowed"
                                        disabled>
-                            <span v-if="is_today_off" class="text-xl py-6 ">{{ ('Today is off!') }}<br></span>
+                            <span v-if="is_today_off" class="text-xl py-6 ">{{ ('Today is off! 🕺🕺') }}<br></span>
                             <span v-else class="text-xl px-10">{{ ('Attendance Taken Today! 🎉') }}<br></span>
                         </PrimaryButton2>
                     </Card>

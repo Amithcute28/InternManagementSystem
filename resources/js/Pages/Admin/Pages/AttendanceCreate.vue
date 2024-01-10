@@ -14,6 +14,7 @@ import Card from "@/Components/Card.vue";
 import HorizontalRule from "@/Components/HorizontalRule.vue";
 import {__} from "@/Composables/useTranslations.js";
 import {attendance_types} from "@/Composables/useAttendanceTypes.js"
+import Swal from 'sweetalert2';
 
 const props = defineProps({
     employees: Object,
@@ -48,14 +49,24 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('attendance.store'), {
-        preserveScroll: true,
-        onError: () => {
-            alert('Error Taking Attendance');
-        },
-        onSuccess: () => {
-            alert('Attendance Taken Successfully');
-        },
+    Swal.fire({
+        title: 'Are you sure you want to take attendance?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.post(route('attendance.store'), {
+                preserveScroll: true,
+                onError: () => {
+                    Swal.fire('Error Taking Attendance', '', 'error');
+                },
+                onSuccess: () => {
+                    Swal.fire('Attendance Taken Successfully', '', 'success');
+                },
+            });
+        }
     });
 };
 

@@ -96,7 +96,7 @@ const submit = () => {
           </div>
 
           <div class="block mt-4 flex flex-wrap justify-between">
-            <label>
+            <!-- <label>
               <Checkbox name="remember" v-model:checked="form.remember" />
               <a class="text-sm text-gray-700 pl-1">Remember me</a>
             </label>
@@ -106,7 +106,7 @@ const submit = () => {
               class="text-sm text-gray-700 hover:text-blue-700"
             >
               Forgot your password?
-            </Link>
+            </Link> -->
           </div>
 
           <button

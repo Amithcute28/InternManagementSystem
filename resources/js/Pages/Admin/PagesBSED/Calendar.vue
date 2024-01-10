@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayoutBSED from '@/Layouts/AdminLayoutBSED.vue';
 import {Head, useForm} from '@inertiajs/vue3';
 import CalendarTabs from "@/Components/Tabs/CalendarTabs.vue";
 import {CalendarView, CalendarViewHeader} from "vue-simple-calendar";
@@ -33,7 +33,7 @@ const submitForm = () => {
             form.date[key] = dayjs(form.date[key]).format('YYYY-MM-DD');
         }
     });
-    form.post(route('calendar.store'), {
+    form.post(route('calendar-bsed.storeBsed'), {
         preserveScroll: true,
         onError: () => {
             useToast().error(('Error Creating Calendar Item'));
@@ -120,7 +120,7 @@ onMounted(() => {
 
 <template>
     <Head :title="('Calendar')"/>
-    <AdminLayout>
+    <AdminLayoutBSED>
         <template #tabs>
             <CalendarTabs />
         </template>
@@ -180,13 +180,13 @@ onMounted(() => {
                     
                     <div>
                         <FlexButton class="mb-2"
-                                    :href="route('calendar.create')"
+                                    :href="route('calendar-bsed.createBsed')"
                                     :text="('Add Items to Calendar')">
                             <PlusIcon />
                         </FlexButton>
 
                         <FlexButton class="mb-2"
-                                    :href="route('calendar.calendarIndex')"
+                                    :href="route('calendar.calendarIndexBsed')"
                                     :text="('Calendar Items')">
                             <PlusIcon />
                         </FlexButton>
@@ -213,7 +213,7 @@ onMounted(() => {
 
             
         </div>
-    </AdminLayout>
+    </AdminLayoutBSED>
 </template>
 
 <style>

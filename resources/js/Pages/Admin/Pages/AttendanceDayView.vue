@@ -23,17 +23,26 @@ const props = defineProps({
 });
 
 const destroy = () => {
-    if (window.confirm('Are you sure? You won\'t be able to revert this!')) {
-        useForm({}).delete(route('attendance.destroy', { date: props.day }), {
-            preserveScroll: true,
-            onError: () => {
-                alert('Error Deleting Attendance');
-            },
-            onSuccess: () => {
-                alert('Attendance Removed!', '', 'success');
-            },
-        });
-    }
+    Swal.fire({
+        title: "Are you sure? You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#d33',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            useForm({}).delete(route('attendance.destroy', { date: props.day }), {
+                preserveScroll: true,
+                onError: () => {
+                    Swal.fire('Error Deleting Attendance', '', 'error');
+                },
+                onSuccess: () => {
+                    Swal.fire('Attendance Removed!', '', 'success');
+                },
+            });
+        }
+    });
 };
 
 

@@ -322,36 +322,20 @@ const confirmProceed = (id) => {
                 class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
                 >MISSING</a
               ></TableDataCell> -->
-              <TableDataCell class="space-x-4">
-                <Link
-                  :href="route('offcampus.show', student.id)"
-                  class="text-green-400 hover:text-green-600"
-                  >View</Link
-                >
-                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
-              </TableDataCell>
-              <TableDataCell
-                ><div class="flex item-center space-x-2">
-                  <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
-                  <button
-                    @click="confirmProceed(student.id)"
-                    class="w-5 h-5 text-green-400 transform hover:text-red-600 hover:scale-110 focus:outline-none active:outline-none"
-                  >
-                    <font-awesome-icon
-                      :icon="['far', 'square-caret-right']"
-                      class="px-2 fa-lg outline-none"
-                    />
-                  </button>
-                  <!-- <Link
-                    :href="route('first-shift.update', student.id)"
-                    method="PUT"
-                    as="button"
-                    class="text-green-400 hover:text-red-600"
-                    >P</Link
-                  >
-
-                  <svg
-                    @click="openModalEvalForm(student)"
+               <TableDataCell class="space-x-4">
+                                <Link :href="route('first-shift.show', student.id)"  class="text-green-400 hover:text-green-600">View</Link>
+                               <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
+                            </TableDataCell>
+                            <TableDataCell
+              ><div class="flex item-center space-x-2">
+               
+                 <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
+                
+                <Link :href="route('first-shift.update', student.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">P</Link>
+                  
+                
+                  <svg 
+                  @click="openModalEvalForm(student)"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
