@@ -19,6 +19,7 @@ use Inertia\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Zipcode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -289,9 +290,9 @@ class UserStudentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(NewInternRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-       
+
 
         $profile = '';
 
@@ -311,6 +312,7 @@ class UserStudentsController extends Controller
 
 
         $user->update([
+
             'student_id' => $request->student_id,
             'program' => $request->program,
             'year_level' => $request->year_level,

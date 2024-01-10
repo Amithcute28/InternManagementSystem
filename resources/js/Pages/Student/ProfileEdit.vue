@@ -115,7 +115,6 @@ const submit = () => {
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.student_id"
-                required
                 autofocus
                 autocomplete="student_id"
               />
@@ -173,7 +172,6 @@ const submit = () => {
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.email"
-                required
                 autofocus
                 autocomplete="email"
               />
@@ -182,57 +180,7 @@ const submit = () => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Email Address</label
               >
-              <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="relative z-1 w-full mb-6 group">
-              <Multiselect
-                v-model="form.skills"
-                :classes="{
-                  groupLabelSelected: 'bg-gold-600 text-white',
-                  groupLabelSelectedPointed:
-                    'bg-gold-600 text-white opacity-90',
-                  optionSelected: 'text-white bg-gold-600',
-                  optionSelectedPointed: 'text-white bg-gold-600 opacity-90',
-                }"
-                mode="tags"
-                :close-on-select="false"
-                :searchable="true"
-                :create-option="true"
-                :options="[
-                  {
-                    value: 'Communication and Interpersonal Skills',
-                    label: 'Communication and Interpersonal Skills',
-                  },
-                  {
-                    value: 'Subject Knowledge Skills',
-                    label: 'Subject Knowledge Skills',
-                  },
-                  {
-                    value: 'Adaptability Skills',
-                    label: 'Adaptability Skills',
-                  },
-                  {
-                    value: 'Technological Profiency Skills',
-                    label: 'Technological Profiency Skills',
-                  },
-                  {
-                    value: 'Classroom Management Skills',
-                    label: 'Classroom Management Skills',
-                  },
-                  {
-                    value: 'Collaboration and Teamwork Skills',
-                    label: 'Collaboration and Teamwork Skills',
-                  },
-                  {
-                    value: 'Emotional Support Skills',
-                    label: 'Emotional Support Skills',
-                  },
-                ]"
-              />
-              <div v-if="errors.skills" class="text-red-500 text-sm mt-5">
-                {{ errors.skills }}
-              </div>
+              <InputError class="mt-2" :message="errors.email" />
             </div>
 
             <div class="grid md:grid-cols-2 md:gap-6">
@@ -308,7 +256,6 @@ const submit = () => {
                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   v-model="form.nationality"
-                  required
                   autofocus
                   autocomplete="nationality"
                 />
@@ -317,7 +264,7 @@ const submit = () => {
                   class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                   >Nationality</label
                 >
-                <InputError class="mt-2" :message="form.errors.nationality" />
+                <InputError class="mt-2" :message="errors.nationality" />
               </div>
             </div>
 
@@ -329,7 +276,6 @@ const submit = () => {
                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   v-model="form.contact_number"
-                  required
                   autofocus
                   autocomplete="contact_number"
                 />
@@ -338,10 +284,7 @@ const submit = () => {
                   class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                   >Contact Number</label
                 >
-                <InputError
-                  class="mt-2"
-                  :message="form.errors.contact_number"
-                />
+                <InputError class="mt-2" :message="errors.contact_number" />
               </div>
               <div class="relative z-0 w-full mb-6 group">
                 <input
@@ -350,7 +293,6 @@ const submit = () => {
                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   v-model="form.zip_code"
-                  required
                   autofocus
                   autocomplete="zip_code"
                 />
@@ -359,7 +301,7 @@ const submit = () => {
                   class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                   >Zip Code</label
                 >
-                <InputError class="mt-2" :message="form.errors.zip_code" />
+                <InputError class="mt-2" :message="errors.zip_code" />
               </div>
             </div>
 
@@ -389,7 +331,6 @@ const submit = () => {
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.guardian_name"
-                required
                 autofocus
                 autocomplete="guardian_name"
               />
@@ -398,7 +339,7 @@ const submit = () => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Guardian Name</label
               >
-              <InputError class="mt-2" :message="form.errors.guardian_name" />
+              <InputError class="mt-2" :message="errors.guardian_name" />
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
@@ -408,7 +349,6 @@ const submit = () => {
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.guardian_contact"
-                required
                 autofocus
                 autocomplete="guardian_contact"
               />
@@ -417,10 +357,7 @@ const submit = () => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >Guardian Contact Number</label
               >
-              <InputError
-                class="mt-2"
-                :message="form.errors.guardian_contact"
-              />
+              <InputError class="mt-2" :message="errors.guardian_contact" />
             </div>
 
             <div class="relative z-0 w-full mb-6 group">
@@ -430,7 +367,6 @@ const submit = () => {
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 v-model="form.student_school_name"
-                required
                 autofocus
                 autocomplete="student_school_name"
               />
@@ -439,10 +375,7 @@ const submit = () => {
                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
                 >School Name</label
               >
-              <InputError
-                class="mt-2"
-                :message="form.errors.student_school_name"
-              />
+              <InputError class="mt-2" :message="errors.student_school_name" />
             </div>
 
             <div class="grid md:grid-cols-2 md:gap-4">
@@ -453,7 +386,6 @@ const submit = () => {
                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   v-model="form.student_school_code"
-                  required
                   autofocus
                   autocomplete="student_school_code"
                 />
@@ -464,7 +396,7 @@ const submit = () => {
                 >
                 <InputError
                   class="mt-2"
-                  :message="form.errors.student_school_code"
+                  :message="errors.student_school_code"
                 />
               </div>
               <div class="relative z-0 w-full mb-2 group">
@@ -477,7 +409,7 @@ const submit = () => {
                   <option>First</option>
                   <option>Second</option>
                 </select>
-                <InputError class="mt-2" :message="form.errors.student_shift" />
+                <InputError class="mt-2" :message="errors.student_shift" />
               </div>
             </div>
             <div class="relative z-0 w-full group">
