@@ -1,9 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, useForm} from '@inertiajs/vue3';
-import GenericDescriptionList from "@/Components/DescriptionList/GenericDescriptionList.vue";
+// import GenericDescriptionList from "@/Components/DescriptionList/GenericDescriptionList.vue";
 import {computed} from "vue";
-import {useToast} from "vue-toastification";
+// import {useToast} from "vue-toastification";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CalendarTabs from "@/Components/Tabs/CalendarTabs.vue";
 import Swal from "sweetalert2";

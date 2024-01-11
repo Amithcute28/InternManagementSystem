@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentCalendarController;
-use App\Http\Controllers\STEController;
+use App\Http\Controllers\SteController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\UserStudentsController;
