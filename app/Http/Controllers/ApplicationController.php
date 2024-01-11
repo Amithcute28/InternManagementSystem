@@ -182,14 +182,14 @@ class ApplicationController extends Controller
 
     public function updateStatus($id)
     {
-        // Find the user by ID
+        // Find the user by Id
         $user = User::findOrFail($id);
 
         // Update the status to "completed"
         $user->in_campus = 1;
         $user->save();
 
-        return back()->with('success', 'Status updated successfully.');
+        return redirect()->route('applications.offCampusApplication');
     }
 
     public function updateIncampus($id)

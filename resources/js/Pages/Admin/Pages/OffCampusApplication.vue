@@ -154,8 +154,8 @@ function openModalEvalForm(intern) {
   document.getElementById("myModalEvalForm").showModal();
 }
 
-const confirmRecommendation = async () => {
-  const result = await Swal.fire({
+const confirmRecommendation = (id) => {
+  const result = Swal.fire({
     title: "Recommend Intern",
     text: "Are you sure you want to recommend this practice teaching intern to another school?",
     icon: "question",
@@ -163,16 +163,12 @@ const confirmRecommendation = async () => {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Yes, recommend",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // If confirmed, proceed with the action
+      router.put(route("applications.updateOffcampus", id));
+    }
   });
-
-  if (result.isConfirmed) {
-    recommendCandidate();
-    Swal.fire(
-      "Recommended!",
-      "This intern has been recommended to another school.",
-      "success"
-    );
-  }
 };
 </script>
 
@@ -270,7 +266,9 @@ const confirmRecommendation = async () => {
             >
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Program</TableHeaderCell>
-             <TableHeaderCell class="whitespace-nowrap">Application</TableHeaderCell>
+            <TableHeaderCell class="whitespace-nowrap"
+              >Application</TableHeaderCell
+            >
             <TableHeaderCell class="whitespace-nowrap"
               >Application</TableHeaderCell
             >
@@ -306,8 +304,15 @@ const confirmRecommendation = async () => {
             </TableDataCell>
 
             <TableDataCell>{{ form.program }}</TableDataCell>
-            <TableDataCell> <button @click="openModal(form)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button></TableDataCell>
-            
+            <TableDataCell>
+              <button
+                @click="openModal(form)"
+                class="px-6 py-2 text-white bg-gold hover:bg-indigo-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                View
+              </button></TableDataCell
+            >
+
             <TableDataCell
               ><a
                 v-if="isImage(form.eval_form)"
@@ -366,7 +371,7 @@ const confirmRecommendation = async () => {
                 <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
 
                 <button
-                  @click="confirmRecommendation"
+                  @click="confirmRecommendation(form.id)"
                   class="w-5 h-5 text-green-400 transform hover:text-red-600 hover:scale-110 focus:outline-none active:outline-none"
                 >
                   <font-awesome-icon
