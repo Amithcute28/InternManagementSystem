@@ -165,7 +165,7 @@ function openModalEvalForm(intern) {
       >
         <div class="flex items-center flex-1 space-x-4">
           <h5>
-            <span class="text-gray-500">All Off-Campus Interns: </span>
+            <span class="text-gray-500">Interns: </span>
             <span class="dark:text-white">{{ totalInterns }}</span>
           </h5>
         </div>
@@ -282,14 +282,16 @@ function openModalEvalForm(intern) {
                 View
               </button></TableDataCell
             >
-            <TableDataCell>
-              <button
-                @click="openModal(form)"
-                class="px-6 py-2 text-white bg-gold hover:bg-indigo-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Check
-              </button></TableDataCell
-            >
+          <TableDataCell class="space-x-4">
+                <Link
+                  :href="
+                    route('steAttendance.index', form.id)
+                  "
+                  class="text-green-400 hover:text-green-600"
+                  >Check</Link
+                >
+                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
+              </TableDataCell>
             <TableDataCell
               ><a
                 v-if="isImage(form.eval_form)"
@@ -350,7 +352,7 @@ function openModalEvalForm(intern) {
                   method="PUT"
                   as="button"
                   class="text-green-400 hover:text-red-600"
-                  >R</Link
+                  >Proceed</Link
                 >
 
                 <svg

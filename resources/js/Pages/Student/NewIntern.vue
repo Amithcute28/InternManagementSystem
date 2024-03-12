@@ -261,6 +261,7 @@ const removeImage = (field) => {
                   optionSelectedPointed: 'text-white bg-gold-600 opacity-90',
                 }"
                 mode="tags"
+                placeholder="Skills"
                 :close-on-select="false"
                 :searchable="true"
                 :create-option="true"

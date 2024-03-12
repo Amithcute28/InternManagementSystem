@@ -39,6 +39,7 @@ class OffCampusController extends Controller
                     'full_name' => $user->full_name,
                     'program' => $user->program,
                     'skills' => $user->skills,
+                    'student_school_name' => $user->student_school_name,
                     'in_campus' => $user->in_campus,
                     'eval_form' => $applicationForm ? ($applicationForm->eval_form ? asset('storage/' . $applicationForm->eval_form) : null) : null,
                     'eslip' => $applicationForm ? ($applicationForm->eslip ? asset('storage/student/' . $applicationForm->eslip) : null) : null,
@@ -92,7 +93,7 @@ class OffCampusController extends Controller
         $perPage = request()->input('perPage') ?: 5;
         $filteredData = $students->when(request()->input('search'), function ($collection, $search) {
             return $collection->filter(function ($item) use ($search) {
-                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+                return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false || stripos($item['student_school_name'], $search) !== false;
             });
         });
 

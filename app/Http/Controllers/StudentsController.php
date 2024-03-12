@@ -66,6 +66,7 @@ public function index()
                 'full_name' => $student_name,
                 'email' => $user->email,
                 'program' => $user->program ?? null,
+                'student_school_name' => $user->student_school_name,
                 'eslip' => $applicationForm->eslip ? asset('storage/' . $applicationForm->eslip) : null,
                 'psa' => $applicationForm->psa ? asset('storage/' . $applicationForm->psa) : null,
                 'pros' => $applicationForm->pros ? asset('storage/' . $applicationForm->pros) : null,
@@ -109,7 +110,7 @@ public function index()
     $combinedData = $applicationForms->concat($approvedUsers);
     $filteredData = $combinedData->when(request()->input('search'), function ($collection, $search) {
         return $collection->filter(function ($item) use ($search) {
-            return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false;
+            return stripos($item['student_id'], $search) !== false || stripos($item['full_name'], $search) !== false || stripos($item['student_school_name'], $search) !== false;
         });
     });
 

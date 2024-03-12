@@ -23,6 +23,7 @@ class AttendanceResource extends JsonResource
             'sign_in_time'  => $this->sign_in_time ?? null,
             'sign_off_time'       => $this->sign_off_time ?? null,
             'notes'        => $this->notes ?? null,
+            'journal'        => $this->journal ?? null,
             
         ];
     }

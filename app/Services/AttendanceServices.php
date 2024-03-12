@@ -209,7 +209,7 @@ Attendance::firstOrCreate(
         "sign_in_time" => $currentTimestamp,
         "sign_off_time" => null,
         "status" => $status,
-        "notes" => "Sign-in Manually filled by employee",
+        "notes" => "insert",
         "is_manually_filled" => true,
     ]
 );
@@ -233,7 +233,7 @@ return to_route('user.index');
         if ($attendance) {
             $attendance->update([
                 "sign_off_time" => Carbon::now()->setTimezone('Asia/Manila'),
-                "notes" => "Manually filled by employee",
+                "notes" => "Manually filled by student",
             ]);
         } else {
             return response()->json(['Error' => 'No Sign in record was found.'], 400);

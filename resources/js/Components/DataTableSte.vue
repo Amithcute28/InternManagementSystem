@@ -48,7 +48,7 @@ const props = defineProps({
             {{ ('No data was found in the records.')}}
         </div>
         <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-900 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-900 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3" v-for="header in head" :key="header.id">
                     {{ header }}

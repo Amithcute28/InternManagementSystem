@@ -24,7 +24,7 @@ const perPage = ref(5);
 
 watch(search, (value) => {
   router.get(
-    "offcampus",
+    "first-shift",
     { search: value },
     {
       preserveState: true,
@@ -35,7 +35,7 @@ watch(search, (value) => {
 
 function getTags() {
   router.get(
-    "offcampus",
+    "first-shift",
     { perPage: perPage.value },
     {
       preserveState: true,
@@ -210,7 +210,7 @@ const confirmProceed = (id) => {
         <Table>
           <template #header>
             <TableRow>
-              <th scope="col" class="p-4">
+              <!-- <th scope="col" class="p-4">
                 <div class="flex items-center">
                   <input
                     id="checkbox-all-search"
@@ -221,10 +221,11 @@ const confirmProceed = (id) => {
                     >checkbox</label
                   >
                 </div>
-              </th>
+              </th> -->
               <TableHeaderCell>Student ID</TableHeaderCell>
               <TableHeaderCell>Name</TableHeaderCell>
               <TableHeaderCell>Program</TableHeaderCell>
+              <TableHeaderCell>School</TableHeaderCell>
               <TableHeaderCell>Application</TableHeaderCell>
               <TableHeaderCell>Attendance</TableHeaderCell>
               <!-- <TableHeaderCell>Evaluation Form</TableHeaderCell> -->
@@ -239,7 +240,7 @@ const confirmProceed = (id) => {
               v-for="student in students.data"
               :key="student.id"
             >
-              <td class="w-4 p-4 bg-white">
+              <!-- <td class="w-4 p-4 bg-white">
                 <div class="flex items-center">
                   <input
                     id="checkbox-table-search-1"
@@ -250,7 +251,7 @@ const confirmProceed = (id) => {
                     >checkbox</label
                   >
                 </div>
-              </td>
+              </td> -->
 
               <TableDataCell>{{ student.student_id }}</TableDataCell>
               <TableDataCell
@@ -271,6 +272,7 @@ const confirmProceed = (id) => {
                 </div>
               </TableDataCell>
               <TableDataCell>{{ student.program }}</TableDataCell>
+              <TableDataCell>{{ student.student_school_name }}</TableDataCell>
               <TableDataCell>
                 <button
                   @click="openModal(student)"
@@ -366,7 +368,7 @@ const confirmProceed = (id) => {
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
-                  </div> -->
+                  </div> 
                 </div></TableDataCell
               >
             </TableRow>

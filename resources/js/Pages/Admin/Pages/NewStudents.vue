@@ -149,7 +149,7 @@ console.log(totalNewStudents);
         <Table>
           <template #header>
             <TableRow>
-              <th scope="col" class="p-4">
+              <!-- <th scope="col" class="p-4">
                 <div class="flex items-center">
                   <input
                     id="checkbox-all-search"
@@ -160,7 +160,7 @@ console.log(totalNewStudents);
                     >checkbox</label
                   >
                 </div>
-              </th>
+              </th> -->
               <TableHeaderCell>ID</TableHeaderCell>
               <TableHeaderCell>Name</TableHeaderCell>
               <TableHeaderCell>Program</TableHeaderCell>
@@ -175,7 +175,7 @@ console.log(totalNewStudents);
               v-for="newstudent in newstudents.data"
               :key="newstudent.id"
             >
-              <td class="w-4 p-4 bg-white">
+              <!-- <td class="w-4 p-4 bg-white">
                 <div class="flex items-center">
                   <input
                     id="checkbox-table-search-1"
@@ -186,7 +186,7 @@ console.log(totalNewStudents);
                     >checkbox</label
                   >
                 </div>
-              </td>
+              </td> -->
 
               <TableDataCell>{{ newstudent.student_id }}</TableDataCell>
               <TableDataCell

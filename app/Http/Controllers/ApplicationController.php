@@ -197,6 +197,7 @@ class ApplicationController extends Controller
         $student = User::find($id);
 
         $student->applications = 1;
+        $student->student_shift = "First";
         $student->save();
 
 
@@ -205,19 +206,60 @@ class ApplicationController extends Controller
         return redirect()->route('applications.inCampusApplication');
     }
 
+    // public function updateOffcampus($id)
+    // {
+    //     $student = User::find($id);
+
+    //     $application = ApplicationForm::find($id);
+
+    //     $application->user()->associate($user);
+
+    //     $student->choosen_institution = 0;
+    //     $student->is_off_campus = 1;
+    //     $application->eval_form = "";
+
+    //     $application->save();
+    //     $student->save();
+
+
+    //     // Add any additional logic or response handling as needed
+
+    //     return redirect()->route('applications.offCampusApplication');
+    // }
+
+
     public function updateOffcampus($id)
-    {
-        $student = User::find($id);
+{
+    // Find the user
+    $user = User::find($id);
 
-        $student->choosen_institution = 0;
-        $student->is_off_campus = 1;
-        $student->save();
+    // Find the application using the user's ID
+    $application = ApplicationForm::where('user_id', $id)->first();
 
-
-        // Add any additional logic or response handling as needed
-
-        return redirect()->route('applications.offCampusApplication');
+    // Check if both user and application exist
+    if (!$user || !$application) {
+        // Handle the case when either user or application is not found
+        return redirect()->route('applications.offCampusApplication')->with('error', 'User or application not found.');
     }
+
+    // Associate the user with the application
+    $application->user()->associate($user);
+
+    // Update user and application fields
+    $user->choosen_institution = 0;
+    $user->is_off_campus = 1;
+
+    // Clear the eval_form field in the application
+    $application->eval_form = "";
+
+    // Save both the user and application
+    $user->save();
+    $application->save();
+
+    // Add any additional logic or response handling as needed
+
+    return redirect()->route('applications.offCampusApplication')->with('success', 'Off-campus update successful.');
+}
 
 
     /**

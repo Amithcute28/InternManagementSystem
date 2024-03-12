@@ -192,7 +192,7 @@ function openModalRecommend(student) {
         <Table>
           <template #header>
             <TableRow>
-              <th scope="col" class="p-4">
+              <!-- <th scope="col" class="p-4">
                 <div class="flex items-center">
                   <input
                     id="checkbox-all-search"
@@ -203,10 +203,11 @@ function openModalRecommend(student) {
                     >checkbox</label
                   >
                 </div>
-              </th>
+              </th> -->
               <TableHeaderCell>Student ID</TableHeaderCell>
               <TableHeaderCell>Name</TableHeaderCell>
               <TableHeaderCell>Program</TableHeaderCell>
+              <TableHeaderCell>School</TableHeaderCell>
               <TableHeaderCell>Application</TableHeaderCell>
               <TableHeaderCell>Attendance</TableHeaderCell>
               <TableHeaderCell>Evaluation Form</TableHeaderCell>
@@ -221,7 +222,7 @@ function openModalRecommend(student) {
               v-for="student in students.data"
               :key="student.id"
             >
-              <td class="w-4 p-4 bg-white">
+              <!-- <td class="w-4 p-4 bg-white">
                 <div class="flex items-center">
                   <input
                     id="checkbox-table-search-1"
@@ -232,7 +233,7 @@ function openModalRecommend(student) {
                     >checkbox</label
                   >
                 </div>
-              </td>
+              </td> -->
 
               <TableDataCell>{{ student.student_id }}</TableDataCell>
               <TableDataCell
@@ -253,6 +254,7 @@ function openModalRecommend(student) {
                 </div>
               </TableDataCell>
               <TableDataCell>{{ student.program }}</TableDataCell>
+              <TableDataCell>{{ student.student_school_name }}</TableDataCell>
               <TableDataCell>
                 <button
                   @click="openModal(student)"
@@ -305,15 +307,16 @@ function openModalRecommend(student) {
                   >MISSING</a
                 ></TableDataCell
               >
-              <TableDataCell>{{ student.choosen_institution }}</TableDataCell>
+              <!-- <TableDataCell>{{ student.choosen_institution }}</TableDataCell> -->
               <TableDataCell class="space-x-4">
                 <Link
                   :href="route('offcampus.show', student.id)"
-                  class="text-green-400 hover:text-green-600"
-                  >View</Link
+                   class="text-green-400 hover:text-green-600"
+                  >Check</Link
                 >
                 <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
               </TableDataCell>
+              <TableDataCell></TableDataCell>
             </TableRow>
           </template>
         </Table>

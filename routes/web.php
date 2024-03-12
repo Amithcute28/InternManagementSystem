@@ -106,6 +106,10 @@ Route::put('/calendar-update-bsed/{id}', [CalendarController::class, 'updateBsed
 Route::put('/status/update/{studentId}/{institutionId}', [StatusController::class, 'update'])->name('status.update');
 Route::get('/my-attendance', [AttendanceController::class, 'attendanceDashboard'])->middleware('auth')->name('attendance.dashboard');
 Route::resource('/attendance', AttendanceController::class);
+Route::put('/attendanceUpdate/{id}', [AttendanceController::class, 'attendanceUpdate'])->name('update.attendance');
+Route::delete('deleteJournal/{id}', [AttendanceController::class, 'deleteJournal'])->name('deleteJournal.index');
+
+
 Route::resource('/requests', RequestController::class)->only(['index', 'show', 'create', 'store', 'destroy']);
 
 Route::get('/requests-admin', [RequestController::class, 'adminRequestsIndex'])->name('requests-admin.requestsIndex');
@@ -132,6 +136,8 @@ Route::resource('/coordinators', CoordinatorsController::class);
 
 Route::resource('/offcampus', OffCampusController::class);
 Route::get('/offcampus-attendance/{id}', [OffCampusController::class, 'attendanceStudent'])->name('offcampus-attendance.attendanceStudent');
+
+Route::get('/ste-attendance/{id}', [SteController::class, 'attendanceStudentSte'])->name('steAttendance.index');
 
 Route::resource('schools', SchoolsController::class);
 Route::resource('adminProfile', AdminProfileController::class);

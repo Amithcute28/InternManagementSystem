@@ -31,7 +31,7 @@
    
     </div>
     <Head>
-      <title>Recommended Institutions for {{ student.full_name }}</title>
+      <title>Recommended Institution</title>
     </Head>
     <div class="mt-16">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -40,6 +40,7 @@
           
           <div class="mb-4 grid md:grid-cols-2">
             <p><strong>Program:</strong> {{ student.program }}</p>
+            <p><strong>Shift:</strong> {{ student.student_shift }}</p>
             <p><strong>Email:</strong> {{ student.email }}</p>
             <p><strong>Academic Performance:</strong> {{ student.academic_performance }}</p>
             <p><strong>Skills:</strong> {{ student.skills }}</p>
@@ -87,9 +88,9 @@
                     </div>
 
                     <div class="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-                    <p class="text-lg text-gray-600">Requirements</p>
+                    <p class="text-lg text-gray-600">Code</p>
                     <p class="text-base font-medium text-navy-700 dark:text-white">
-                        {{ institution.requirements }}
+                        {{ student.school_code }}
                     </p>
                     </div>
 

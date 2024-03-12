@@ -179,6 +179,11 @@ class User extends Authenticatable
         return $this->hasMany(Attendance::class, 'student_id');
     }
 
+    // public function attendances()
+    // {
+    //     return $this->hasMany(Attendance::class);
+    // }
+
     public function getAttended(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         // exclude absented ones

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('sign_in_time')->nullable();
             $table->time('sign_off_time')->nullable();
             $table->string('notes')->nullable();
+            $table->string('journal')->nullable();
             $table->boolean('is_manually_filled')->default(false); // when employees take attendance themselves
             $table->unique(['student_id', 'date']);
             $table->timestamps();

@@ -392,6 +392,9 @@ class SteController extends Controller
         //
         $student = User::find($id);
 
+        $student->student_school_name = "";
+        $student->student_school_code = "";
+        $student->student_shift = "Second";
         $student->in_campus = 1;
         $student->save();
 
@@ -429,6 +432,56 @@ class SteController extends Controller
 
         // Redirect back to the previous page or show a success message
         return to_route('stes-interns.interns');
+    }
+
+    public function attendanceStudentSte(Request $request, string $id)
+    {
+        $request->validate([
+            'term' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        $user = User::findOrFail($id); // Get the logged-in user
+
+        $dateParam = $request->input('term', '');
+
+        if ($dateParam) {
+            $date = Carbon::createFromFormat('Y-m-d', $dateParam)->startOfDay();
+            if ($date->isAfter(Carbon::today())) {
+                return response()->json(['Error' => 'Date cannot be in the future. Go back and choose a date before today.']);
+            }
+
+            $date = $date->toDateString();
+        } else {
+            $date = '';
+        }
+
+        $attendanceList = Attendance::select(
+            'date',
+            'status',
+            'sign_in_time',
+            'sign_off_time',
+            'notes',
+            DB::raw('COUNT(CASE WHEN status IN (\'late\', \'on_time\') THEN 1 END) as attended_count'),
+            DB::raw('COUNT(CASE WHEN status = \'on_time\' THEN 1 END) as on_time_count'),
+            DB::raw('COUNT(CASE WHEN status = \'late\' THEN 1 END) as late_count'),
+            DB::raw(
+                'COUNT(CASE WHEN status = \'missed\' THEN 1 END) as missed_count'
+            )
+        )
+            ->with('user') // Eager load the User model relationship
+            ->where('student_id', $user->id) // Filter by the logged-in user's ID
+            ->groupBy('date', 'status', 'sign_in_time', 'sign_off_time', 'notes')
+            ->orderByDesc('date');
+
+        if ($date) {
+            $attendanceList->where('date', '=', $date);
+        }
+
+        return Inertia::render('STE/AttendanceStudentSte', [
+            "attendanceList" => $attendanceList->get(), // Use get to retrieve the results
+            "dateParam" => $date,
+            "EmployeeStats" => $user->myInfo(),
+        ]);
     }
 
     /**

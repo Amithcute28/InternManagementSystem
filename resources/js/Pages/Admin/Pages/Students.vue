@@ -290,6 +290,7 @@ const submit = () => {
             <TableHeaderCell>Student ID</TableHeaderCell>
             <TableHeaderCell >Name</TableHeaderCell>
             <TableHeaderCell >Program</TableHeaderCell>
+            <TableHeaderCell >School</TableHeaderCell>
             <TableHeaderCell >Status</TableHeaderCell>
             <!-- <TableHeaderCell class="whitespace-nowrap"
               >Entrance Slip</TableHeaderCell
@@ -324,6 +325,7 @@ const submit = () => {
                                      </div>  
                             </TableDataCell>
             <TableDataCell>{{ form.program }}</TableDataCell>
+            <TableDataCell>{{ form.student_school_name }}</TableDataCell>
              <TableDataCell>
               <template v-if="offCampus(form)">
                  <div class="flex items-center">

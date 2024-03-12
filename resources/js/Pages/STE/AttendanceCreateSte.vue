@@ -149,7 +149,7 @@ watch(() => form.date, search);
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Card class="!mt-0">
                     <InputLabel v-if="partial_attendance_exists" class="!font-thin">
-                        {{ ('Note: This page overwrites employees manually registered attendance') }}.
+                        {{ ('Note: This page overwrites students manually registered attendance') }}.
                     </InputLabel>
                     <form @submit.prevent="submit" class="pt-4">
                         <div>
@@ -177,9 +177,9 @@ watch(() => form.date, search);
 
                         <Notice v-else-if="partial_attendance_exists" type="warning"
                                 :bold="('Incomplete Attendance!')" br
-                                :text="('Some employees have taken their attendances here while others did not. Any changes you make in this page will overwrite the records here.') + '<br />' +
-                                      ('Records with the sign ✍️ denotes that this employee has taken their attendance but hasn\'t signed off yet (incomplete attendance).') + '<br />' +
-                                      ('Records with the sign ✅ denotes that this employee has taken their attendance and has signed off (complete attendance).') + '<br />'"
+                                :text="('Some students have taken their attendances here while others did not. Any changes you make in this page will overwrite the records here.') + '<br />' +
+                                      ('Records with the sign ✍️ denotes that this student has taken their attendance but hasn\'t signed off yet (incomplete attendance).') + '<br />' +
+                                      ('Records with the sign ✅ denotes that this student has taken their attendance and has signed off (complete attendance).') + '<br />'"
                         />
 
                         <HorizontalRule class="mt-6"/>
@@ -277,9 +277,9 @@ watch(() => form.date, search);
                                 <p>
                                     {{ ('⚠️ Means there this page has registered attendances recorded, but this record is not recorded and needs to be filled') }}.</p>
                                 <p>
-                                    {{ ('✍️ Means there this page has registered attendances recorded, and this record has been taken by employee, but hasn\'t signed off yet (incomplete attendance)') }}.</p>
+                                    {{ ('✍️ Means there this page has registered attendances recorded, and this record has been taken by student, but hasn\'t signed off yet (incomplete attendance)') }}.</p>
                                 <p>
-                                    {{ ('✅ Means there this page has registered attendances recorded, and this record\'s attendance has been fully taken by employee (complete attendance)') }}.</p>
+                                    {{ ('✅ Means there this page has registered attendances recorded, and this record\'s attendance has been fully taken by student (complete attendance)') }}.</p>
                             </div>
                         </div>
 

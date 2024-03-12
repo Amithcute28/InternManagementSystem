@@ -43,9 +43,9 @@ watch(date, search);
             <AttendanceTabs/>
         </template>
         <div class="py-8 mt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Card class="!mt-0">
-                    <h1 class="card-header !mb-4">{{ ('Attendance List') }}</h1>
+           
+               
+                   <p class="text-2xl font-semibold ml-4 mb-6">Attendance List</p>
                     <div class="flex justify-between items-center pb-4 gap-4">
                         <FlexButton :href="route('ste-dashboard.create')" :text="('Take/Edit Attendance')">
                             <PlusIcon/>
@@ -68,7 +68,7 @@ watch(date, search);
                     </div>
                     <DataTableSte
                         :controller="'ste-attendances'"
-                        :head='[("Date"), ("Total Attendance"), ("Attended On Time"), ("Attended Late"), ("Absented")]'
+                        :head='[("Date"), ("Total Attendance"), ("On Time"), ("Late"), ("Absents")]'
                         :data="attendanceList"
                         :hasActions="false"
                         :hasLink="true"
@@ -76,8 +76,8 @@ watch(date, search);
                         :customParamsHeader="'date'"
                         :customParamsIndex="0"
                     ></DataTableSte>
-                </Card>
-            </div>
+              
+            
         </div>
     </SteLayout>
 </template>

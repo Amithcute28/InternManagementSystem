@@ -46,9 +46,10 @@ watch(date, search);
             <p class="text-2xl font-semibold ml-4 mb-6">Attendance List</p>
                 
                     <div class="flex justify-between items-center pb-4 gap-4">
-                        <FlexButton :href="route('attendance.create')" :text="('Take/Edit Attendance')">
+                        <!-- <FlexButton :href="route('attendance.create')" :text="('Take/Edit Attendance')">
                             <PlusIcon/>
-                        </FlexButton>
+                        </FlexButton> -->
+                        <div></div>
                         <div>
                             <InputLabel for="date" :value="('Filter by Date:')"/>
                             <VueDatePicker
@@ -67,7 +68,7 @@ watch(date, search);
                     </div>
                     <DataTable
                         :controller="'attendances'"
-                        :head='[("Date"), ("Total Attendance"), ("Attended On Time"), ("Attended Late"), ("Absented")]'
+                        :head='[("Date"), ("Total Attendance"), ("On Time"), ("Late"), ("Absents")]'
                         :data="attendanceList"
                         :hasActions="false"
                         :hasLink="true"
