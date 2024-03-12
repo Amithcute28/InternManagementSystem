@@ -322,26 +322,46 @@ const confirmProceed = (id) => {
                 class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
                 >MISSING</a
               ></TableDataCell> -->
-               <TableDataCell class="space-x-4">
-                                <Link :href="route('first-shift.show', student.id)"  class="text-green-400 hover:text-green-600">View</Link>
-                               <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
-                            </TableDataCell>
-                            <TableDataCell
-              ><div class="flex item-center space-x-2">
-               
-                 <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
-                
-                <Link :href="route('first-shift.update', student.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">P</Link>
-                  
-                
-                  <svg 
-                  @click="openModalEvalForm(student)"
+              <TableDataCell class="space-x-4">
+                <Link
+                  :href="route('first-shift.show', student.id)"
+                  class="text-green-400 hover:text-green-600"
+                  >View</Link
+                >
+                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
+              </TableDataCell>
+              <TableDataCell
+                ><div class="flex item-center space-x-2">
+                  <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
+
+                  <Link
+                    :href="route('first-shift.update', student.id)"
+                    method="PUT"
+                    as="button"
+                    class="text-grey-300 hover:text-yellow-300"
+                  >
+                    <font-awesome-icon
+                      :icon="['far', 'square-caret-right']"
+                      class="fa-lg outline-none"
+                  /></Link>
+                  <!-- <button
+                    @click="confirmRecommendation(form.id)"
+                    class="w-5 h-5 text-green-400 transform hover:text-red-600 hover:scale-110 focus:outline-none active:outline-none"
+                  >
+                    <font-awesome-icon
+                      :icon="['far', 'square-caret-right']"
+                      class="px-2 fa-lg outline-none"
+                    />
+                  </button> -->
+
+                  <svg
+                    @click="openModalEvalForm(student)"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="w-5 h-5 transform hover:text-purple-500 hover:scale-110"
+                    class="w-5 h-5 transform hover:text-yellow-300 hover:scale-110"
                   >
                     <path
                       stroke-linecap="round"
@@ -350,25 +370,22 @@ const confirmProceed = (id) => {
                     />
                   </svg>
 
-                  <div
-                    class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-5 h-5 scale-90 ml-4 transform hover:text-yellow-300 hover:scale-100"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </div> -->
-                </div></TableDataCell
-              >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg></div
+              ></TableDataCell>
             </TableRow>
           </template>
         </Table>

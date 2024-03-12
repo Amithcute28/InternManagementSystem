@@ -149,23 +149,38 @@ const deleteAction = (id) => {
         > -->
       </div>
 
-                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
-              
-              <div class="flex items-center flex-1 space-x-4">
-                  <h5>
-                      <span class="text-gray-500">All First Shift Applications: </span>
-                      <span class="dark:text-white">{{ totalInterns }}</span>
-                  </h5>
-        
-              </div>
-              <div class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-                
-      <label for="table-search" class="sr-only">Search</label>
-      <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-          </div>
-           <input
+      <div
+        class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4"
+      >
+        <div class="flex items-center flex-1 space-x-4">
+          <h5>
+            <span class="text-gray-500">All First Shift Applications: </span>
+            <span class="dark:text-white">{{ totalInterns }}</span>
+          </h5>
+        </div>
+        <div
+          class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3"
+        >
+          <label for="table-search" class="sr-only">Search</label>
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
+              <svg
+                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            <input
               v-model="search"
               type="text"
               id="table-search-users"
@@ -266,24 +281,38 @@ const deleteAction = (id) => {
               </template></TableDataCell
             >
 
-            <TableDataCell class="space-x-4">
-              <Link
-                @click="isComplete(form) ? proceedAction(form.id) : null"
-                as="button"
-                class="text-green-400 hover:text-green-600"
-                :style="{
-                  'pointer-events': isComplete(form) ? 'auto' : 'none',
-                  color: isComplete(form) ? '' : '#ccc',
-                }"
-              >
-                Proceed
-              </Link>
-              <Link
-                @click="deleteAction(form.id)"
-                as="button"
-                class="text-red-400 hover:text-red-600"
-                >Delete</Link
-              >
+            <TableDataCell>
+              <div class="flex items-center space-x-2">
+                <Link
+                  @click="isComplete(form) ? proceedAction(form.id) : null"
+                  as="button"
+                  class="text-grey-300 hover:text-yellow-300"
+                  :style="{
+                    'pointer-events': isComplete(form) ? 'auto' : 'none',
+                    color: isComplete(form) ? '' : '#ccc',
+                  }"
+                  ><font-awesome-icon
+                    :icon="['far', 'square-caret-right']"
+                    class="fa-lg outline-none"
+                  />
+                </Link>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5 scale-90 transform hover:text-yellow-300 hover:scale-100"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </div>
             </TableDataCell>
           </TableRow>
         </template>

@@ -367,12 +367,12 @@ const confirmRecommendation = (id) => {
             >
 
             <TableDataCell
-              ><div class="flex item-center space-x-2">
+              ><div class="flex item-center space-x-3 justify-center">
                 <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
 
                 <button
                   @click="confirmRecommendation(form.id)"
-                  class="w-5 h-5 text-green-400 transform hover:text-red-600 hover:scale-110 focus:outline-none active:outline-none"
+                  class="w-5 h-5 text-grey-300 hover:text-yellow-300 hover:scale-110 focus:outline-none active:outline-none"
                 >
                   <font-awesome-icon
                     :icon="['far', 'square-caret-right']"
@@ -387,7 +387,7 @@ const confirmRecommendation = (id) => {
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  class="w-5 h-5 transform hover:text-purple-500 hover:scale-110"
+                  class="w-5 h-5 transform hover:text-yellow-300 hover:scale-110"
                 >
                   <path
                     stroke-linecap="round"
