@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full bg-darkWhite h-screen">
+  <div class="w-full h-full bg-darkWhite h-full">
     <aside
       id="logo-sidebar"
       class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
