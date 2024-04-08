@@ -21,9 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(): Response
     {
 
@@ -35,33 +33,18 @@ class AdminProfileController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($user)
     {
         $user = User::findOrFail($user);
@@ -70,10 +53,6 @@ class AdminProfileController extends Controller
         ]);
     }
 
-    
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id): RedirectResponse
     {
         $user = User::find($id);
@@ -113,22 +92,10 @@ class AdminProfileController extends Controller
             'guardian_name' => $request->guardian_name,
             'guardian_contact' => $request->guardian_contact,
         ]);
-
-
-
-
-
-
-
-
         return to_route('adminProfile.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
     }
 }
