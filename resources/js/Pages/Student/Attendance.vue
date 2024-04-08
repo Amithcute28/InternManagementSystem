@@ -106,8 +106,8 @@ const submit = () => {
 
   // Example of using SweetAlert for confirmation
   Swal.fire({
-    title: "Submit Evaluation Form",
-    text: "Are you sure you want to submit the evaluation form?",
+    title: "Submit Journal",
+    text: "Are you sure you want to submit the Journal for today?",
     icon: "question",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -306,7 +306,7 @@ function openModalEvalForm(intern) {
               <TableDataCell
               ><a
                 v-if="isImage(form.journal)"
-                :href="form.psa"
+                :href="form.journal"
                 target="_blank"
               >
                 <img
@@ -317,14 +317,14 @@ function openModalEvalForm(intern) {
               </a>
               <a
                 v-else-if="isPdf(form.journal)"
-                :href="form.eval_form"
+                :href="form.journal"
                 target="_blank"
                 class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
                 >PDF</a
               >
               <a
                 v-else-if="isDoc(form.journal)"
-                :href="form.eval_form"
+                :href="form.journal"
                 target="_blank"
                 class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
                 >DOC FILE</a

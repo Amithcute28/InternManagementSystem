@@ -28,6 +28,7 @@ use App\Services\CommonServices;
 use App\Services\AttendanceServices;
 use App\Services\ValidationServices;
 use Carbon\Carbon;
+use App\Models\School;
 
 class UserStudentsController extends Controller
 {
@@ -247,8 +248,10 @@ class UserStudentsController extends Controller
      */
     public function edit(User $user): Response
     {
+        $schools = School::all();   
         return Inertia::render('Student/ProfileEdit', [
-            'user' => new UserResource($user)
+            'user' => new UserResource($user),
+            'school' => $schools
         ]);
     }
 

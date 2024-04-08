@@ -189,7 +189,7 @@ public function index(Request $request)
             'on_time_count' => $attendance->on_time_count,
             'late_count' => $attendance->late_count,
             'missed_count' => $attendance->missed_count,
-            'journal' => $attendance->journal ? asset('storage/student/' . $attendance->journal) : null,
+            'journal' => $attendance->journal ? asset('storage/' . $attendance->journal) : null,
         ];
     });
 

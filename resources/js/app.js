@@ -12,6 +12,7 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import 'sweetalert2/dist/sweetalert2.css';
 
 
+
 library.add(fas, far);
 // or via CommonJS
 

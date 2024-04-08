@@ -209,7 +209,7 @@ Attendance::firstOrCreate(
         "sign_in_time" => $currentTimestamp,
         "sign_off_time" => null,
         "status" => $status,
-        "notes" => "insert",
+        "notes" => "",
         "is_manually_filled" => true,
     ]
 );

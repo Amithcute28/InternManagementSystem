@@ -152,8 +152,8 @@ const destroy = () => {
                             <TableHead>{{('Student')}}</TableHead>
                             <TableHead>{{('School')}}</TableHead>
                             <TableHead>{{('Status')}}</TableHead>
-                            <TableHead>{{('Sign In Time')}}</TableHead>
-                            <TableHead>{{('Sign Off Time')}}</TableHead>
+                            <TableHead>{{('Time In')}}</TableHead>
+                            <TableHead>{{('Time out')}}</TableHead>
                             <TableHead>{{('Notes')}}</TableHead>
                             <TableHead>{{('Journal')}}</TableHead>
                         </template>
@@ -166,7 +166,7 @@ const destroy = () => {
                                 <TableBodyHeader >{{ attendance.student_school_name }}</TableBodyHeader>
                                 <TableBody>{{ attendance_types[attendance.status] }}</TableBody>
                                 <TableBody>{{ attendance.sign_in_time }}</TableBody>
-                                <TableBody>{{ attendance.sign_off_time ?? ('Haven\'t Sign Off Yet') }}</TableBody>
+                                <TableBody>{{ attendance.sign_off_time ?? ('Haven\'t Time Out Yet') }}</TableBody>
                                 <TableBody>{{ attendance.notes }}</TableBody>
                                   
                             </TableRow>

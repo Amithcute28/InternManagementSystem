@@ -43,7 +43,7 @@ const today = (new Date()).toLocaleDateString(usePage().props.locale,
 const form = useForm({});
 
 const msg = computed(() => {
-    return (props.attendance_status === 0) ? ('Sign in') : ('Sign off')
+    return (props.attendance_status === 0) ? ('Time In') : ('Time Out')
 })
 
 let isSignIn = props.attendance_status === 0;
@@ -55,14 +55,28 @@ watch(() => props.attendance_status,
 const submit = async () => {
   const postRoute = isSignIn ? 'attendance.dashboardSignIn' : 'attendance.dashboardSignOff';
 
-  const confirmed = window.confirm(`Confirm ${isSignIn ? 'Sign in' : 'Sign off'} for attendance for ${today}?`);
+  const confirmed = await Swal.fire({
+    title: `Confirm ${isSignIn ? 'Time In' : 'Time Out'} for attendance for ${today}?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Confirm',
+    cancelButtonText: 'Cancel',
+  });
 
-  if (confirmed) {
+  if (confirmed.isConfirmed) {
     try {
       await form.post(route(postRoute, { id: usePage().props.auth.user.id }));
-      alert(`Action Registered${isSignIn ? "\nDon't forget to come here and sign-off before you leave so that the attendance gets registered!" : ''}`);
+      Swal.fire({
+        title: 'Action Registered',
+        text: isSignIn ? "Don't forget to come here and sign-off before you leave so that the attendance gets registered!" : '',
+        icon: 'success',
+      });
     } catch (error) {
-      alert('Error: Something went wrong. Please try again later.');
+      Swal.fire({
+        title: 'Error',
+        text: 'Something went wrong. Please try again later.',
+        icon: 'error',
+      });
     }
   }
 };
@@ -97,7 +111,8 @@ onMounted(() => {
                         <form @submit.prevent="submit" class="w-full h-full"
                               v-if="attendance_status !== 2 && !is_today_off">
                             <PrimaryButton2 class="w-full h-full flex justify-center">
-                            <span class="text-xl">Attendance{{ msg }}
+                            <span class="text-xl">Attendance
+                                <br>{{ msg }}
                                 <br>
                                 <span class="text-xs text-gray-200">{{ ('For') }}  {{ today }}</span>
                             </span>
