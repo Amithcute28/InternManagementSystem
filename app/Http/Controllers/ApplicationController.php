@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): Response
     {
         $user = Auth::user();
@@ -34,8 +31,6 @@ class ApplicationController extends Controller
 
     public function inCampusApplication()
     {
-        // in-campus logic goes here
-
         $qualifiedUsers = User::where('approved', 1)
             ->where('is_admin', 0)
             ->where('applications', 0)
@@ -51,7 +46,7 @@ class ApplicationController extends Controller
             }])
             ->get()
             ->map(function ($user) {
-                $applicationForm = $user->applicationForms->first(); // Get the first application form
+                $applicationForm = $user->applicationForms->first(); 
 
                 return [
                     'id' => $user->id,
@@ -112,8 +107,6 @@ class ApplicationController extends Controller
 
     public function offCampusApplication()
     {
-        // in-campus logic goes herea
-
         $qualifiedUsers = User::where('approved', 1)->where('is_admin', 0)
             ->whereIn('program', ['BEED', 'BECEd', 'BSNEd', 'BPEd'])
             ->where('in_campus', 1)
@@ -123,7 +116,7 @@ class ApplicationController extends Controller
             }])
             ->get()
             ->map(function ($user) {
-                $applicationForm = $user->applicationForms->first(); // Get the first application form
+                $applicationForm = $user->applicationForms->first();
 
                 return [
                     'id' => $user->id,
@@ -182,10 +175,8 @@ class ApplicationController extends Controller
 
     public function updateStatus($id)
     {
-        // Find the user by Id
         $user = User::findOrFail($id);
 
-        // Update the status to "completed"
         $user->in_campus = 1;
         $user->save();
 
@@ -199,50 +190,22 @@ class ApplicationController extends Controller
         $student->applications = 1;
         $student->student_shift = "First";
         $student->save();
-
-
-        // Add any additional logic or response handling as needed
-
         return redirect()->route('applications.inCampusApplication');
     }
 
-    // public function updateOffcampus($id)
-    // {
-    //     $student = User::find($id);
-
-    //     $application = ApplicationForm::find($id);
-
-    //     $application->user()->associate($user);
-
-    //     $student->choosen_institution = 0;
-    //     $student->is_off_campus = 1;
-    //     $application->eval_form = "";
-
-    //     $application->save();
-    //     $student->save();
-
-
-    //     // Add any additional logic or response handling as needed
-
-    //     return redirect()->route('applications.offCampusApplication');
-    // }
-
-
     public function updateOffcampus($id)
 {
-    // Find the user
+
     $user = User::find($id);
 
-    // Find the application using the user's ID
     $application = ApplicationForm::where('user_id', $id)->first();
 
-    // Check if both user and application exist
+
     if (!$user || !$application) {
-        // Handle the case when either user or application is not found
         return redirect()->route('applications.offCampusApplication')->with('error', 'User or application not found.');
     }
 
-    // Associate the user with the application
+   
     $application->user()->associate($user);
 
     // Update user and application fields
