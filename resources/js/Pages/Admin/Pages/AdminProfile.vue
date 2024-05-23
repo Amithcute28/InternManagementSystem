@@ -35,11 +35,7 @@ function openModal(school) {
         <p class="text-2xl font-semibold ml-4">Coordinator Profile</p>
          
           <Link v-for="admin in users" :key="admin.id" :href="route('adminProfile.edit', admin.id)" class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit Information</Link>
-        <!-- <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        > -->
+     
         
       </div>
       <div class="bg-gray-100 mt-16">
@@ -50,17 +46,14 @@ function openModal(school) {
            
         </div>
     </div>
-    <!-- End of Navbar -->
+    
     
 
     <div class="container mx-auto bg-white">
         <div class="md:flex no-wrap md:-mx-2 ">
-            <!-- Left Side -->
             
-            <!-- Right Side -->
             <div class="w-full mx-2 h-64">
-                <!-- Profile tab -->
-                <!-- About Section -->
+               
                 <div class="bg-white p-3 rounded-xl shadow-md">
                     
 
@@ -136,18 +129,10 @@ function openModal(school) {
                            
                         </div>
                     </div>
-                   
-                   
-                         
-                         
+ 
                 </div>
-                <!-- End of about section -->
 
                 <div class="my-4"></div>
-
-                <!-- Experience and education -->
-               
-                <!-- End of profile tab -->
             </div>
         </div>
     </div>

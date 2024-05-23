@@ -234,8 +234,6 @@ const deleteAction = (id) => {
                   class="px-2 py-2.5 text-white bg-red-500 hover:bg-indigo-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-3"
                   >Delete</Link
                 >
-
-                <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
               </div>
             </ReusableCard>
             <ModalDialog :modalActive="modalActive" @close-modal="toggleModal">
@@ -838,12 +836,6 @@ const deleteAction = (id) => {
                 class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12"
               >
                 <div class="map-container-2 w-full">
-                  <!-- <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1956.657715528662!2d125.00004053842936!3d11.238190528016471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3308772c87c4c367%3A0xa5e5c080ec6a88ef!2sLeyte%20Normal%20University!5e0!3m2!1sen!2sph!4v1683656352509!5m2!1sen!2sph"
-                    class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg"
-                    frameborder="0"
-                    allowfullscreen
-                  ></iframe> -->
                 </div>
               </div>
               <div
@@ -927,9 +919,8 @@ const deleteAction = (id) => {
               </div>
             </div>
           </section>
-          <!-- Section: Design Block -->
         </div>
-        <!-- End of Modal Content-->
+        
       </div>
     </dialog>
   </AdminLayout>

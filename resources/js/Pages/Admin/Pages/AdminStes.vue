@@ -79,12 +79,6 @@ const submit = () => {
     };
 
 
-
-
-
-// console.log(props.offCampus);
-
-
 </script>
 
 <template>
@@ -95,11 +89,7 @@ const submit = () => {
       <div class="flex justify-between">
         <p class="text-2xl font-semibold ml-4">STE's</p>
           <button onclick="document.getElementById('myModal').showModal()" id="btn" class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">New STE</button>
-        <!-- <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        > -->
+        
         
       </div>
 
@@ -140,7 +130,7 @@ const submit = () => {
 
 
               </select>
-              <!-- Dropdown menu -->
+              
               
             </div>
       </div>
@@ -152,9 +142,6 @@ const submit = () => {
       <Table>
         <template #header>
           <TableRow>
-            <!-- <TableHeaderCell class="whitespace-nowrap"
-              >ID</TableHeaderCell
-            > -->
             <TableHeaderCell class="whitespace-nowrap">Name</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">Shift</TableHeaderCell>
             <TableHeaderCell class="whitespace-nowrap">School - Code</TableHeaderCell>
@@ -189,10 +176,7 @@ const submit = () => {
                   >Delete</Link
                 >
               </TableDataCell>
-          
-
-          
-          </TableRow>
+</TableRow>
         </template>
       </Table>
       <div class="m-2 p-2">
@@ -203,15 +187,15 @@ const submit = () => {
     <dialog id="myModal" class="h-auto w-11/12 md:w-1/2 p-5  bg-white rounded-md ">
         
    <div class="flex flex-col w-full h-auto ">
-        <!-- Header -->
+        
         <div class="flex w-full h-auto justify-between items-center">
           <p class="mt-2 text-lg">New STE</p>
           <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </div>
-          <!--Header End-->
+
         </div>
-          <!-- Modal Content-->
+
            <div class="bg-white pb-10 px-10  mt-8">
       <div
         class="flex items-center justify-between space-x-2 ml-3 font-semibold text-gray-900 leading-8"
@@ -397,12 +381,7 @@ const submit = () => {
         </form>
       </div>
       </div>
-           
-        
-          <!-- End of Modal Content-->
-          
-          
-          
+
         </div>
 </dialog>
 

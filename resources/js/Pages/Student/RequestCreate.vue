@@ -91,7 +91,7 @@ const submitForm = () => {
                                     range
                                     required
                                 ></VueDatePicker>
-                                <!-- :min-date="form.type === 'leave' ? dayjs().tz('Asia/Manila').format() : ''" -->
+                                
                                 <InputError class="mt-2" :message="form.errors.date"/>
                             </div>
                         </div>

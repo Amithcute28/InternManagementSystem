@@ -76,14 +76,13 @@ const submit = () => {
   const formData = new FormData();
   formData.append("_method", "PUT");
 
-  // Append all form fields except the profile picture.
+
   for (const [key, value] of Object.entries(form)) {
     if (key !== "profile") {
       formData.append(key, value);
     }
   }
 
-  // Append the profile picture only if a new file has been selected.
   if (form.profile instanceof File) {
     formData.append("profile", form.profile);
   }
@@ -309,24 +308,6 @@ const submit = () => {
               </div>
             </div>
 
-            <!-- <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="home_address"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.home_address"
-                required
-                autofocus
-                autocomplete="home_address"
-              />
-              <label
-                for="home_address"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Home Address</label
-              >
-              <InputError class="mt-2" :message="form.errors.home_address" />
-            </div> -->
 
             <div class="relative z-0 w-full mb-6 group">
               <input
@@ -382,26 +363,6 @@ const submit = () => {
         {{ errors.student_school_name }}
     </div>
 </div>
-
-
-            <!-- <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="student_school_name"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.student_school_name"
-                autofocus
-                autocomplete="student_school_name"
-              />
-              <label
-                for="student_school_name"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Deployed at:</label
-              >
-              <InputError class="mt-2" :message="errors.student_school_name" />
-            </div> -->
-
             
 
             <div class="grid md:grid-cols-2 md:gap-4">
@@ -465,20 +426,16 @@ const submit = () => {
 @import "@vueform/multiselect/themes/tailwind.css";
 
 .multiselect-tag {
-  background-color: #f2ce02; /* Change background color */
-  color: #fff; /* Change text color */
-  border-color: #f6e05e; /* Change border color */
-  /* Add any other styles as needed */
+  background-color: #f2ce02; 
+  color: #fff; 
+  border-color: #f6e05e; 
+  
 }
 
 .multiselect-tag-remove {
   background-color: #fff;
   color: #fff;
   border-color: #fff;
-  /* Change background color */
-  /* Change text color */
-  /* Change border color */
-  /* Add any other styles as needed */
 }
 
 .multiselect.is-active {

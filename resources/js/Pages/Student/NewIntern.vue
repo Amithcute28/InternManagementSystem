@@ -12,7 +12,7 @@ import { ref, watch, reactive, computed } from "vue";
 import "flatpickr/dist/themes/light.css";
 import Multiselect from "@vueform/multiselect";
 
-// initialize components based on data attribute selectors
+
 onMounted(() => {
   flatpickr(".flatpickr", {});
 });
@@ -118,14 +118,14 @@ const handleZipCodeChange = async () => {
   const zipCode = formFields.zip_code;
   if (zipCode) {
     if (!Array.isArray(props.zipcodes) || props.zipcodes.length === 0) {
-      // Handle the case where props.zipcodes is undefined or empty
+      
       console.error("ZIP codes list is empty or undefined.");
       return;
     }
 
     if (!props.zipcodes.includes(zipCode)) {
       showInvalidZipCodeMessage.value = true;
-      props.errors.zip_code = "ZIP code does not exist"; // Set specific error message
+      props.errors.zip_code = "ZIP code does not exist"; 
       return;
     }
 
@@ -180,13 +180,12 @@ watch(
   { immediate: true }
 );
 
-// Watch for changes in the ZIP code input field
+
 
 const removeImage = (field) => {
-  // Clear the file input value
+
   document.getElementById(field).value = "";
 
-  // Reset the form data for the field
   form[field] = null;
 };
 </script>
@@ -195,7 +194,6 @@ const removeImage = (field) => {
     <nav class="bg-blue border-b-2 border-gold">
       <div class="max-w-7xl mx-auto px-6 md:px-14">
         <div class="flex justify-start space-x-32">
-          <!-- logo -->
           <div>
             <a
               href="#home"
@@ -206,14 +204,12 @@ const removeImage = (field) => {
             </a>
           </div>
 
-          <!-- primary nav -->
           <div class="hidden md:flex flex items-center space-x-2">
             <h1 class="font-bold text-white uppercase">
               New intern, Please fill up the required information to continue!
             </h1>
           </div>
 
-          <!-- login button for big screen -->
           <div class="flex items-center space-x-1">
             <div>
               <Link
@@ -406,26 +402,6 @@ const removeImage = (field) => {
               </div>
             </div>
 
-            <!-- <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="text"
-                id="home_address"
-                :class="{ 'border-red-500': errors.home_address }"
-                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                v-model="form.home_address"
-                autocomplete="home_address"
-              />
-              <label
-                for="home_address"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >Home Address</label
-              >
-              <div v-if="errors.home_address" class="text-red-500 text-sm mt-5">
-                {{ errors.home_address }}
-              </div>
-            </div> -->
-
             <div class="relative z-0 w-full mb-6 group">
               <input
                 type="text"
@@ -543,7 +519,6 @@ const removeImage = (field) => {
                 {{ errors.profile }}
               </div>
             </div>
-            <!-- "sm:col-span-2" -->
           </div>
 
           <h3>Home Address</h3>
@@ -647,25 +622,20 @@ const removeImage = (field) => {
 @import "@vueform/multiselect/themes/tailwind.css";
 
 .multiselect-tag {
-  background-color: #f2ce02; /* Change background color */
-  color: #fff; /* Change text color */
-  border-color: #f6e05e; /* Change border color */
-  /* Add any other styles as needed */
+  background-color: #f2ce02;
+  color: #fff;
+  border-color: #f6e05e;
+  
 }
 
 .multiselect-tag-remove {
   background-color: #fff;
   color: #fff;
   border-color: #fff;
-  /* Change background color */
-  /* Change text color */
-  /* Change border color */
-  /* Add any other styles as needed */
+
 }
 
 .multiselect.is-active {
   outline-color: #0743b2;
 }
-/* or */
-/* @import './path/to/node_modules/@vueform/multiselect/themes/tailwind.css'; */
 </style>

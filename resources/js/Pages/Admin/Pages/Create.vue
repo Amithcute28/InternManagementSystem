@@ -45,11 +45,7 @@ const form = useForm({
                 <button type="submit" class="w-80 py-2.5 block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
               px-4 py-3 mt-6" :class=" {'opacity-25': form.processing }" :disabled="form.processing">Create</button>
         </div>
-
-            
- 
-        
-      </form>
+</form>
             </div>
         </div>
     </AdminLayout>

@@ -25,18 +25,10 @@
         <div class="container mx-auto bg-white mt-16">
            <Link :href="route('first-shift.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
         <div class="md:flex no-wrap md:-mx-2 ">
-            <!-- Left Side -->
-            
-            <!-- Right Side -->
+
             <div class="w-full mx-2 h-64">
-                <!-- Profile tab -->
-                <!-- About Section -->
                 <div class="bg-white p-3 rounded-xl shadow-md">
-                   
-                   
-                   
-                  
-    <div>
+<div>
    
     </div>
     <Head>
@@ -55,18 +47,7 @@
           </div>
           
            <h1 class="text-2xl font-bold mb-4">Recommended Institution:</h1>
-          <!-- <ul>
-            <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
-              <div class="font-bold">{{ institution.name }}</div>
-              <div class="text-gray-500">{{ institution.required_programs }}</div>
-              <div class="text-gray-500">{{ institution.skills}}</div>
-              <div class="text-gray-500">{{ institution.address }}</div>
-              <div class="text-sm text-gray-500">Required Academic Performance: {{ institution.academic_performance }}</div>
-              
-            </li>
-          </ul> -->
-
-          <section class="text-gray-800">
+<section class="text-gray-800">
   
   <div class="block rounded-lg shadow-lg bg-white">
     <div class="flex flex-wrap">
@@ -134,18 +115,9 @@
                          
                          
                 </div>
-                <!-- End of about section -->
-
-                
-
-               
-            </div>
+ </div>
         </div>
-    
-      
-
-
-    </AdminLayout>
+</AdminLayout>
 </template>
 
 <style>

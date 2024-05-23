@@ -290,13 +290,9 @@ function openModal(school) {
     </div>
   
 </section>
-<!-- Section: Design Block -->
 
 </div>
-          <!-- End of Modal Content-->
-          
-          
-          
+
         </div>
 </dialog>
   </AdminLayout>

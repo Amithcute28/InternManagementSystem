@@ -47,7 +47,7 @@ const submit = async () => {
                   })
                 : '';
 
-        // Update the form or perform other actions
+
         form.admin_response = rejectionReason.value || '';
         form.put(route('requests-update.update', { id: props.request.id }), {
             preserveScroll: true,

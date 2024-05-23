@@ -135,15 +135,6 @@ const submit = () => {
  </form>                 
                         
                     </div>
-                   
-                         
-                         
- 
-
-
-
-  
-
-        </div>
+</div>
     </AdminLayout>
 </template>

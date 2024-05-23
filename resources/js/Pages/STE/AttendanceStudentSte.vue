@@ -56,19 +56,19 @@ onMounted(() => {
 
 
 const workableThisYear = computed(() => {
-  // Use your fixed values for total working days in a year
+  
   const totalWorkingDaysThisYear = 24;
   return totalWorkingDaysThisYear;
 });
 
 const attendancePercentage = computed(() => {
-  // Use your fixed values for total working days in a year
+  
   const totalWorkingDaysThisYear = 24;
   return (props.EmployeeStats['totalAttendanceSoFar'] / totalWorkingDaysThisYear * 100).toFixed(0);
 });
 
 const absencePercentage = computed(() => {
-  // Use your fixed values for total working days in a year
+ 
   const totalWorkingDaysThisYear = 24;
   return ((props.EmployeeStats['totalAbsenceSoFar'] / totalWorkingDaysThisYear) * 100).toFixed(0);
 });

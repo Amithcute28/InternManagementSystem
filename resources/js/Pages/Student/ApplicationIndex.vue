@@ -24,7 +24,7 @@ const props = defineProps({
 });
 
 const form = useForm({
-  // Set the initial value to the existing data if editing, otherwise default to null or ''.
+  
   id: props.application_forms?.id,
   eslip: props.application_forms?.eslip || "",
   psa: props.application_forms?.psa || null,
@@ -33,12 +33,10 @@ const form = useForm({
   medical: props.application_forms?.medical || null,
   parent: props.application_forms?.parent || null,
   twobytwo: props.application_forms?.twobytwo || null,
-  // You can add other fields here as necessary.
 
-  // preserveState tells Inertia to keep the form's state after a page visit.
 });
 
-const isLarge = ref(false); // Initially, the button size is normal
+const isLarge = ref(false); 
 
 const toggleSize = () => {
   isLarge.value = !isLarge.value;
@@ -52,27 +50,27 @@ const localErrors = reactive({
   medical: null,
   parent: null,
   twobytwo: null,
-  // ... other fields initialized to null ...
+ 
 });
 
 const isFilePath = (value) => typeof value === "string" && value.length > 0;
 
 const validateAllFields = () => {
-  // Validate field as a file path or a File object
+  
   const validateField = (field, file, isFileFn) => {
     if (isFilePath(file)) {
-      // Assume file paths to be valid if they are non-empty strings
+      
       localErrors[field] = null;
     } else if (file instanceof File) {
-      // Validate the file object
+      
       localErrors[field] = isFileFn(file) ? null : errorMessages[field];
     } else {
-      // No file or file path provided
+      
       localErrors[field] = errorMessages.required;
     }
   };
 
-  // Perform validation checks
+  
   validateField("eslip", form.eslip, isPdfFile);
   validateField("applicationF", form.applicationF, isPdfFile);
   validateField("psa", form.psa, isPdfFile);
@@ -81,7 +79,7 @@ const validateAllFields = () => {
   validateField("parent", form.parent, isPdfFile);
   validateField("twobytwo", form.twobytwo, isImageFile);
 
-  // ... repeat for other fields ...
+  
 };
 
 onMounted(() => {
@@ -98,11 +96,11 @@ const errorMessages = {
   twobytwo: "The 2x2 ID  must be an image (JPEG, PNG, JPG).",
   required: "This field is required.",
 
-  // Add other fields and their error messages as needed
+  
 };
 
 const checkFileRequired = (file, field) => {
-  // Check if the file is not provided
+  
   if (!file) {
     localErrors[field] = errorMessages.required;
   }
@@ -209,7 +207,7 @@ const submit = async () => {
       if (form.twobytwo instanceof File) {
         formData.append("twobytwo", form.twobytwo);
       }
-      // Append other fields to formData...
+      
 
       try {
         await router.post(
@@ -223,7 +221,7 @@ const submit = async () => {
             forceFormData: true,
             onSuccess: () => {
               if (Object.keys(props.errors).length === 0) {
-                // No validation errors, proceed with success message
+                
                 Swal.fire(
                   "Success!",
                   "Your application has been processed.",
@@ -233,7 +231,6 @@ const submit = async () => {
             },
             onError: (errors) => {
               isFormLoading.value = false;
-              // Update local errors with server validation errors
               localErrors.value = errors;
               const errorMessage = Object.values(errors)
                 .map((e) => (Array.isArray(e) ? e.join(", ") : e))
@@ -243,7 +240,7 @@ const submit = async () => {
           }
         );
       } catch (e) {
-        // Network error or other non-validation related error
+        
         console.error("Request error:", e);
         await Swal.fire(
           "Error",
@@ -272,16 +269,13 @@ const submit = async () => {
               "Your new application has been submitted.",
               "success"
             ).then(() => {
-              // Reload the whole page after showing the success message
+             
               location.reload();
             });
 
-            // Also clear any server-side errors
-            // Reset preserveState to false after successful submission
           }
         },
         onError: (errors) => {
-          // Update local errors with server validation errors
           localErrors.value = errors;
           const errorMessage = Object.values(errors)
             .map((e) => (Array.isArray(e) ? e.join(", ") : e))
@@ -322,17 +316,14 @@ const deleteIntern = async (fieldName) => {
       }),
       {
         onSuccess: () => {
-          // Update the form object to reflect the deletion
+          
           form[fieldName] = null;
 
-          // If you maintain any additional state related to the file, update it here
-          // For example, if you store the file URL, clear it as well
+          
           if (fieldName === "eslip") {
             props.application_forms.eslip = null;
           }
-          // ... handle other fields similarly ...
-
-          // Show the success message
+         
           swalWithBootstrapButtons.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",

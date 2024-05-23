@@ -239,21 +239,9 @@ const confirmRecommendation = (id) => {
                 <option value="10">10 Per Page</option>
                 <option value="15">15 Per Page</option>
               </select>
-              <!-- Dropdown menu -->
             </div>
           </div>
-          <!-- <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                      <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                      </svg>
-                      Update stocks 1/250
-                  </button>
-                  <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                      <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                      </svg>
-                      Export
-                  </button> -->
+         
         </div>
       </div>
     </div>
@@ -318,7 +306,6 @@ const confirmRecommendation = (id) => {
                   class="text-green-400 hover:text-green-600"
                   >Check</Link
                 >
-                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
               </TableDataCell>
 
             <TableDataCell
@@ -376,9 +363,7 @@ const confirmRecommendation = (id) => {
 
             <TableDataCell
               ><div class="flex item-center space-x-3 justify-center">
-                <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
-
-                <button
+<button
                   @click="confirmRecommendation(form.id)"
                   class="w-5 h-5 text-grey-300 hover:text-yellow-300 hover:scale-110 focus:outline-none active:outline-none"
                 >
@@ -489,9 +474,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -535,10 +517,6 @@ const confirmRecommendation = (id) => {
                 >MISSING</a
               >
             </div>
-
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -583,9 +561,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -630,9 +605,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -677,9 +649,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -724,9 +693,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -772,9 +738,6 @@ const confirmRecommendation = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
         </div>
 
@@ -815,11 +778,6 @@ const confirmRecommendation = (id) => {
         </div>
       </div>
       <div class="flex items-center flex-col p-10">
-        <!-- main card -->
-
-        <!-- headers content-->
-
-        <!-- subscriptions -->
 
         <form
           class="py-6 px-9"

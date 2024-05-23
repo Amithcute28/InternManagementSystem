@@ -21,11 +21,7 @@ import { Link } from '@inertiajs/vue3';
         <div class="font-semibold text-3xl">
           <p>Waiting for the student to choose institution.</p>
         </div>
-        
-     
-
-      
-    </div>
+</div>
   </div>
 </div>
     </AdminLayout>

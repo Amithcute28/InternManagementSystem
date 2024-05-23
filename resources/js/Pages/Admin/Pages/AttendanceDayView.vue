@@ -132,17 +132,7 @@ const destroy = () => {
             </select>
           </div>
         </div>
-                        <!-- <div class="flex justify-center items-center inline">
-                            <FlexButton :href="route('attendance.create')" :text="('Retake/Update Attendance')">
-                                <TrashIcon/>
-                            </FlexButton>
-                        </div> -->
-                        <!-- <form @submit.prevent="destroy" class="flex justify-center items-center ">
-                            <PrimaryButton class="bg-red-600 hover:bg-red-700 focus:bg-red-500 active:bg-red-900" >
-                                <TrashIcon/>
-                                {{('Delete Day Attendance')}}
-                            </PrimaryButton>
-                        </form> -->
+
                     </div>
 
                     <Table :links="attendanceList.links" :showingNumber="attendanceList.data.length"

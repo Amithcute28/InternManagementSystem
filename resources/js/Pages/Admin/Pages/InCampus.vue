@@ -94,51 +94,12 @@ const confirmProceed = (id) => {
   <Head title="First Shift" />
 
   <AdminLayout>
-    <!-- <div class="mt-16 flex">
-
-            <div class="w-full">
-                <h1 class="text-xl font-bold mb-4">Students</h1>
-                <div class="bg-white shadow-md rounded my-6">
-                    <table class="w-full table-auto"> 
-                        <thead>
-                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-4 text-left">Name</th>
-                                <th class="py-3 px-4 text-left">Program</th>
-                                <th class="py-3 px-4 text-left">Email</th>
-                                <th class="py-3 px-4 text-left">Academic Performance</th>
-                                <th class="py-3 px-4 text-left"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-600 text-sm font-light">
-                            <tr v-for="student in students" :key="student.id" class="border-b border-gray-200 hover:bg-gray-100">
-                                <td class="py-3 px-4">{{ student.full_name }}</td>
-                                <td class="py-3 px-4">{{ student.program }}</td>
-                                <td class="py-3 px-4">{{ student.email }}</td>
-                                <td class="py-3 px-4">{{ student.academic_performance }}</td>
-                                <td class="py-3 px-4">
-                                    <Link :href="route('offcampus.show', { id: student.id })" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View</Link>
-                                    <ul v-if="student.recommended_institutions.length > 0">
-                                        <li v-for="institution in student.recommended_institutions" :key="institution.id">
-                                            {{ institution.name }} - {{ institution.required_academic_performance }}
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
+    
 
     <div class="mt-16">
       <div class="flex justify-between">
         <p class="text-2xl font-semibold ml-4">First Shift</p>
 
-        <!-- <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        > -->
       </div>
 
       <div
@@ -192,43 +153,20 @@ const confirmProceed = (id) => {
               <option value="15">15 Per Page</option>
             </select>
           </div>
-          <!-- <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                      <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                      </svg>
-                      Update stocks 1/250
-                  </button>
-                  <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                      <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                      </svg>
-                      Export
-                  </button> -->
+         
         </div>
       </div>
       <div class="">
         <Table>
           <template #header>
             <TableRow>
-              <!-- <th scope="col" class="p-4">
-                <div class="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label for="checkbox-all-search" class="sr-only"
-                    >checkbox</label
-                  >
-                </div>
-              </th> -->
+              
               <TableHeaderCell>Student ID</TableHeaderCell>
               <TableHeaderCell>Name</TableHeaderCell>
               <TableHeaderCell>Program</TableHeaderCell>
               <TableHeaderCell>School</TableHeaderCell>
               <TableHeaderCell>Application</TableHeaderCell>
               <TableHeaderCell>Attendance</TableHeaderCell>
-              <!-- <TableHeaderCell>Evaluation Form</TableHeaderCell> -->
               <TableHeaderCell>Status</TableHeaderCell>
               <TableHeaderCell>Action</TableHeaderCell>
             </TableRow>
@@ -240,19 +178,6 @@ const confirmProceed = (id) => {
               v-for="student in students.data"
               :key="student.id"
             >
-              <!-- <td class="w-4 p-4 bg-white">
-                <div class="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label for="checkbox-table-search-1" class="sr-only"
-                    >checkbox</label
-                  >
-                </div>
-              </td> -->
-
               <TableDataCell>{{ student.student_id }}</TableDataCell>
               <TableDataCell
                 class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -289,53 +214,19 @@ const confirmProceed = (id) => {
                   class="text-green-400 hover:text-green-600"
                   >Check</Link
                 >
-                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
               </TableDataCell>
-              <!-- <TableDataCell
-              ><a
-                v-if="isImage(student.eval_form)"
-                :href="student.psa"
-                target="_blank"
-              >
-                <img
-                  :src="student.eval_form"
-                  style="max-width: 100%; max-height: 100px"
-                  class="h-16 w-16"
-                />
-              </a>
-              <a
-                v-else-if="isPdf(student.eval_form)"
-                :href="studenteval_form"
-                target="_blank"
-                class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs"
-                >PDF</a
-              >
-              <a
-                v-else-if="isDoc(student.eval_form)"
-                :href="student.eval_form"
-                target="_blank"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs"
-                >DOC FILE</a
-              >
-              <a
-                v-else
-                :href="student.eval_form"
-                target="_blank"
-                class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
-                >MISSING</a
-              ></TableDataCell> -->
+             
               <TableDataCell class="space-x-4">
                 <Link
                   :href="route('first-shift.show', student.id)"
                   class="text-green-400 hover:text-green-600"
                   >View</Link
                 >
-                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
+                
               </TableDataCell>
               <TableDataCell
                 ><div class="flex item-center space-x-2">
-                  <!-- <Link :href="route('stes-interns.proceed', form.id)" method="PUT" as="button" class="text-green-400 hover:text-red-600">R</Link> -->
-
+                  
                   <Link
                     :href="route('first-shift.update', student.id)"
                     method="PUT"
@@ -346,16 +237,7 @@ const confirmProceed = (id) => {
                       :icon="['far', 'square-caret-right']"
                       class="fa-lg outline-none"
                   /></Link>
-                  <!-- <button
-                    @click="confirmRecommendation(form.id)"
-                    class="w-5 h-5 text-green-400 transform hover:text-red-600 hover:scale-110 focus:outline-none active:outline-none"
-                  >
-                    <font-awesome-icon
-                      :icon="['far', 'square-caret-right']"
-                      class="px-2 fa-lg outline-none"
-                    />
-                  </button> -->
-
+            
                   <svg
                     @click="openModalEvalForm(student)"
                     xmlns="http://www.w3.org/2000/svg"
@@ -429,11 +311,6 @@ const confirmProceed = (id) => {
         </div>
       </div>
       <div class="flex items-center flex-col p-10">
-        <!-- main card -->
-
-        <!-- headers content-->
-
-        <!-- subscriptions -->
         <div class="grid grid-cols-12 gap-6" v-if="applications">
           <div
             class="transform hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
@@ -477,9 +354,7 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+
           </div>
 
           <div
@@ -524,9 +399,6 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -571,9 +443,7 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+            
           </div>
 
           <div
@@ -618,9 +488,7 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+          
           </div>
 
           <div
@@ -665,9 +533,6 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -712,9 +577,6 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -760,9 +622,7 @@ const confirmProceed = (id) => {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+            
           </div>
         </div>
 
@@ -801,19 +661,11 @@ const confirmProceed = (id) => {
         </div>
       </div>
       <div class="flex items-center flex-col p-10">
-        <!-- main card -->
-
-        <!-- headers content-->
-
-        <!-- subscriptions -->
+       
         <div class="container mx-auto bg-white mt-16" v-if="recommend">
           <div class="md:flex no-wrap md:-mx-2">
-            <!-- Left Side -->
-
-            <!-- Right Side -->
             <div class="w-full mx-2 h-64">
-              <!-- Profile tab -->
-              <!-- About Section -->
+             
               <div class="bg-white p-3 rounded-xl shadow-md">
                 <div></div>
                 <Head>
@@ -841,17 +693,6 @@ const confirmProceed = (id) => {
                       <h1 class="text-2xl font-bold mb-4">
                         Recommended Institution:
                       </h1>
-                      <!-- <ul>
-            <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
-              <div class="font-bold">{{ institution.name }}</div>
-              <div class="text-gray-500">{{ institution.required_programs }}</div>
-              <div class="text-gray-500">{{ institution.skills}}</div>
-              <div class="text-gray-500">{{ institution.address }}</div>
-              <div class="text-sm text-gray-500">Required Academic Performance: {{ institution.academic_performance }}</div>
-              
-            </li>
-          </ul> -->
-
                       <section class="text-gray-800">
                         <div class="block rounded-lg shadow-lg bg-white">
                           <div class="flex flex-wrap">
@@ -962,7 +803,7 @@ const confirmProceed = (id) => {
                 </div>
               </div>
             </div>
-            <!-- End of about section -->
+
           </div>
         </div>
 

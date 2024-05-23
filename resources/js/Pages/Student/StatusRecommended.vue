@@ -47,17 +47,7 @@
           </div>
           
            <h1 class="text-2xl font-bold mb-4">Recommended Institution:</h1>
-          <!-- <ul>
-            <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
-              <div class="font-bold">{{ institution.name }}</div>
-              <div class="text-gray-500">{{ institution.required_programs }}</div>
-              <div class="text-gray-500">{{ institution.skills}}</div>
-              <div class="text-gray-500">{{ institution.address }}</div>
-              <div class="text-sm text-gray-500">Required Academic Performance: {{ institution.academic_performance }}</div>
-              
-            </li>
-          </ul> -->
-
+         
           <section class="text-gray-800">
   
   <div class="block rounded-lg  bg-white">

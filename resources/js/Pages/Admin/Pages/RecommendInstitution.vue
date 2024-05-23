@@ -69,16 +69,7 @@ function openModal(institution) {
             <p><strong>Academic Performance:</strong> {{ student.academic_performance }}</p>
             <p><strong>Skills:</strong> {{ student.skills }}</p>
           </div>
-          <!-- <ul>
-            <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
-              <div class="font-bold">{{ institution.name }}</div>
-              <div class="text-gray-500">{{ institution.required_programs }}</div>
-              <div class="text-gray-500">{{ institution.skills}}</div>
-              <div class="text-gray-500">{{ institution.address }}</div>
-              <div class="text-sm text-gray-500">Required Academic Performance: {{ institution.academic_performance }}</div>
-              
-            </li>
-          </ul> -->
+         
         </div>
       </div>
     </div>
@@ -97,9 +88,7 @@ function openModal(institution) {
                             <p class="font-semibold text-sm text-gray-400 mb-6">Required Skills: {{ institution.skills }}</p>
                             
                             <button @click="openModal(institution)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">More info</button>
-                            
-                            
-                           <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
+
                         </div> 
 
                     </ReusableCard>
@@ -107,8 +96,6 @@ function openModal(institution) {
                         </div>
                         </div>
   
-
-        <!-- Header -->
 <dialog id="myModal" class="p-5  bg-white rounded-md ">
         
    <div class="flex flex-col w-full h-auto ">
@@ -121,12 +108,11 @@ function openModal(institution) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </div>
         </div>
-          <!--Header End-->
-          <!-- Modal Content-->
+
            
 <div class="container my-4 px-6 mx-auto">
 
-<!-- Section: Design Block -->
+
 <section class="text-gray-800">
   
   <div class="flex flex-wrap">
@@ -188,13 +174,9 @@ function openModal(institution) {
     </div>
   
 </section>
-<!-- Section: Design Block -->
 
 </div>
-          <!-- End of Modal Content-->
-          
-          
-          
+
         </div>
 </dialog>
 

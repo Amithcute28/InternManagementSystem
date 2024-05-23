@@ -32,21 +32,13 @@ const submit = () => {
 <template>
 <AdminLayout>
         <Head title="Update student" />
-
-
-
- 
-
-  <div class="max-w-7xl mx-auto py-4">
+<div class="max-w-7xl mx-auto py-4">
     <div class="flex justify-between">
             <h1>Update student</h1>
             <Link :href="route('coordinators.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
            </div>
     <div class="w-80 h-100">
-
-
-
-      <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
+<form @submit.prevent="submit" class="mt-6" action="#" method="POST">
             <div>
                 <InputLabel for="student_id" value="Student ID" />
     
@@ -190,15 +182,7 @@ const submit = () => {
               px-4 py-3 mt-6">Update students</button>
 
     </form>
-
-
-    
-
-
-    </div>
+</div>
   </div>
-
-
-        
-    </AdminLayout>
+</AdminLayout>
 </template>

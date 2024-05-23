@@ -34,47 +34,6 @@ const recommendUpdated = (student) => {
     <Head title="Recommender" />
 
     <AdminLayout>
-        <!-- <div class="mt-16">
-            <div class="w-full">
-                <h1 class="text-xl font-bold mb-4">Students</h1>
-                <div class="bg-white shadow-md rounded my-6">
-                    <table class="w-full table-auto"> 
-                        <thead>
-                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-4 text-left">Name</th>
-                                <th class="py-3 px-4 text-left">Program</th>
-                                <th class="py-3 px-4 text-left">Email</th>
-                                <th class="py-3 px-4 text-left">Academic Performance</th>
-                                <th class="py-3 px-4 text-left"></th>
-                        <TableHeaderCell>Student ID</TableHeaderCell>
-                        <TableHeaderCell>Name</TableHeaderCell>
-                        <TableHeaderCell>Program</TableHeaderCell>
-                        <TableHeaderCell>Status</TableHeaderCell>
-                        <TableHeaderCell>Action</TableHeaderCell>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-600 text-sm font-light">
-                            <tr v-for="student in students" :key="student.id" class="border-b border-gray-200 hover:bg-gray-100">
-                                <td class="py-3 px-4">{{ student.full_name }}</td>
-                                <td class="py-3 px-4">{{ student.program }}</td>
-                                <td class="py-3 px-4">{{ student.email }}</td>
-                                <td class="py-3 px-4">{{ student.academic_performance }}</td>
-                                <td class="py-3 px-4 space-x-6">
-                                    <Link :href="route('recommender.edit', { id: student.id })" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">check</Link>
-                                      <Link :href="route('recommender.update', student.id)" method="PUT" as="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Recommend na</Link>
-                                    <ul v-if="student.recommended_institutions">
-                                        <li v-for="institution in student.recommended_institutions" :key="institution.id">
-                                            {{ institution.name }} - {{ institution.required_academic_performance }}
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
-
        
    <div class="mt-16">
             <div class="flex justify-between">
@@ -131,9 +90,5 @@ const recommendUpdated = (student) => {
                 </Table>
         </div>
         </div>
-
-  
-    
-
-    </AdminLayout>
+</AdminLayout>
 </template>

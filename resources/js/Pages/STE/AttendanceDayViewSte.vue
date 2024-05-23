@@ -74,7 +74,6 @@ const destroy = () => {
                             <TableHead>{{('Notes')}}</TableHead>
                         </template>
 
-                        <!--Iterate Here-->
                         <template #Body>
                             <TableRow v-for="attendance in attendanceList.data" :key="attendance.id">
                                 <TableBodyHeader>{{ attendance.student_id }}</TableBodyHeader>

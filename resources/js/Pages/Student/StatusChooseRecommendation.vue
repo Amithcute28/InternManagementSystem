@@ -13,29 +13,7 @@
       required: true,
     },
   });
-// const form = useForm({
-//   student_id: props.student?.student_id,
-//   program: props.student?.program,
-//   year_level: props.student?.year_level,
-//   full_name: props.student?.full_name,
-//   email: props.student?.email,
-//   birthday: props.student?.birthday,
-//   gender: props.student?.gender,
-//   relationship: props.student?.relationship,
-//   nationality: props.student?.nationality,
-//   contact_number: props.student?.contact_number,
-//   home_address: props.student?.home_address,
-//   zip_code: props.student?.zip_code,
-//   guardian_name: props.student?.guardian_name,
-//   guardian_contact: props.student?.guardian_contact,
-//   recommend: props.student?.recommend,
-// });
 
-
-// const submit = () => {
-//   console.log( props.student?.id);
-//   form.put(route("recommender.update", props.student?.id));
-// };
 
 const selectedInstitution = ref(null);
 
@@ -67,16 +45,6 @@ function openModal(institution) {
             <p><strong>Academic Performance:</strong> {{ student.academic_performance }}</p>
             <p><strong>Skills:</strong> {{ student.skills }}</p>
           </div>
-          <!-- <ul>
-            <li v-for="institution in student.recommended_institutions" :key="institution.name" class="my-2">
-              <div class="font-bold">{{ institution.name }}</div>
-              <div class="text-gray-500">{{ institution.required_programs }}</div>
-              <div class="text-gray-500">{{ institution.skills}}</div>
-              <div class="text-gray-500">{{ institution.address }}</div>
-              <div class="text-sm text-gray-500">Required Academic Performance: {{ institution.academic_performance }}</div>
-              
-            </li>
-          </ul> -->
         </div>
       </div>
     
@@ -97,7 +65,6 @@ function openModal(institution) {
                            <Link :href="route('status.update', {studentId: student.id, institutionId: institution.id})" method="PUT" as="button" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Choose</Link>
                             <button @click="openModal(institution)" class="px-2 py-2  text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-6">More info</button>
                             
-                           <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
                         </div> 
 
                     </ReusableCard>
@@ -120,12 +87,10 @@ function openModal(institution) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </div>
         </div>
-          <!--Header End-->
-          <!-- Modal Content-->
            
 <div class="container my-4 px-6 mx-auto">
 
-<!-- Section: Design Block -->
+
 <section class="text-gray-800">
   
   <div class="flex flex-wrap">
@@ -187,12 +152,9 @@ function openModal(institution) {
     </div>
   
 </section>
-<!-- Section: Design Block -->
 
-</div>
-          <!-- End of Modal Content-->
-          
-          
+
+</div>      
           
         </div>
 </dialog>

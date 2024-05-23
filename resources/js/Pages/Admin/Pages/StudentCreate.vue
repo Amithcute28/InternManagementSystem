@@ -32,23 +32,7 @@ const form = useForm({
   terms: false,
 });
 
-// const submit = async () => {
-//   form.processing = true;
 
-//   // Submit the application form
-//   await form.post("/application");
-//   await form.put("/application", {
-//     _method: "put",
-//   });
-
-//   // Submit the student form
-//   await form.post(route("students.store"), {
-//     onFinish: () => form.reset("password", "password_confirmation"),
-//   });
-
-//   form.processing = false;
-//   form.reset();
-// };
 
 const submit = () => {
         form.post(route('students.store'), {

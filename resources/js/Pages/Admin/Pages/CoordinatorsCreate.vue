@@ -30,21 +30,13 @@ const submit = () => {
  <template>
 <AdminLayout>
         <Head title="Create student" />
-
-
-
- 
-
-  <div class="max-w-7xl mx-auto py-4">
+<div class="max-w-7xl mx-auto py-4">
     <div class="flex justify-between">
                 
             <Link :href="route('coordinators.index')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">Back</Link>
            </div>
     <div class="w-80 h-100">
-
-
-
-      <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
+<form @submit.prevent="submit" class="mt-6" action="#" method="POST">
             <div>
                 <InputLabel for="student_id" value="ID" />
     
@@ -128,10 +120,7 @@ const submit = () => {
     
                 <InputError class="mt-2" :message="form.errors.contact" />
             </div>
-    
-           
-    
-            <div>
+<div>
                 <InputLabel for="current_address" value="Currenr Address" />
     
                 <TextInput
@@ -220,15 +209,7 @@ const submit = () => {
                   px-4 py-3 mt-6">Register</button>
     
         </form>
-
-
-    
-
-
-    </div>
+</div>
   </div>
-
-
-        
-    </AdminLayout>
+</AdminLayout>
 </template>

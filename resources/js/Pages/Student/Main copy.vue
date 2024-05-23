@@ -13,14 +13,14 @@ import TableDataCell from "@/Components/TableDataCell.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
-// initialize components based on data attribute selectors
+
 onMounted(() => {
   initFlowbite();
 });
 
 defineProps(["users"]);
 
-// Component registration
+
 </script>
 
 <template>
@@ -34,16 +34,13 @@ defineProps(["users"]);
           class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8"
         ></div>
       </div>
-      <!-- End of Navbar -->
+  
 
       <div class="container mx-auto bg-white">
         <div class="md:flex no-wrap md:-mx-2">
-          <!-- Left Side -->
 
-          <!-- Right Side -->
           <div class="w-full mx-2 h-64">
-            <!-- Profile tab -->
-            <!-- About Section -->
+      
             <div class="bg-white p-3 rounded-xl shadow-md">
               <div
                 class="flex items-center space-x-2 ml-3 font-semibold text-gray-900 leading-8"
@@ -153,13 +150,8 @@ defineProps(["users"]);
                 >Edit Information</Link
               >
             </div>
-            <!-- End of about section -->
-
+            
             <div class="my-4"></div>
-
-            <!-- Experience and education -->
-
-            <!-- End of profile tab -->
           </div>
         </div>
       </div>

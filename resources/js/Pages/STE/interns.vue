@@ -290,7 +290,6 @@ function openModalEvalForm(intern) {
                   class="text-green-400 hover:text-green-600"
                   >Check</Link
                 >
-                <!-- <button @click="openModalRecommend(student)" class="px-6 py-2  text-white bg-gold hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</button> -->
               </TableDataCell>
             <TableDataCell
               ><a
@@ -408,12 +407,6 @@ function openModalEvalForm(intern) {
         </div>
       </div>
       <div class="flex items-center flex-col p-10">
-        <!-- main card -->
-
-        <!-- headers content-->
-
-        <!-- subscriptions -->
-
         <form
           class="py-6 px-9"
           @submit.prevent="submit"
@@ -532,11 +525,7 @@ function openModalEvalForm(intern) {
         </div>
       </div>
       <div class="flex items-center flex-col p-10">
-        <!-- main card -->
-
-        <!-- headers content-->
-
-        <!-- subscriptions -->
+       
         <div class="grid grid-cols-12 gap-6" v-if="applications">
           <div
             class="transform hover:scale-105 transition duration-300 shadow-md rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
@@ -580,9 +569,7 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+        
           </div>
 
           <div
@@ -627,9 +614,6 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -674,9 +658,6 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
 
           <div
@@ -721,9 +702,7 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+           
           </div>
 
           <div
@@ -768,9 +747,7 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+           
           </div>
 
           <div
@@ -815,9 +792,7 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
+            
           </div>
 
           <div
@@ -863,9 +838,6 @@ function openModalEvalForm(intern) {
               >
             </div>
 
-            <!-- <button class="bg-gold px-2 py-2 rounded-lg mt-4">
-                    Add subscription
-                </button> -->
           </div>
         </div>
       </div>

@@ -357,28 +357,5 @@ const schools = [
     </div>
 
                                 
-
-        <!-- <div class="px-6 pt-6 2xl:container">
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div class="md:col-span-2 lg:col-span-1 transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1" >
-                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-md rounded-lg">
-                   
-                  
-                </div>
-            </div>
-            <div>
-                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-md rounded-lg transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover: shadow-2x1">
-
-                 </div>   
-            </div>
-            <div>
-                <div class="h-full py-8 px-6 space-y-6 bg-white p-4 shadow-lg rounded-lg transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2x1 ">
-                 
-                   
-                  
-                </div>
-            </div>
-        </div>
-    </div> -->
   </AdminLayout>
 </template>

@@ -26,7 +26,7 @@ const workableThisYear = computed(() => {
     return workingDaysThisYear - weekendsOffThisYear - holidaysThisYear;
   }
 
-  return 0; // Return a default value or handle the case when EmployeeStats['YearStats'] is undefined
+  return 0;
 });
 
 const attendancePercentage = computed(() => {
@@ -41,7 +41,7 @@ const absencePercentage = computed(() => {
     return ((totalAbsenceSoFar / yearStats['absence_limit']) * 100).toFixed(0);
   }
 
-  return 0; // Return a default value or handle the case when properties are undefined
+  return 0; 
 });
 </script>
 <template>
@@ -59,7 +59,6 @@ const absencePercentage = computed(() => {
                 <Card>
                     <h1 class="text-2xl mb-6">{{('Your Attendance This Month (:attendance)', {attendance: new Date().toLocaleString('default', { month: 'long' })})}}</h1>
 
-                    <!-- Attendance -->
                     <div class="mt-4">
                         <h2 class="font-bold mb-1">{{('Attendance')}}</h2>
                         <p class="mb-2">{{('Attended')}} {{ EmployeeStats['attendedThisMonth'] }} {{('of')}} {{ EmployeeStats['attendableThisMonth'] }} {{('Days')}}.</p>
@@ -67,7 +66,6 @@ const absencePercentage = computed(() => {
 
                     <hr class="my-3 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/>
 
-                    <!-- Absence -->
                     <div class="mt-4">
                         <h2 class="font-bold mb-1 mt-4">{{('Absence')}}</h2>
                         <p class="mb-2">{{('Absented')}} {{ EmployeeStats['absentedThisMonth'] }} {{('Days')}}.</p>
@@ -75,7 +73,7 @@ const absencePercentage = computed(() => {
 
                     <hr class="my-3 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/>
 
-                    <!-- Hours -->
+                
                     <div class="mt-4">
                         <h2 class="inline font-bold mt-8">{{('Hour Compensation')}}</h2>
                         <ToolTip>
@@ -95,7 +93,7 @@ const absencePercentage = computed(() => {
                 <Card>
                     <h1 class="text-2xl mb-6">{{('Your Attendance This Year')}}</h1>
 
-                    <!-- Attendance -->
+            
                     <div class="mt-4">
                         <h2 class="font-bold mb-1">{{('Attendance')}}</h2>
                         <p class="mb-2">{{('Attended :attended from :from', {attended: EmployeeStats['totalAttendanceSoFar'], from: workableThisYear})}}</p>
@@ -107,7 +105,7 @@ const absencePercentage = computed(() => {
                         </div>
                     </div>
 
-                    <!-- Absence -->
+                  
                     <div class="mt-4">
                         <h2 class="font-bold mb-1 mt-4">{{('Absence')}}</h2>
                        <p class="mb-2">
@@ -123,7 +121,7 @@ const absencePercentage = computed(() => {
 
                     <hr class="my-6 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/>
 
-                    <!-- Days Breakdown -->
+                    
                     <div class="mt-4">
                         <h2 class="font-bold mb-1 mt-4">{{('Your Year\'s Data')}}</h2>
                         <div class="block mt-4">

@@ -37,43 +37,8 @@ defineProps({
            
                     <div class="flex justify-between items-center pb-4">
 
-                        <!-- <FlexButton :href="route('requests.create')"
-                                    :text="('Initiate A Request')">
-                            <PlusIcon/>
-                        </FlexButton> -->
                     </div>
-                    <!-- <Table :links="requests.links" :showingNumber="requests" :totalNumber="requests.total">
-                        <template #Head>
-                            <TableHead>{{('ID')}}</TableHead>
-                            <TableHead>{{('Created By')}}</TableHead>
-                            <TableHead>{{('Type')}}</TableHead>
-                            <TableHead>{{('Start Date')}}</TableHead>
-                            <TableHead>{{('End Date')}}</TableHead>
-                            <TableHead>{{('Status')}}</TableHead>
-                        </template>
-
-                      
-                        <template #Body>
-                            <TableRow v-for="request in requests" :key="request.id">
-                                <TableBodyHeader :href="route('requests.show', {id: request.id})">{{request.id}}</TableBodyHeader>
-                                <TableBodyHeader :href="route('requests.show', {id: request.id})" >{{request.employee_name}}</TableBodyHeader>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request_types[request.type]}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request.start_date}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">{{request.end_date ?? ('N/A')}}</TableBody>
-                                <TableBody :href="route('requests.show', {id: request.id})">
-                                    {{  request.status === "Pending" ? request_status_types['pending'] + ' ⏳' :
-                                        request.status === "Approved" ? request_status_types['approved'] + ' ✅' :
-                                            request_status_types['rejected'] + ' 🚫'
-                                    }}
-                                    <span class="text-red-500 text-xs font-bold"
-                                        v-if="!$page.props.auth.user.roles && request.status !== 'Pending' && !request.is_seen">
-                                        <sup>**</sup>
-                                    </span>
-                                </TableBody>
-                            </TableRow>
-                        </template>
-                    </Table> -->
-
+                   
                       <Table>
         <template #header>
           <TableRow>
@@ -104,7 +69,7 @@ defineProps({
                                 </TableBody>
                             </TableRow>
                         </template>
-        <!-- Additional content for the table -->
+
       </Table>
               
            

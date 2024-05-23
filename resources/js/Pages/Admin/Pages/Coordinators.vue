@@ -39,19 +39,11 @@ const submit = () => {
          <div class="flex justify-between">
         <p class="text-2xl font-semibold ml-4">Coordinators</p>
           <button onclick="document.getElementById('myModal').showModal()" id="btn" class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">New Coordinator</button>
-        <!-- <Link
-          :href="route('students.create')"
-          class="px-3 py-2 text-white font-semibold bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >New Students</Link
-        > -->
-        
+
       </div>
         
       </div>
-
-
-
- <div class="grid grid-cols-2 gap-0">
+<div class="grid grid-cols-2 gap-0">
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8 px-6 py-6">
                 <div class="grid grid-cols-12 gap-6">
                     <ReusableCard2 v-for="admin in students" :key="admin.id">
@@ -64,13 +56,11 @@ const submit = () => {
                       <div
                         class="flex flex-row justify-center w-full mx-auto space-x-2 text-center"
                       >
-                        <!-- /typography/_h3.antlers.html -->
                         <div
                           class="text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 font-mono text-xl mb-5"
                         >
                           {{ admin.email }}
                         </div>
-                        <!-- End: /typography/_h3.antlers.html -->
                       </div>
                            
                             <Link
@@ -79,11 +69,10 @@ const submit = () => {
                             class="px-2 py-2  text-white bg-red-500 hover:bg-indigo-400 rounded-lg  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >Delete</Link>
                            
-                           <!-- <PrimaryButton :href="route('students.create')" ><template #icon>  <Arrow></Arrow> </template>  Read More</PrimaryButton> -->
                         </div> 
 
                     </ReusableCard2>
-                     
+
           </div>
         </div>
       </div>
@@ -226,12 +215,7 @@ const submit = () => {
         </form>
       </div>
       </div>
-           
-        
-          <!-- End of Modal Content-->
-          
-          
-          
+
         </div>
 </dialog>
     </AdminLayout>

@@ -46,12 +46,11 @@ const submitForm = () => {
 };
 
 const props = defineProps({
-    calendarItems: Array, // Assuming that calendarItems should be an array
-    leaveRequests: Array, // Assuming that leaveRequests should be an array
+    calendarItems: Array, 
+    leaveRequests: Array, 
 });
 
 const items = computed(() => {
-    // Check if props.calendarItems is an array
     const obj1 = Array.isArray(props.calendarItems) ? props.calendarItems.map(item => {
         const { start_date, end_date, id, title, type } = item;
         return {
@@ -62,7 +61,6 @@ const items = computed(() => {
         };
     }) : [];
 
-    // Check if props.leaveRequests is an array
     const obj2 = Array.isArray(props.leaveRequests) ? props.leaveRequests.map(item => {
         const { start_date, end_date, id } = item;
         return {
@@ -90,11 +88,8 @@ function setShowDate(d) {
 }
 
 onMounted(() => {
-    // Set the Initial Date to Today.
-    // You can use any date you want like this new Date('2011-01-25').
     setShowDate(new Date());
 
-    // To change the color of leave requests
     const element = document.querySelectorAll('.cv-item');
     for (let i = 0; i < element.length; i++) {
         const content = element[i].textContent;

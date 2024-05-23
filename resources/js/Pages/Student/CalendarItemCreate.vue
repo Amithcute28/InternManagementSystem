@@ -35,13 +35,6 @@ const submitForm = () => {
     });
     form.post(route('calendar.store'), {
         preserveScroll: true,
-        // onError: () => {
-        //     useToast().error(('Error Creating Calendar Item'));
-        // },
-        // onSuccess: () => {
-        //     useToast().success(('Calendar Item Stored Successfully'));
-        //     form.reset();
-        // }
     });
 }
 
@@ -58,11 +51,6 @@ const submitForm = () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                
                     <form @submit.prevent="submitForm">
-                        <!-- <Notice type="info" :bold="('Holidays Notice:')" class="mt-0" br
-                                :text="
-                                ('1. Adding a holidays means the day is off, and the attendance on that day will not be considered.') + '<br/>' +
-                                ('2. If a holiday overlaps with a weekend, the system will not consider the overlap and count the holiday and the weekend as 2 non-attendable days, not just 1.')
-                                "/> -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <InputLabel for="type_id" :value="('Type')"/>

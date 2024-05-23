@@ -72,7 +72,6 @@ function fillForm() {
 
 
 function fillOldForm() {
-    // Mapping the employees with the attendances
     let index = 0;
     while (true) {
         for (let i = 0; i < props.attendances.length; i++) {
@@ -114,7 +113,7 @@ function displayStatus(partial_attendance_exists, form, index) {
             return form.sign_off_time[index] === null ? '✍️' : '✅'; // ✍️ for manual entry, ✅ for success
         }
     }
-    return ''; // Return empty string if no icon should be displayed
+    return ''; 
 }
 
 
@@ -128,7 +127,7 @@ onMounted(() => {
     }
 });
 
-// No Need for debounce here
+
 const search = (() => {
     router.visit(route('ste-dashboard.create', {term: form.date.toISOString().split('T')[0]}),
         {preserveState: false, preserveScroll: true})
@@ -191,9 +190,7 @@ watch(() => form.date, search);
                                     <th scope="col" class="px-6 py-3">
                                         {{ ('Student name') }}
                                     </th>
-<!--                                    <th scope="col" class="px-6 py-3">-->
-<!--                                        {{ __('ID') }}-->
-<!--                                    </th>-->
+
                                     <th scope="col" class="px-6 py-3">
                                         {{ ('Status') }}
                                     </th>
@@ -217,10 +214,7 @@ watch(() => form.date, search);
                                         {{ displayStatus(partial_attendance_exists, form, index) }}
                                         <span class="hidden">{{ form.student_id[index] = employee.id }}</span>
                                     </th>
-<!--                                    <td class="table-td">-->
-<!--                                        {{ employee.id }}-->
-<!--                                        <span class="hidden">{{ form.employee_id[index] = employee.id }}</span>-->
-<!--                                    </td>-->
+
 
                                     <td class="table-td w-40">
                                         <select v-model="form.status[index]" class="fancy-selector"

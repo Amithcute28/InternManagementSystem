@@ -33,7 +33,7 @@ const submit = () => {
     if (isConfirmed) {
         const rejectionReason = message.value === 'reject' ? window.prompt('(Optional) Provide a reason for rejecting this request:') : '';
 
-        // Update the form or perform other actions
+       
         form.admin_response = rejectionReason || '';
         form.put(route('requests-update.update', { id: props.request.id }), {
             preserveScroll: true,
@@ -94,9 +94,6 @@ const destroy = () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Card class="!mt-0">
                     <div>
-                        <!-- <div class="flex justify-between items-center mb-4">
-                            <h1 class="card-header mb-2">{{('Request #:id Data', {id: request.id})}}</h1>
-                        </div> -->
 
                         <h2 class="mb-2 ml-1 font-semibold">{{('Request Info')}}</h2>
 
@@ -155,11 +152,7 @@ const destroy = () => {
                             </DescriptionListItem>
                         </DescriptionList>
 
-                        <!-- <form  @submit.prevent="destroy" class="flex justify-end">
-                            <PrimaryButton class="bg-red-600 hover:bg-red-700 ml-4 mt-4 focus:bg-red-500 active:bg-red-900" >
-                                {{('Delete Request')}}
-                            </PrimaryButton>
-                        </form> -->
+                      
                     </div>
                 </Card>
             </div>
